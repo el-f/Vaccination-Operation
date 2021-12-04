@@ -23,6 +23,8 @@ public class Main {
             entityManager.createNativeQuery("select * from vaccine", Vaccine.class).getResultStream()
                     .forEach(System.out::println);
 
+            entityManager.createQuery("select Vaccine.company from Vaccine").getResultList();
+
 //            TypedQuery<Employee> empByDeptQuery = entityManager.createNamedQuery("Employee.byDept", Employee.class);
 //            empByDeptQuery.setParameter(1, "Java Advocacy");
 //            for (Employee employee : empByDeptQuery.getResultList()) {
