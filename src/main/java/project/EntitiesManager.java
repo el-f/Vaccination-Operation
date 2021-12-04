@@ -8,12 +8,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * A class for managing the entities in the database through hibernate and / or native sql queries.
  */
 public class EntitiesManager {
+
+    public static final int ERROR_CODE = -1;
 
     private final EntityManagerFactory entityManagerFactory;
 
@@ -125,14 +126,14 @@ public class EntitiesManager {
                     .flatMap(Collection::stream)
                     .map(Dose::getBarcode)
                     .findFirst()
-                    .orElse(-1);
+                    .orElse(ERROR_CODE);
 
 //            List<?> unusedDoses = em
 //                    .createNativeQuery(getUnusedDoseForWorker(worker.getWorkerId()))
 //                    .getResultList();
 //
 //            if (unusedDoses.isEmpty()) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
-            if (unusedDoseBarcode == -1) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
+            if (unusedDoseBarcode == ERROR_CODE) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
 
             Vaccination vaccination = Vaccination.VaccinationBuilder
                     .aVaccination()
