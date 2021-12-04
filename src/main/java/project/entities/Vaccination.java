@@ -100,6 +100,17 @@ public class Vaccination {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Vaccination{" +
+                "workerId=" + workerId +
+                ", citizenId=" + citizenId +
+                ", doseBarcode=" + doseBarcode +
+                ", date=" + date +
+                ", phase=" + phase +
+                '}';
+    }
+
     public Worker getWorkerByWorkerId() {
         return workerByWorkerId;
     }

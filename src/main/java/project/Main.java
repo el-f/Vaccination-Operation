@@ -5,9 +5,12 @@ import project.entities.Vaccine;
 import javax.persistence.*;
 import java.util.Arrays;
 
+@SuppressWarnings("unchecked")
 public class Main {
+
+    static EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
+
     public static void main(String[] args) {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("default");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -29,6 +32,14 @@ public class Main {
 
             entityManager.createQuery("select v.vaccineId, v.vaccineName from Vaccine v")
                     .getResultList().forEach(o -> System.out.println(Arrays.toString((Object[]) o)));
+
+            entityManager.createQuery("select v from Vaccination v")
+                    .getResultList().forEach(System.out::println);
+
+
+            entityManager.createQuery("select v from Vaccination v")
+                    .getResultList().forEach(System.out::println);
+
 
 //            TypedQuery<Employee> empByDeptQuery = entityManager.createNamedQuery("Employee.byDept", Employee.class);
 //            empByDeptQuery.setParameter(1, "Java Advocacy");
