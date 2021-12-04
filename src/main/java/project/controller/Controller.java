@@ -55,17 +55,16 @@ public class Controller {
         while (currentUserType == null) try {
             System.out.println("> Choose your user type:");
             for (int i = 0; i < UserType.values().length; i++) {
-                System.out.println(i + ") " + UserType.values()[i]);
+                System.out.println((i + 1) + ") " + UserType.values()[i]);
             }
 
-            currentUserType = UserType.values()[scanner.nextInt()];
+            currentUserType = UserType.values()[scanner.nextInt() - 1];
         } catch (Exception e) {
             System.out.println("Invalid input!");
             scanner.nextLine();
         }
 
         EntityManager em = entityManagerFactory.createEntityManager();
-        EntityTransaction et = em.getTransaction();
 
         int id = -1;
         boolean foundID = false;
@@ -108,6 +107,8 @@ public class Controller {
             System.out.println("Invalid input!");
             scanner.nextLine();
         }
+
+        em.close();
         System.out.println(currentUserType + " Logged in!");
     }
 
