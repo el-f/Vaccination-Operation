@@ -2,7 +2,7 @@ package project;
 
 import java.sql.*;
 
-public class JDBC {
+public class JDBC_MainExample {
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/vac_operation?useUnicode"
                 + "=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";

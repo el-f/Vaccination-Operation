@@ -32,7 +32,7 @@ public class Worker {
     @OneToMany(mappedBy = "workerByWorkerId")
     private Collection<Vaccination> vaccinationsByWorkerId;
     @ManyToOne
-    @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id",  updatable = false, insertable = false)
+    @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id", updatable = false, insertable = false)
     private Clinic clinicByClinicId;
 
     public int getWorkerId() {

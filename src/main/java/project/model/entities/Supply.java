@@ -2,6 +2,8 @@ package project.model.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -22,10 +24,10 @@ public class Supply {
     @OneToMany(mappedBy = "supplyBySupplyId")
     private Collection<Dose> dosesBySupplyId;
     @ManyToOne
-    @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id",  updatable = false, insertable = false)
+    @JoinColumn(name = "clinic_id", referencedColumnName = "clinic_id", updatable = false, insertable = false)
     private Clinic clinicByClinicId;
     @ManyToOne
-    @JoinColumn(name = "vaccine_id", referencedColumnName = "vaccine_id", nullable = false,  updatable = false, insertable = false)
+    @JoinColumn(name = "vaccine_id", referencedColumnName = "vaccine_id", nullable = false, updatable = false, insertable = false)
     private Vaccine vaccineByVaccineId;
 
     public int getSupplyId() {
@@ -116,6 +118,10 @@ public class Supply {
 
     public void setVaccineByVaccineId(Vaccine vaccineByVaccineId) {
         this.vaccineByVaccineId = vaccineByVaccineId;
+    }
+
+    public static Date DEFAULT_EXPIRATION() {
+        return Date.valueOf(LocalDateTime.now().plusDays(180).toLocalDate());
     }
 
     public static final class SupplyBuilder {
