@@ -26,6 +26,8 @@ public class Controller {
     Clinic clinicManagerUser;
     UserType currentUserType;
 
+    final static int EXIT_OPTION = 0;
+
     public Controller() {
         entityManagerFactory = Persistence.createEntityManagerFactory("default");
         entitiesManager = new EntitiesManager(entityManagerFactory);
@@ -87,7 +89,7 @@ public class Controller {
             System.out.println(e.getFullMessage());
             scanner.nextLine();
         } catch (Exception e) {
-            System.out.println("Invalid input!");
+            System.out.println("Invalid input! (" + e.getClass().getSimpleName() + ")");
             scanner.nextLine();
         }
 
@@ -95,19 +97,139 @@ public class Controller {
     }
 
     void citizenMenu(Scanner scanner) {
+        int choice = -1;
+        while (choice != EXIT_OPTION) try {
+            System.out.println("> Citizen Menu:");
+            System.out.println("1) Create an appointment");
+            System.out.println("2) Cancel an appointment");
+            System.out.println("3) Show all appointments");
+            System.out.println("4) Show administered vaccinations");
+            System.out.println("\n0) To exit");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case EXIT_OPTION:
+                    System.out.println("Goodbye!");
+                    break;
+                case 1:
 
+                    break;
+                case 2:
+
+                    break;
+
+                case 3:
+
+                    break;
+
+                case 4:
+                    break;
+
+                default:
+                    System.out.println("Invalid choice For choice Range [0-3]");
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println("Error! " + e.getClass().getSimpleName());
+            scanner.nextLine(); //clean buffer
+        }
     }
 
     void workerMenu(Scanner scanner) {
+        int choice = -1;
+        while (choice != EXIT_OPTION) try {
+            System.out.println("> Worker Menu:");
+            System.out.println("1) Log a vaccination");
+            System.out.println("2) Show all appointments");
+            System.out.println("\n0) To exit");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case EXIT_OPTION:
+                    System.out.println("Goodbye!");
+                    break;
+                case 1:
 
+                    break;
+                case 2:
+
+                    break;
+
+                default:
+                    System.out.println("Invalid choice For choice Range [0-2]");
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println("Error! " + e.getClass().getSimpleName());
+            scanner.nextLine(); //clean buffer
+        }
     }
 
     void clinicManagerMenu(Scanner scanner) {
+        int choice = -1;
+        while (choice != EXIT_OPTION) try {
+            System.out.println("> Clinic Manager Menu:");
+            System.out.println("1) Show all supplies");
+            System.out.println("2) Show all workers");
+            System.out.println("3) Show all appointments");
+            System.out.println("4) Add supplies to clinic");
+            System.out.println("\n0) To exit");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case EXIT_OPTION:
+                    System.out.println("Goodbye!");
+                    break;
+                case 1:
 
+                    break;
+                case 2:
+
+                    break;
+
+                case 3:
+
+                    break;
+
+                default:
+                    System.out.println("Invalid choice For choice Range [0-3]");
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println("Error! " + e.getClass().getSimpleName());
+            scanner.nextLine(); //clean buffer
+        }
     }
 
     void operationManagerMenu(Scanner scanner) {
+        int choice = -1;
+        while (choice != EXIT_OPTION) try {
+            System.out.println("> Operation Manager Menu:");
+            System.out.println("1) ---");
+            System.out.println("2) ---");
+            System.out.println("3) ---");
+            System.out.println("\n0) To exit");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case EXIT_OPTION:
+                    System.out.println("Goodbye!");
+                    break;
+                case 1:
 
+                    break;
+                case 2:
+
+                    break;
+
+                case 3:
+
+                    break;
+
+                default:
+                    System.out.println("Invalid choice For choice Range [0-3]");
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println("Error! " + e.getClass().getSimpleName());
+            scanner.nextLine(); //clean buffer
+        }
     }
 
 }
