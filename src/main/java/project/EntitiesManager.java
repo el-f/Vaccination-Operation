@@ -119,11 +119,20 @@ public class EntitiesManager {
 
         try {
             transaction.begin();
-            List<?> unusedDoses = em
-                    .createNativeQuery(getUnusedDoseForWorker(worker.getWorkerId()))
-                    .getResultList();
 
-            if (unusedDoses.isEmpty()) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
+            int unusedDoseBarcode = worker.getClinicByClinicId().getSuppliesByClinicId().stream()
+                    .map(Supply::getDosesBySupplyId)
+                    .flatMap(Collection::stream)
+                    .map(Dose::getBarcode)
+                    .findFirst()
+                    .orElse(-1);
+
+//            List<?> unusedDoses = em
+//                    .createNativeQuery(getUnusedDoseForWorker(worker.getWorkerId()))
+//                    .getResultList();
+//
+//            if (unusedDoses.isEmpty()) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
+            if (unusedDoseBarcode == -1) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
 
             Vaccination vaccination = Vaccination.VaccinationBuilder
                     .aVaccination()
@@ -131,7 +140,8 @@ public class EntitiesManager {
                     .withCitizenId(citizen.getCitizenId())
                     .withPhase(phase)
                     .withDate(timestamp)
-                    .withDoseBarcode((int) unusedDoses.get(0))
+//                    .withDoseBarcode((int) unusedDoses.get(0))
+                    .withDoseBarcode(unusedDoseBarcode)
                     .build();
 
             em.persist(vaccination);
