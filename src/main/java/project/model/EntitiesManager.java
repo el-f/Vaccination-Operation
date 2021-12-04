@@ -1,13 +1,16 @@
-package project;
+package project.model;
 
-import project.entities.*;
-import project.exceptions.DatabaseQueryException;
+import project.model.entities.*;
+import project.model.exceptions.DatabaseQueryException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A class for managing the entities in the database through hibernate and / or native sql queries.
@@ -29,7 +32,7 @@ public class EntitiesManager {
      ******************************************
      */
 
-    void createAppointment(Citizen citizen, Clinic clinic, Timestamp timestamp) {
+    public void createAppointment(Citizen citizen, Clinic clinic, Timestamp timestamp) {
         Appointment appointment = Appointment.AppointmentBuilder
                 .anAppointment()
                 .withCitizenId(citizen.getCitizenId())
@@ -55,7 +58,7 @@ public class EntitiesManager {
         }
     }
 
-    void cancelAppointment(int appointmentId) {
+    public void cancelAppointment(int appointmentId) {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
 
@@ -75,10 +78,15 @@ public class EntitiesManager {
         }
     }
 
-    Collection<Appointment> getAppointmentListForCitizen(Citizen citizen) {
-        return citizen.getAppointmentsByCitizenId();
+    public List<Appointment> getPendingAppointmentForCitizen(Citizen citizen) {
+        return citizen.getAppointmentsByCitizenId().stream()
+                .filter(appointment -> appointment.getDate().after(Timestamp.valueOf(LocalDateTime.now())))
+                .collect(Collectors.toList());
     }
 
+    public Collection<Vaccination> getVaccinationsForCitizen(Citizen citizen) {
+        return citizen.getVaccinationsByCitizenId();
+    }
 
     /*
      *******************************************
@@ -114,7 +122,7 @@ public class EntitiesManager {
                 "LIMIT 1;";
     }
 
-    void logVaccination(Worker worker, Citizen citizen, Timestamp timestamp, int phase) {
+    public void logVaccination(Worker worker, Citizen citizen, Timestamp timestamp, int phase) {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
 
@@ -135,7 +143,8 @@ public class EntitiesManager {
 //                    .getResultList();
 //
 //            if (unusedDoses.isEmpty()) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
-            if (unusedDoseBarcode == ERROR_CODE) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
+            if (unusedDoseBarcode == ERROR_CODE)
+                throw new DatabaseQueryException("Not enough doses in the worker's clinic");
 
             Vaccination vaccination = Vaccination.VaccinationBuilder
                     .aVaccination()
@@ -159,5 +168,20 @@ public class EntitiesManager {
             em.close(); // Close EntityManager
         }
     }
+
+    public List<Appointment> getPendingAppointmentsForWorker(Worker worker) {
+        return worker.getAppointmentsByWorkerId().stream()
+                .filter(appointment -> appointment.getDate().after(Timestamp.valueOf(LocalDateTime.now())))
+                .collect(Collectors.toList());
+    }
+
+
+
+
+    /*
+     *******************************************
+     User type - manager
+     ******************************************
+     */
 
 }

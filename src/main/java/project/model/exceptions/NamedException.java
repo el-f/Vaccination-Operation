@@ -1,4 +1,4 @@
-package project.exceptions;
+package project.model.exceptions;
 
 public abstract class NamedException extends Exception {
     private final String FULL_MESSAGE;

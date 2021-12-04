@@ -1,4 +1,4 @@
-package project.entities;
+package project.model.entities;
 
 public enum RiskGroup {
     Max,

@@ -1,7 +1,7 @@
 package project;
 
-import project.entities.Citizen;
-import project.entities.Vaccine;
+import project.model.entities.Citizen;
+import project.model.entities.Vaccine;
 
 import javax.persistence.*;
 import java.util.Arrays;

@@ -5,14 +5,14 @@
              version="2.2">
     <persistence-unit name="default">
 
-        <class>project.entities.Appointment</class>
-        <class>project.entities.Citizen</class>
-        <class>project.entities.Clinic</class>
-        <class>project.entities.Dose</class>
-        <class>project.entities.Supply</class>
-        <class>project.entities.Vaccination</class>
-        <class>project.entities.Vaccine</class>
-        <class>project.entities.Worker</class>
+        <class>project.model.entities.Appointment</class>
+        <class>project.model.entities.Citizen</class>
+        <class>project.model.entities.Clinic</class>
+        <class>project.model.entities.Dose</class>
+        <class>project.model.entities.Supply</class>
+        <class>project.model.entities.Vaccination</class>
+        <class>project.model.entities.Vaccine</class>
+        <class>project.model.entities.Worker</class>
 
         <properties>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/vac_operation"/>
