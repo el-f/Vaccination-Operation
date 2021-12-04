@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+    <persistence-unit name="default">
+
+        <class>project.entities.Appointment</class>
+        <class>project.entities.Citizen</class>
+        <class>project.entities.Clinic</class>
+        <class>project.entities.Dose</class>
+        <class>project.entities.Supply</class>
+        <class>project.entities.Vaccination</class>
+        <class>project.entities.Vaccine</class>
+        <class>project.entities.Worker</class>
+
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/vac_operation"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.user" value="root"/>
+            <property name="hibernate.connection.password" value=""/>
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
