@@ -124,6 +124,7 @@ public class EntitiesManager {
             int unusedDoseBarcode = worker.getClinicByClinicId().getSuppliesByClinicId().stream()
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
+                    .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
                     .map(Dose::getBarcode)
                     .findFirst()
                     .orElse(ERROR_CODE);
