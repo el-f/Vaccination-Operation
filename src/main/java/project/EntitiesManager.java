@@ -125,6 +125,7 @@ public class EntitiesManager {
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
                     .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
+                    .limit(1)
                     .map(Dose::getBarcode)
                     .findFirst()
                     .orElse(ERROR_CODE);
