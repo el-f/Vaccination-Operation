@@ -14,7 +14,6 @@ public class JDBC {
             Statement myStatement = connection.createStatement();
 
             ResultSet myResult = myStatement.executeQuery("select citizen_id, worker_id from vaccination");
-
             while (myResult.next()) {
                 System.out.println(myResult.getString("citizen_id"));
             }

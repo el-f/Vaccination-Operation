@@ -120,6 +120,19 @@ public class Clinic {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Clinic{" +
+                "clinicId=" + clinicId +
+                ", clinicName='" + clinicName + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", email='" + email + '\'' +
+                ", street='" + street + '\'' +
+                ", houseNum=" + houseNum +
+                ", district='" + district + '\'' +
+                '}';
+    }
+
     public Collection<Appointment> getAppointmentsByClinicId() {
         return appointmentsByClinicId;
     }

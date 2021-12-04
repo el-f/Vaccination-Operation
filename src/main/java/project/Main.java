@@ -1,5 +1,6 @@
 package project;
 
+import project.entities.Citizen;
 import project.entities.Vaccine;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class Main {
     public static void main(String[] args) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
+
 
         try {
             transaction.begin();
@@ -37,8 +39,32 @@ public class Main {
                     .getResultList().forEach(System.out::println);
 
 
-            entityManager.createQuery("select v from Vaccination v")
+            entityManager.createQuery("select c from Citizen c")
                     .getResultList().forEach(System.out::println);
+
+
+            System.out.println(entityManager.createNativeQuery("SELECT barcode\n" +
+                                                                       "FROM dose\n" +
+                                                                       "WHERE barcode NOT IN (\n" +
+                                                                       "    SELECT dose_barcode\n" +
+                                                                       "    FROM vaccination\n" +
+                                                                       ")\n" +
+                                                                       "  AND barcode IN (\n" +
+                                                                       "    SELECT barcode\n" +
+                                                                       "    FROM (SELECT c.clinic_id\n" +
+                                                                       "          FROM clinic c,\n" +
+                                                                       "               worker w\n" +
+                                                                       "          WHERE w.worker_id = 111111111\n" +
+                                                                       "            AND c.clinic_id = w.clinic_id) AS cid,\n" +
+                                                                       "         supply,\n" +
+                                                                       "         dose\n" +
+                                                                       "    WHERE cid.clinic_id = supply.clinic_id\n" +
+                                                                       "      AND dose.supply_id = supply.supply_id\n" +
+                                                                       ")\n" +
+                                                                       "LIMIT 1;").getResultList());
+
+            Citizen citizen = entityManager.find(Citizen.class, 854089088);
+            System.out.println(citizen.getAppointmentsByCitizenId());
 
 
 //            TypedQuery<Employee> empByDeptQuery = entityManager.createNamedQuery("Employee.byDept", Employee.class);

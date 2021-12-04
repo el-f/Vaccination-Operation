@@ -134,4 +134,54 @@ public class Vaccination {
     public void setDoseByDoseBarcode(Dose doseByDoseBarcode) {
         this.doseByDoseBarcode = doseByDoseBarcode;
     }
+
+    public static final class VaccinationBuilder {
+        private int workerId;
+        private int citizenId;
+        private int doseBarcode;
+        private Timestamp date;
+        private int phase;
+
+        private VaccinationBuilder() {
+        }
+
+        public static VaccinationBuilder aVaccination() {
+            return new VaccinationBuilder();
+        }
+
+        public VaccinationBuilder withWorkerId(int workerId) {
+            this.workerId = workerId;
+            return this;
+        }
+
+        public VaccinationBuilder withCitizenId(int citizenId) {
+            this.citizenId = citizenId;
+            return this;
+        }
+
+        public VaccinationBuilder withDoseBarcode(int doseBarcode) {
+            this.doseBarcode = doseBarcode;
+            return this;
+        }
+
+        public VaccinationBuilder withDate(Timestamp date) {
+            this.date = date;
+            return this;
+        }
+
+        public VaccinationBuilder withPhase(int phase) {
+            this.phase = phase;
+            return this;
+        }
+
+        public Vaccination build() {
+            Vaccination vaccination = new Vaccination();
+            vaccination.setWorkerId(workerId);
+            vaccination.setCitizenId(citizenId);
+            vaccination.setDoseBarcode(doseBarcode);
+            vaccination.setDate(date);
+            vaccination.setPhase(phase);
+            return vaccination;
+        }
+    }
 }

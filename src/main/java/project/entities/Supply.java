@@ -117,4 +117,47 @@ public class Supply {
     public void setVaccineByVaccineId(Vaccine vaccineByVaccineId) {
         this.vaccineByVaccineId = vaccineByVaccineId;
     }
+
+    public static final class SupplyBuilder {
+        private int supplyId;
+        private Integer clinicId;
+        private int vaccineId;
+        private Date expiryDate;
+
+        private SupplyBuilder() {
+        }
+
+        public static SupplyBuilder aSupply() {
+            return new SupplyBuilder();
+        }
+
+        public SupplyBuilder withSupplyId(int supplyId) {
+            this.supplyId = supplyId;
+            return this;
+        }
+
+        public SupplyBuilder withClinicId(Integer clinicId) {
+            this.clinicId = clinicId;
+            return this;
+        }
+
+        public SupplyBuilder withVaccineId(int vaccineId) {
+            this.vaccineId = vaccineId;
+            return this;
+        }
+
+        public SupplyBuilder withExpiryDate(Date expiryDate) {
+            this.expiryDate = expiryDate;
+            return this;
+        }
+
+        public Supply build() {
+            Supply supply = new Supply();
+            supply.setSupplyId(supplyId);
+            supply.setClinicId(clinicId);
+            supply.setVaccineId(vaccineId);
+            supply.setExpiryDate(expiryDate);
+            return supply;
+        }
+    }
 }

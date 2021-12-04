@@ -121,6 +121,19 @@ public class Worker {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "workerId=" + workerId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", medicalLicense=" + medicalLicense +
+                ", seniority=" + seniority +
+                ", clinicId=" + clinicId +
+                '}';
+    }
+
     public Collection<Appointment> getAppointmentsByWorkerId() {
         return appointmentsByWorkerId;
     }

@@ -97,6 +97,17 @@ public class Appointment {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "appointmentId=" + appointmentId +
+                ", clinicId=" + clinicId +
+                ", citizenId=" + citizenId +
+                ", workerId=" + workerId +
+                ", date=" + date +
+                '}';
+    }
+
     public Clinic getClinicByClinicId() {
         return clinicByClinicId;
     }
@@ -119,5 +130,55 @@ public class Appointment {
 
     public void setWorkerByWorkerId(Worker workerByWorkerId) {
         this.workerByWorkerId = workerByWorkerId;
+    }
+
+    public static final class AppointmentBuilder {
+        private int appointmentId;
+        private int clinicId;
+        private Integer citizenId;
+        private Integer workerId;
+        private Timestamp date;
+
+        private AppointmentBuilder() {
+        }
+
+        public static AppointmentBuilder anAppointment() {
+            return new AppointmentBuilder();
+        }
+
+        public AppointmentBuilder withAppointmentId(int appointmentId) {
+            this.appointmentId = appointmentId;
+            return this;
+        }
+
+        public AppointmentBuilder withClinicId(int clinicId) {
+            this.clinicId = clinicId;
+            return this;
+        }
+
+        public AppointmentBuilder withCitizenId(Integer citizenId) {
+            this.citizenId = citizenId;
+            return this;
+        }
+
+        public AppointmentBuilder withWorkerId(Integer workerId) {
+            this.workerId = workerId;
+            return this;
+        }
+
+        public AppointmentBuilder withDate(Timestamp date) {
+            this.date = date;
+            return this;
+        }
+
+        public Appointment build() {
+            Appointment appointment = new Appointment();
+            appointment.setAppointmentId(appointmentId);
+            appointment.setClinicId(clinicId);
+            appointment.setCitizenId(citizenId);
+            appointment.setWorkerId(workerId);
+            appointment.setDate(date);
+            return appointment;
+        }
     }
 }

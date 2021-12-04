@@ -158,6 +158,22 @@ public class Citizen {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Citizen{" +
+                "citizenId=" + citizenId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", age=" + age +
+                ", weight=" + weight +
+                ", email='" + email + '\'' +
+                ", district='" + district + '\'' +
+                ", phasesComplete=" + phasesComplete +
+                ", riskGroup=" + riskGroup +
+                '}';
+    }
+
     public Collection<Appointment> getAppointmentsByCitizenId() {
         return appointmentsByCitizenId;
     }

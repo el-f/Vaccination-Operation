@@ -54,6 +54,14 @@ public class Dose {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Dose{" +
+                "barcode=" + barcode +
+                ", supplyId=" + supplyId +
+                '}';
+    }
+
     public Supply getSupplyBySupplyId() {
         return supplyBySupplyId;
     }
@@ -69,4 +77,5 @@ public class Dose {
     public void setVaccinationsByBarcode(Collection<Vaccination> vaccinationsByBarcode) {
         this.vaccinationsByBarcode = vaccinationsByBarcode;
     }
+
 }
