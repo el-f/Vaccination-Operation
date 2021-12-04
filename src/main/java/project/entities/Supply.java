@@ -84,6 +84,16 @@ public class Supply {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Supply{" +
+                "supplyId=" + supplyId +
+                ", clinicId=" + clinicId +
+                ", vaccineId=" + vaccineId +
+                ", expiryDate=" + expiryDate +
+                '}';
+    }
+
     public Collection<Dose> getDosesBySupplyId() {
         return dosesBySupplyId;
     }
