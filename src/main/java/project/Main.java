@@ -1,11 +1,11 @@
 package project;
 
-import project.controller.Controller;
+import project.controller.CLI_Controller;
 
 public class Main {
 
     public static void main(String[] args) {
-        new Controller();
+        new CLI_Controller();
     }
 
 }

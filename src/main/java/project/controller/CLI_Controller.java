@@ -17,7 +17,7 @@ enum UserType {
     OperationManager
 }
 
-public class Controller {
+public class CLI_Controller {
 
     EntityManagerFactory entityManagerFactory;
     EntitiesManager entitiesManager;
@@ -28,7 +28,7 @@ public class Controller {
 
     final static int EXIT_OPTION = 0;
 
-    public Controller() {
+    public CLI_Controller() {
         entityManagerFactory = Persistence.createEntityManagerFactory("default");
         entitiesManager = new EntitiesManager(entityManagerFactory);
 
