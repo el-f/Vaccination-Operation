@@ -7,7 +7,7 @@ public abstract class NamedException extends Exception {
         FULL_MESSAGE = _msg;
     }
 
-    public String toString() {
+    public String getFullMessage() {
         return FULL_MESSAGE;
     }
 }

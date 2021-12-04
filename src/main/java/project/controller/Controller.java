@@ -6,7 +6,6 @@ import project.model.entities.Clinic;
 import project.model.entities.Worker;
 import project.model.exceptions.DatabaseQueryException;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Scanner;
@@ -69,15 +68,15 @@ public class Controller {
         while (!success) try {
             switch (currentUserType) {
                 case Citizen:
-                    System.out.println("Enter citizen ID");
+                    System.out.println("Enter citizen ID:");
                     citizenUser = entitiesManager.getCitizenByID(scanner.nextInt());
                     break;
                 case Worker:
-                    System.out.println("Enter worker ID");
+                    System.out.println("Enter worker ID:");
                     workerUser = entitiesManager.getWorkerByID(scanner.nextInt());
                     break;
                 case ClinicManager:
-                    System.out.println("Enter clinic ID");
+                    System.out.println("Enter clinic ID:");
                     clinicManagerUser = entitiesManager.getClinicByID(scanner.nextInt());
                     break;
                 default:
@@ -85,7 +84,7 @@ public class Controller {
             }
             success = true;
         } catch (DatabaseQueryException e) {
-            System.out.println(e.toString());
+            System.out.println(e.getFullMessage());
             scanner.nextLine();
         } catch (Exception e) {
             System.out.println("Invalid input!");
