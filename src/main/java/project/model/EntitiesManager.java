@@ -27,6 +27,27 @@ public class EntitiesManager {
         this.entityManagerFactory = entityManagerFactory;
     }
 
+    public Citizen getCitizenByID(int id) throws DatabaseQueryException {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Citizen citizen = em.find(Citizen.class,id);
+        if (citizen == null) throw new DatabaseQueryException("Citizen with this ID was not found!");
+        return citizen;
+    }
+
+    public Worker getWorkerByID(int id) throws DatabaseQueryException {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Worker worker = em.find(Worker.class,id);
+        if (worker == null) throw new DatabaseQueryException("Worker with this ID was not found!");
+        return worker;
+    }
+
+    public Clinic getClinicByID(int id) throws DatabaseQueryException {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Clinic clinic = em.find(Clinic.class,id);
+        if (clinic == null) throw new DatabaseQueryException("Clinic with this ID was not found!");
+        return clinic;
+    }
+
 
     /*
      *******************************************

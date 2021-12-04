@@ -4,10 +4,10 @@ import project.model.EntitiesManager;
 import project.model.entities.Citizen;
 import project.model.entities.Clinic;
 import project.model.entities.Worker;
+import project.model.exceptions.DatabaseQueryException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.Scanner;
 
@@ -64,51 +64,34 @@ public class Controller {
             scanner.nextLine();
         }
 
-        EntityManager em = entityManagerFactory.createEntityManager();
+        boolean success = false;
 
-        int id = -1;
-        boolean foundID = false;
-
-        while (!foundID) try {
+        while (!success) try {
             switch (currentUserType) {
                 case Citizen:
                     System.out.println("Enter citizen ID");
-                    id = scanner.nextInt();
+                    citizenUser = entitiesManager.getCitizenByID(scanner.nextInt());
                     break;
                 case Worker:
                     System.out.println("Enter worker ID");
-                    id = scanner.nextInt();
+                    workerUser = entitiesManager.getWorkerByID(scanner.nextInt());
                     break;
                 case ClinicManager:
                     System.out.println("Enter clinic ID");
-                    id = scanner.nextInt();
+                    clinicManagerUser = entitiesManager.getClinicByID(scanner.nextInt());
                     break;
                 default:
                     break;
             }
-            switch (currentUserType) {
-                case Citizen:
-                    citizenUser = em.find(Citizen.class, id);
-                    foundID = citizenUser != null;
-                    break;
-                case Worker:
-                    workerUser = em.find(Worker.class, id);
-                    foundID = workerUser != null;
-                    break;
-                case ClinicManager:
-                    clinicManagerUser = em.find(Clinic.class, id);
-                    foundID = clinicManagerUser != null;
-                    break;
-                default:
-                    foundID = true;
-            }
-            if (!foundID) System.out.println("User with such ID not found!");
+            success = true;
+        } catch (DatabaseQueryException e) {
+            System.out.println(e.toString());
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("Invalid input!");
             scanner.nextLine();
         }
 
-        em.close();
         System.out.println(currentUserType + " Logged in!");
     }
 
