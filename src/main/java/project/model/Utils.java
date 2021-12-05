@@ -13,4 +13,14 @@ public class Utils {
         return Timestamp.valueOf(LocalDateTime.now().plusDays(nDays));
     }
 
+    public static Throwable getRootCause(Throwable e) {
+        Throwable cause;
+        Throwable result = e;
+
+        while (null != (cause = result.getCause()) && (result != cause)) {
+            result = cause;
+        }
+        return result;
+    }
+
 }

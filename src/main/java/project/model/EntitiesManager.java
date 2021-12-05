@@ -185,7 +185,7 @@ public class EntitiesManager {
         } finally {
             em.close(); // Close EntityManager
         }
-        if (exp != null) throw new DatabaseQueryException(exp.toString());
+        if (exp != null) throw new DatabaseQueryException(exp);
     }
 
     public List<Appointment> getPendingAppointmentsForWorker(Worker worker) {
