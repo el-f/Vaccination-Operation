@@ -5,8 +5,12 @@ import java.time.LocalDateTime;
 
 public class Utils {
 
-    static Timestamp now() {
+    public static Timestamp now() {
         return Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public static Timestamp nDaysFromNow(int nDays) {
+        return Timestamp.valueOf(LocalDateTime.now().plusDays(nDays));
     }
 
 }

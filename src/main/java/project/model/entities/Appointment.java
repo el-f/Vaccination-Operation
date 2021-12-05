@@ -1,5 +1,8 @@
 package project.model.entities;
 
+import project.model.Utils;
+import project.model.exceptions.InvalidInputException;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -69,6 +72,12 @@ public class Appointment {
 
     public void setDate(Timestamp date) {
         this.date = date;
+    }
+
+    public static Timestamp createAppointmentDate(int nDaysFromNow) throws InvalidInputException {
+        if (nDaysFromNow < 1 || nDaysFromNow > 14)
+            throw new InvalidInputException("Appointment date must be between 1 and 14 days from now (not " + nDaysFromNow + ")");
+        return Utils.nDaysFromNow(nDaysFromNow);
     }
 
     @Override

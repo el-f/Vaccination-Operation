@@ -29,25 +29,34 @@ public class EntitiesManager {
 
     public Citizen getCitizenByID(int id) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Citizen citizen = em.find(Citizen.class,id);
+        Citizen citizen = em.find(Citizen.class, id);
+        em.close();
         if (citizen == null) throw new DatabaseQueryException("Citizen with this ID was not found!");
         return citizen;
     }
 
     public Worker getWorkerByID(int id) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Worker worker = em.find(Worker.class,id);
+        Worker worker = em.find(Worker.class, id);
+        em.close();
         if (worker == null) throw new DatabaseQueryException("Worker with this ID was not found!");
         return worker;
     }
 
     public Clinic getClinicByID(int id) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Clinic clinic = em.find(Clinic.class,id);
+        Clinic clinic = em.find(Clinic.class, id);
+        em.close();
         if (clinic == null) throw new DatabaseQueryException("Clinic with this ID was not found!");
         return clinic;
     }
 
+    public List<Clinic> getAllClinics() {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        List<Clinic> ret = em.createQuery("Select c from Clinic c").getResultList();
+        em.close();
+        return ret;
+    }
 
     /*
      *******************************************
@@ -55,9 +64,10 @@ public class EntitiesManager {
      *******************************************
      */
 
-    public void createAppointment(Citizen citizen, Clinic clinic, Timestamp timestamp) {
+    public void createAppointment(Citizen citizen, Clinic clinic, Timestamp timestamp) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
+        Exception exp = null;
 
         try {
             transaction.begin();
@@ -76,15 +86,17 @@ public class EntitiesManager {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            exp = e;
         } finally {
             em.close(); // Close EntityManager
         }
+        if (exp != null) throw new DatabaseQueryException(exp.toString());
     }
 
-    public void cancelAppointment(int appointmentId) {
+    public void cancelAppointment(int appointmentId) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
+        Exception exp = null;
 
         try {
             transaction.begin();
@@ -98,20 +110,25 @@ public class EntitiesManager {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            exp = e;
         } finally {
             em.close(); // Close EntityManager
         }
+        if (exp != null) throw new DatabaseQueryException(exp.toString());
     }
 
     public List<Appointment> getPendingAppointmentForCitizen(Citizen citizen) {
-        return citizen.getAppointmentsByCitizenId().stream()
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Citizen dummy = em.find(Citizen.class, citizen.getCitizenId());
+        return dummy.getAppointmentsByCitizenId().stream()
                 .filter(appointment -> appointment.getDate().after(Timestamp.valueOf(LocalDateTime.now())))
                 .collect(Collectors.toList());
     }
 
     public Collection<Vaccination> getVaccinationsForCitizen(Citizen citizen) {
-        return citizen.getVaccinationsByCitizenId();
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Citizen dummy = em.find(Citizen.class, citizen.getCitizenId());
+        return dummy.getVaccinationsByCitizenId();
     }
 
     /*
