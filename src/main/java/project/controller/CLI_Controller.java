@@ -13,8 +13,18 @@ import java.util.Scanner;
 enum UserType {
     Citizen,
     Worker,
-    ClinicManager,
-    OperationManager
+    ClinicManager {
+        @Override
+        public String toString() {
+            return "Clinic Manager";
+        }
+    },
+    OperationManager {
+        @Override
+        public String toString() {
+            return "Operation Manager";
+        }
+    }
 }
 
 public class CLI_Controller {
