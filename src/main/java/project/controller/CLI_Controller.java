@@ -1,7 +1,7 @@
 package project.controller;
 
 import project.model.EntitiesManager;
-import project.model.Pair;
+import project.model.util.Pair;
 import project.model.entities.*;
 import project.model.exceptions.DatabaseQueryException;
 import project.model.exceptions.InvalidInputException;

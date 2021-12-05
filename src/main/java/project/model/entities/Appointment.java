@@ -1,10 +1,11 @@
 package project.model.entities;
 
-import project.model.Utils;
+import project.model.util.UtilMethods;
 import project.model.exceptions.InvalidInputException;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 public class Appointment {
@@ -77,7 +78,7 @@ public class Appointment {
     public static Timestamp createAppointmentDate(int nDaysFromNow) throws InvalidInputException {
         if (nDaysFromNow < 1 || nDaysFromNow > 14)
             throw new InvalidInputException("Appointment date must be between 1 and 14 days from now (not " + nDaysFromNow + ")");
-        return Utils.nDaysFromNow(nDaysFromNow);
+        return UtilMethods.nDaysFromNow(nDaysFromNow);
     }
 
     @Override
@@ -89,11 +90,9 @@ public class Appointment {
 
         if (appointmentId != that.appointmentId) return false;
         if (clinicId != that.clinicId) return false;
-        if (citizenId != null ? !citizenId.equals(that.citizenId) : that.citizenId != null) return false;
-        if (workerId != null ? !workerId.equals(that.workerId) : that.workerId != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-
-        return true;
+        if (!Objects.equals(citizenId, that.citizenId)) return false;
+        if (!Objects.equals(workerId, that.workerId)) return false;
+        return Objects.equals(date, that.date);
     }
 
     @Override

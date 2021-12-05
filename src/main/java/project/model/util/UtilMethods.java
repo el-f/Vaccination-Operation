@@ -1,4 +1,4 @@
-package project.model;
+package project.model.util;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  *
  * @author Elazar Fine https://github.com/Elfein7Night
  */
-public class Utils {
+public class UtilMethods {
 
     /**
      * Get a timestamp of the exact current {@link LocalDateTime}.

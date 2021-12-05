@@ -1,6 +1,6 @@
 package project.model.exceptions;
 
-import project.model.Utils;
+import project.model.util.UtilMethods;
 
 /**
  * A custom exception for better output and specific exception handling.
@@ -15,7 +15,7 @@ public abstract class NamedException extends Exception {
     }
 
     public NamedException(Throwable throwable) {
-        FULL_MESSAGE = throwable + " (" + Utils.getRootCause(throwable) + ")";
+        FULL_MESSAGE = throwable + " (" + UtilMethods.getRootCause(throwable) + ")";
     }
 
     public String getFullMessage() {

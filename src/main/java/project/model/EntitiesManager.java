@@ -3,6 +3,8 @@ package project.model;
 import project.model.entities.*;
 import project.model.exceptions.DatabaseQueryException;
 import project.model.exceptions.InvalidInputException;
+import project.model.util.Pair;
+import project.model.util.UtilMethods;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -255,7 +257,7 @@ public class EntitiesManager {
             Citizen citizen = em.find(Citizen.class, citizenID);
             if (citizen == null) throw new DatabaseQueryException("No citizen with such ID!");
             int phase = citizen.getPhasesComplete() + 1;
-            Timestamp timestamp = Utils.now();
+            Timestamp timestamp = UtilMethods.now();
 
             Worker attached = em.find(Worker.class, worker.getWorkerId());
 
@@ -302,7 +304,7 @@ public class EntitiesManager {
         EntityManager em = entityManagerFactory.createEntityManager();
         Worker attached = em.find(Worker.class, worker.getWorkerId());
         return attached.getAppointmentsByWorkerId().stream()
-                .filter(appointment -> appointment.getDate().after(Utils.now()))
+                .filter(appointment -> appointment.getDate().after(UtilMethods.now()))
                 .collect(Collectors.toList());
     }
 
@@ -420,7 +422,7 @@ public class EntitiesManager {
             Clinic attached = em.find(Clinic.class, clinic.getClinicId());
 
             attached.getSuppliesByClinicId().stream()
-                    .filter(supply -> supply.getExpiryDate().before(Utils.now()))
+                    .filter(supply -> supply.getExpiryDate().before(UtilMethods.now()))
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
                     .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
