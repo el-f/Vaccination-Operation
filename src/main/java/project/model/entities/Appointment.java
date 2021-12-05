@@ -35,6 +35,9 @@ public class Appointment {
     @JoinColumn(name = "worker_id", referencedColumnName = "worker_id", updatable = false, insertable = false)
     private Worker workerByWorkerId;
 
+    public static final int MIN_DAYS_RANGE_FOR_APPOINT = 1;
+    public static final int MAX_DAYS_RANGE_FOR_APPOINT = 14;
+
     public int getAppointmentId() {
         return appointmentId;
     }
@@ -76,8 +79,13 @@ public class Appointment {
     }
 
     public static Timestamp createAppointmentDate(int nDaysFromNow) throws InvalidInputException {
-        if (nDaysFromNow < 1 || nDaysFromNow > 14)
-            throw new InvalidInputException("Appointment date must be between 1 and 14 days from now (not " + nDaysFromNow + ")");
+        if (nDaysFromNow < MIN_DAYS_RANGE_FOR_APPOINT || nDaysFromNow > MAX_DAYS_RANGE_FOR_APPOINT) {
+            throw new InvalidInputException(
+                    "Appointment date must be between " +
+                            MIN_DAYS_RANGE_FOR_APPOINT + " and " +
+                            MAX_DAYS_RANGE_FOR_APPOINT + " days from now (not " + nDaysFromNow + ")"
+            );
+        }
         return UtilMethods.nDaysFromNow(nDaysFromNow);
     }
 
