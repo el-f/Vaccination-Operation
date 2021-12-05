@@ -290,7 +290,10 @@ public class EntitiesManager {
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
                     .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
-                    .forEach(em::remove);
+                    .forEach(dose -> {
+                        em.remove(dose);
+                        expiredAmount.incrementAndGet();
+                    });
 
             transaction.commit();
         } catch (Exception e) {
