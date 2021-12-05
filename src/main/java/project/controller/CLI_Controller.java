@@ -3,6 +3,7 @@ package project.controller;
 import project.model.EntitiesManager;
 import project.model.entities.*;
 import project.model.exceptions.DatabaseQueryException;
+import project.model.exceptions.InvalidInputException;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -61,6 +62,9 @@ public class CLI_Controller {
             default:
                 break;
         }
+
+        // exit
+        entityManagerFactory.close();
     }
 
     void initializeUser(Scanner scanner) {
@@ -103,13 +107,13 @@ public class CLI_Controller {
             scanner.nextLine();
         }
 
-        System.out.println(currentUserType + " Logged in!");
+        System.out.println("Logged in as " + currentUserType);
     }
 
     void citizenMenu(Scanner scanner) {
         int choice = -1;
         while (choice != EXIT_OPTION) try {
-            System.out.println("> Citizen Menu:");
+            System.out.println("\n> Citizen Menu:");
             System.out.println("1) Create an appointment");
             System.out.println("2) Cancel an appointment");
             System.out.println("3) Show all appointments");
@@ -185,7 +189,7 @@ public class CLI_Controller {
     void workerMenu(Scanner scanner) {
         int choice = -1;
         while (choice != EXIT_OPTION) try {
-            System.out.println("> Worker Menu:");
+            System.out.println("\n> Worker Menu:");
             System.out.println("1) Log a vaccination");
             System.out.println("2) Show all appointments");
             System.out.println("3) Show all administered vaccinations");
@@ -236,13 +240,13 @@ public class CLI_Controller {
     void clinicManagerMenu(Scanner scanner) {
         int choice = -1;
         while (choice != EXIT_OPTION) try {
-            System.out.println("> Clinic Manager Menu:");
+            System.out.println("\n> Clinic Manager Menu:");
             System.out.println("1) Show all clinic supplies");
             System.out.println("2) Show all clinic workers");
             System.out.println("3) Show all clinic appointments");
             System.out.println("4) Add supplies to clinic");
-            System.out.println("4) Add supplies to clinic");
-            System.out.println("5) Add worker to appointment");
+            System.out.println("5) Remove expired supplies from clinic");
+            System.out.println("6) Add worker to appointment");
             System.out.println("\n0) To exit");
             choice = scanner.nextInt();
             switch (choice) {
@@ -250,26 +254,58 @@ public class CLI_Controller {
                     System.out.println("Goodbye!");
                     break;
                 case 1:
-
+                    Collection<Supply> supplies = entitiesManager.getSuppliesForClinic(clinicManagerUser);
+                    if (supplies.isEmpty()) {
+                        System.out.println("No supplies for clinic!");
+                    } else {
+                        supplies.forEach(System.out::println);
+                    }
                     break;
-                case 2:
 
+                case 2:
+                    Collection<Worker> workers = entitiesManager.getWorkersForClinic(clinicManagerUser);
+                    if (workers.isEmpty()) {
+                        System.out.println("No workers in clinic!");
+                    } else {
+                        workers.forEach(System.out::println);
+                    }
                     break;
 
                 case 3:
-
+                    Collection<Appointment> appointments = entitiesManager.getAppointmentsForClinic(clinicManagerUser);
+                    if (appointments.isEmpty()) {
+                        System.out.println("No appointments for clinic!");
+                    } else {
+                        appointments.forEach(System.out::println);
+                    }
                     break;
                 case 4:
-
+                    System.out.println("Please enter how many vaccine doses from each vaccine type you wish to add:");
+                    entitiesManager.addSuppliesToClinic(clinicManagerUser, scanner.nextInt());
+                    System.out.println("Supplies added!");
                     break;
                 case 5:
+                    long expiredAmount = entitiesManager.removeExpiredSupplies(clinicManagerUser);
+                    System.out.println("Removed " + expiredAmount + " expired supplies from the clinic");
+                    break;
 
+                case 6:
+                    int workerID, appointmentID;
+                    System.out.println("Enter the worker ID:");
+                    workerID = scanner.nextInt();
+                    System.out.println("Enter the appointment ID:");
+                    appointmentID = scanner.nextInt();
+                    entitiesManager.addWorkerToAppointment(clinicManagerUser, workerID, appointmentID);
+                    System.out.println("Worker assigned to appointment!");
                     break;
 
                 default:
                     System.out.println("Invalid choice For choice Range [0-3]");
                     break;
             }
+        } catch (DatabaseQueryException | InvalidInputException e) {
+            System.out.println(e.getFullMessage());
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("Error! " + e.getClass().getSimpleName());
             scanner.nextLine(); //clean buffer
@@ -279,9 +315,12 @@ public class CLI_Controller {
     void operationManagerMenu(Scanner scanner) {
         int choice = -1;
         while (choice != EXIT_OPTION) try {
-            System.out.println("> Operation Manager Menu:");
+            System.out.println("\n> Operation Manager Menu:");
             System.out.println("1) Show all clinics");
             System.out.println("2) Show all supplies");
+            System.out.println("3) Show all citizens");
+            System.out.println("4) Show all workers");
+            System.out.println("4) Show all vaccinations");
             System.out.println("3) Add supplies to all clinics");
             System.out.println("\n0) To exit");
             choice = scanner.nextInt();

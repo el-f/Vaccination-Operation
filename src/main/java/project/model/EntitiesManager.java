@@ -2,6 +2,7 @@ package project.model;
 
 import project.model.entities.*;
 import project.model.exceptions.DatabaseQueryException;
+import project.model.exceptions.InvalidInputException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 /**
@@ -119,16 +121,16 @@ public class EntitiesManager {
 
     public List<Appointment> getPendingAppointmentForCitizen(Citizen citizen) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Citizen dummy = em.find(Citizen.class, citizen.getCitizenId());
-        return dummy.getAppointmentsByCitizenId().stream()
+        Citizen attached = em.find(Citizen.class, citizen.getCitizenId());
+        return attached.getAppointmentsByCitizenId().stream()
                 .filter(appointment -> appointment.getDate().after(Timestamp.valueOf(LocalDateTime.now())))
                 .collect(Collectors.toList());
     }
 
     public Collection<Vaccination> getVaccinationsForCitizen(Citizen citizen) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Citizen dummy = em.find(Citizen.class, citizen.getCitizenId());
-        return dummy.getVaccinationsByCitizenId();
+        Citizen attached = em.find(Citizen.class, citizen.getCitizenId());
+        return attached.getVaccinationsByCitizenId();
     }
 
     /*
@@ -150,9 +152,9 @@ public class EntitiesManager {
             int phase = citizen.getPhasesComplete() + 1;
             Timestamp timestamp = Utils.now();
 
-            Worker dummy = em.find(Worker.class, worker.getWorkerId());
+            Worker attached = em.find(Worker.class, worker.getWorkerId());
 
-            int unusedDoseBarcode = dummy.getClinicByClinicId().getSuppliesByClinicId().stream()
+            int unusedDoseBarcode = attached.getClinicByClinicId().getSuppliesByClinicId().stream()
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
                     .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
@@ -166,7 +168,7 @@ public class EntitiesManager {
 
             Vaccination vaccination = Vaccination.VaccinationBuilder
                     .aVaccination()
-                    .withWorkerId(dummy.getWorkerId())
+                    .withWorkerId(attached.getWorkerId())
                     .withCitizenId(citizen.getCitizenId())
                     .withPhase(phase)
                     .withDate(timestamp)
@@ -180,7 +182,6 @@ public class EntitiesManager {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             exp = e;
         } finally {
             em.close(); // Close EntityManager
@@ -190,16 +191,16 @@ public class EntitiesManager {
 
     public List<Appointment> getPendingAppointmentsForWorker(Worker worker) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Worker dummy = em.find(Worker.class, worker.getWorkerId());
-        return dummy.getAppointmentsByWorkerId().stream()
+        Worker attached = em.find(Worker.class, worker.getWorkerId());
+        return attached.getAppointmentsByWorkerId().stream()
                 .filter(appointment -> appointment.getDate().after(Utils.now()))
                 .collect(Collectors.toList());
     }
 
     public Collection<Vaccination> getVaccinationsByWorker(Worker worker) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        Worker dummy = em.find(Worker.class, worker.getWorkerId());
-        return dummy.getVaccinationsByWorkerId();
+        Worker attached = em.find(Worker.class, worker.getWorkerId());
+        return attached.getVaccinationsByWorkerId();
     }
 
     /*
@@ -208,22 +209,35 @@ public class EntitiesManager {
      *******************************************
      */
 
-    Collection<Appointment> getAppointmentsForClinic(Clinic clinic) {
-        return clinic.getAppointmentsByClinicId();
+    public Collection<Supply> getSuppliesForClinic(Clinic clinic) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Clinic attached = em.find(Clinic.class, clinic.getClinicId());
+        return attached.getSuppliesByClinicId();
     }
 
-    Collection<Worker> getWorkersForClinic(Clinic clinic) {
-        return clinic.getWorkersByClinicId();
+    public Collection<Appointment> getAppointmentsForClinic(Clinic clinic) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Clinic attached = em.find(Clinic.class, clinic.getClinicId());
+        return attached.getAppointmentsByClinicId();
     }
 
-    void addSuppliesToClinic(Clinic clinic, int amount) {
+    public Collection<Worker> getWorkersForClinic(Clinic clinic) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Clinic attached = em.find(Clinic.class, clinic.getClinicId());
+        return attached.getWorkersByClinicId();
+    }
+
+    public void addSuppliesToClinic(Clinic clinic, int amount) throws DatabaseQueryException, InvalidInputException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
+        Exception exp = null;
+
+        if (amount <= 0 || amount > 1000) throw new InvalidInputException("Dose amount must be between 1 and 1000!");
 
         try {
             transaction.begin();
 
-            List<Integer> vaccineTypes = em.createQuery("select Vaccine.vaccineId from Vaccine").getResultList();
+            List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
             vaccineTypes.forEach(vaccineID -> {
                 Supply supply = Supply.SupplyBuilder
                         .aSupply()
@@ -253,20 +267,29 @@ public class EntitiesManager {
                 transaction.rollback();
             }
             e.printStackTrace();
+            exp = e;
         } finally {
             em.close(); // Close EntityManager
         }
+        if (exp != null) throw new DatabaseQueryException(exp);
     }
 
-    void removeExpiredSupplies(Clinic clinic) {
+    public long removeExpiredSupplies(Clinic clinic) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
+        Exception exp = null;
+        AtomicLong expiredAmount = new AtomicLong();
 
         try {
             transaction.begin();
 
-            clinic.getSuppliesByClinicId().stream()
+            Clinic attached = em.find(Clinic.class, clinic.getClinicId());
+
+            attached.getSuppliesByClinicId().stream()
                     .filter(supply -> supply.getExpiryDate().before(Utils.now()))
+                    .map(Supply::getDosesBySupplyId)
+                    .flatMap(Collection::stream)
+                    .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
                     .forEach(em::remove);
 
             transaction.commit();
@@ -275,11 +298,48 @@ public class EntitiesManager {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            exp = e;
         } finally {
             em.close(); // Close EntityManager
         }
+        if (exp != null) throw new DatabaseQueryException(exp);
+        return expiredAmount.get();
+    }
 
+    public void addWorkerToAppointment(Clinic clinicManagerUser, int workerID, int appointmentID) throws DatabaseQueryException {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        Exception exp = null;
+
+        try {
+            transaction.begin();
+
+            Worker worker = em.find(Worker.class, workerID);
+            if (worker == null) throw new DatabaseQueryException("No worker such ID");
+            if (worker.getClinicId() != clinicManagerUser.getClinicId()) {
+                throw new DatabaseQueryException("This worker is not assigned to this clinic!");
+            }
+
+            Appointment appointment = em.find(Appointment.class, appointmentID);
+            if (appointment == null) throw new DatabaseQueryException("No appointment with such ID");
+            if (appointment.getClinicId() != clinicManagerUser.getClinicId()) {
+                throw new DatabaseQueryException("This appointment is not for this clinic");
+            }
+
+            appointment.setWorkerId(workerID);
+            em.persist(appointment);
+
+            transaction.commit();
+        } catch (Exception e) {
+            // If there is an exception rollback changes
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            exp = e;
+        } finally {
+            em.close(); // Close EntityManager
+        }
+        if (exp != null) throw new DatabaseQueryException(exp);
     }
 
 
@@ -300,10 +360,11 @@ public class EntitiesManager {
      *
      * @return the result table shown above
      */
-    List<Object[]> getClinicsWithNotEnoughDoses() {
+    public List<Object[]> getClinicsWithNotEnoughDoses() throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         List<Object[]> lowSupplyClinics = Collections.emptyList();
+        Exception exp = null;
 
         try {
             transaction.begin();
@@ -337,13 +398,14 @@ public class EntitiesManager {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
+            exp = e;
         } finally {
             em.close(); // Close EntityManager
         }
-
+        if (exp != null) throw new DatabaseQueryException(exp);
         return lowSupplyClinics;
     }
+
 
 }
 
