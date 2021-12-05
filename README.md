@@ -35,4 +35,4 @@ The purpose of the system is to facilitate vaccination appointments for citizens
 
 #### Design patterns worth mentioning:
 - The system structure design is the `MVC` pattern.
-- All entities are instantiated using the `Builder` pattern.
+- Complex entities are instantiated using the `Builder` pattern.
