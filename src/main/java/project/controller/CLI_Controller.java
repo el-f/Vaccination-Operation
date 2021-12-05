@@ -225,7 +225,7 @@ public class CLI_Controller {
                     break;
 
                 default:
-                    System.out.println("Invalid choice For choice Range [0-2]");
+                    System.out.println("Invalid choice For choice Range [0-3]");
                     break;
             }
         } catch (DatabaseQueryException e) {
@@ -300,7 +300,7 @@ public class CLI_Controller {
                     break;
 
                 default:
-                    System.out.println("Invalid choice For choice Range [0-3]");
+                    System.out.println("Invalid choice For choice Range [0-6]");
                     break;
             }
         } catch (DatabaseQueryException | InvalidInputException e) {
@@ -320,8 +320,11 @@ public class CLI_Controller {
             System.out.println("2) Show all supplies");
             System.out.println("3) Show all citizens");
             System.out.println("4) Show all workers");
-            System.out.println("4) Show all vaccinations");
-            System.out.println("3) Add supplies to all clinics");
+            System.out.println("5) Show all vaccinations");
+            System.out.println("6) Show all appointments");
+            System.out.println("7) Show clinics with low supplies");
+            System.out.println("8) Add supplies to a clinic");
+            System.out.println("9) Add supplies to all clinics");
             System.out.println("\n0) To exit");
             choice = scanner.nextInt();
             switch (choice) {
@@ -329,18 +332,40 @@ public class CLI_Controller {
                     System.out.println("Goodbye!");
                     break;
                 case 1:
-
+                    entitiesManager.getAllClinics().forEach(System.out::println);
                     break;
                 case 2:
-
+                    entitiesManager.getAllSupplies().forEach(System.out::println);
                     break;
-
                 case 3:
+                    entitiesManager.getAllCitizens().forEach(System.out::println);
+                    break;
+                case 4:
+                    entitiesManager.getAllWorkers().forEach(System.out::println);
+                    break;
+                case 5:
+                    entitiesManager.getAllVaccinations().forEach(System.out::println);
+                    break;
+                case 6:
+                    entitiesManager.getAllAppointments().forEach(System.out::println);
+                    break;
+                case 7:
+                    List<Object[]> lowSupplyClinicsTable = entitiesManager.getLowSupplyClinics();
+                    lowSupplyClinicsTable.forEach(row -> {
+                        int clinicID = (int) row[0];
+                        String clinicName = (String) row[1];
+                        int vaccinesTotal = (int) row[2];
+                        int appointments = (int) row[3];
+                    });
+                    break;
+                case 8:
 
                     break;
+                case 9:
 
+                    break;
                 default:
-                    System.out.println("Invalid choice For choice Range [0-3]");
+                    System.out.println("Invalid choice For choice Range [0-9]");
                     break;
             }
         } catch (Exception e) {

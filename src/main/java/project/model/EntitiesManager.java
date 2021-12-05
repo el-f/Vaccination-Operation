@@ -60,6 +60,42 @@ public class EntitiesManager {
         return ret;
     }
 
+    public List<Supply> getAllSupplies() {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        List<Supply> ret = em.createQuery("Select s from Supply s").getResultList();
+        em.close();
+        return ret;
+    }
+
+    public List<Citizen> getAllCitizens() {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        List<Citizen> ret = em.createQuery("Select c from Citizen c").getResultList();
+        em.close();
+        return ret;
+    }
+
+    public List<Worker> getAllWorkers() {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        List<Worker> ret = em.createQuery("Select w from Worker w").getResultList();
+        em.close();
+        return ret;
+    }
+
+    public List<Vaccination> getAllVaccinations() {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        List<Vaccination> ret = em.createQuery("Select v from Vaccination v").getResultList();
+        em.close();
+        return ret;
+    }
+
+    public List<Appointment> getAllAppointments() {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        List<Appointment> ret = em.createQuery("Select a from Appointment a").getResultList();
+        em.close();
+        return ret;
+    }
+
+
     /*
      *******************************************
      User type - citizen
@@ -237,28 +273,7 @@ public class EntitiesManager {
         try {
             transaction.begin();
 
-            List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
-            vaccineTypes.forEach(vaccineID -> {
-                Supply supply = Supply.SupplyBuilder
-                        .aSupply()
-                        .withVaccineId(vaccineID)
-                        .withClinicId(clinic.getClinicId())
-                        .withExpiryDate(Supply.DEFAULT_EXPIRATION())
-                        .build();
-
-                em.persist(supply);
-            });
-
-            List<Integer> newSuppliesIDs = em.createQuery("select s.supplyId " +
-                                                                  "from Supply s " +
-                                                                  "where s.dosesBySupplyId is empty").getResultList();
-            newSuppliesIDs.forEach(supplyID -> {
-                for (int i = 0; i < amount; i++) {
-                    Dose dose = new Dose();
-                    dose.setSupplyId(supplyID);
-                    em.persist(dose);
-                }
-            });
+            addDosesToClinic(amount, em, clinic);
 
             transaction.commit();
         } catch (Exception e) {
@@ -266,7 +281,6 @@ public class EntitiesManager {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            e.printStackTrace();
             exp = e;
         } finally {
             em.close(); // Close EntityManager
@@ -369,7 +383,7 @@ public class EntitiesManager {
      *
      * @return the result table shown above
      */
-    public List<Object[]> getClinicsWithNotEnoughDoses() throws DatabaseQueryException {
+    public List<Object[]> getLowSupplyClinics() throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         List<Object[]> lowSupplyClinics = Collections.emptyList();
@@ -415,6 +429,56 @@ public class EntitiesManager {
         return lowSupplyClinics;
     }
 
+    public void addSuppliesToAllClinics(int amount) throws DatabaseQueryException, InvalidInputException {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        Exception exp = null;
+
+        if (amount <= 0 || amount > 1000) throw new InvalidInputException("Dose amount must be between 1 and 1000!");
+
+        try {
+            transaction.begin();
+
+            List<Clinic> clinics = em.createQuery("select c from Clinic c").getResultList();
+            clinics.forEach(clinic -> addDosesToClinic(amount, em, clinic));
+
+            transaction.commit();
+        } catch (Exception e) {
+            // If there is an exception rollback changes
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            exp = e;
+        } finally {
+            em.close(); // Close EntityManager
+        }
+        if (exp != null) throw new DatabaseQueryException(exp);
+    }
+
+    private void addDosesToClinic(int amount, EntityManager em, Clinic clinic) {
+        List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
+        vaccineTypes.forEach(vaccineID -> {
+            Supply supply = Supply.SupplyBuilder
+                    .aSupply()
+                    .withVaccineId(vaccineID)
+                    .withClinicId(clinic.getClinicId())
+                    .withExpiryDate(Supply.DEFAULT_EXPIRATION())
+                    .build();
+
+            em.persist(supply);
+        });
+
+        List<Integer> newSuppliesIDs = em.createQuery("select s.supplyId " +
+                                                              "from Supply s " +
+                                                              "where s.dosesBySupplyId is empty").getResultList();
+        newSuppliesIDs.forEach(supplyID -> {
+            for (int i = 0; i < amount; i++) {
+                Dose dose = new Dose();
+                dose.setSupplyId(supplyID);
+                em.persist(dose);
+            }
+        });
+    }
 
 }
 
