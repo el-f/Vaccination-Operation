@@ -309,7 +309,7 @@ public class EntitiesManager {
         return expiredAmount.get();
     }
 
-    public void addWorkerToAppointment(Clinic clinicManagerUser, int workerID, int appointmentID) throws DatabaseQueryException {
+    public void replaceWorkerToAppointment(Clinic clinicManagerUser, int workerID, int appointmentID) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         Exception exp = null;
@@ -318,13 +318,13 @@ public class EntitiesManager {
             transaction.begin();
 
             Worker worker = em.find(Worker.class, workerID);
-            if (worker == null) throw new DatabaseQueryException("No worker such ID");
+            if (worker == null) throw new DatabaseQueryException("No worker such ID!");
             if (worker.getClinicId() != clinicManagerUser.getClinicId()) {
                 throw new DatabaseQueryException("This worker is not assigned to this clinic!");
             }
 
             Appointment appointment = em.find(Appointment.class, appointmentID);
-            if (appointment == null) throw new DatabaseQueryException("No appointment with such ID");
+            if (appointment == null) throw new DatabaseQueryException("No appointment with such ID!");
             if (appointment.getClinicId() != clinicManagerUser.getClinicId()) {
                 throw new DatabaseQueryException("This appointment is not for this clinic");
             }
@@ -333,6 +333,12 @@ public class EntitiesManager {
             em.persist(appointment);
 
             transaction.commit();
+        } catch (DatabaseQueryException e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            em.close();
+            throw e;
         } catch (Exception e) {
             // If there is an exception rollback changes
             if (transaction.isActive()) {

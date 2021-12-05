@@ -286,7 +286,7 @@ public class CLI_Controller {
                     break;
                 case 5:
                     long expiredAmount = entitiesManager.removeExpiredSupplies(clinicManagerUser);
-                    System.out.println("Removed " + expiredAmount + " expired supplies from the clinic");
+                    System.out.println("Removed " + expiredAmount + " expired doses from the clinic");
                     break;
 
                 case 6:
@@ -295,7 +295,7 @@ public class CLI_Controller {
                     workerID = scanner.nextInt();
                     System.out.println("Enter the appointment ID:");
                     appointmentID = scanner.nextInt();
-                    entitiesManager.addWorkerToAppointment(clinicManagerUser, workerID, appointmentID);
+                    entitiesManager.replaceWorkerToAppointment(clinicManagerUser, workerID, appointmentID);
                     System.out.println("Worker assigned to appointment!");
                     break;
 
