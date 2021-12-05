@@ -1,24 +1,19 @@
 package project.model.entities;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Embeddable
 public class VaccinationPK implements Serializable {
     @Column(name = "worker_id")
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int workerId;
+    protected int workerId;
     @Column(name = "citizen_id")
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int citizenId;
+    protected int citizenId;
     @Column(name = "phase")
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int phase;
+    protected int phase;
 
     public int getWorkerId() {
         return workerId;

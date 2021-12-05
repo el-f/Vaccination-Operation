@@ -195,16 +195,26 @@ public class CLI_Controller {
                     System.out.println("Goodbye!");
                     break;
                 case 1:
-
+                    System.out.println("Enter vaccinated citizen ID:");
+                    entitiesManager.logVaccination(workerUser, scanner.nextInt());
+                    System.out.println("Vaccination logged!");
                     break;
                 case 2:
-
+                    List<Appointment> pending = entitiesManager.getPendingAppointmentsForWorker(workerUser);
+                    if (pending.isEmpty()) {
+                        System.out.println("No pending appointments!");
+                    } else {
+                        pending.forEach(System.out::println);
+                    }
                     break;
 
                 default:
                     System.out.println("Invalid choice For choice Range [0-2]");
                     break;
             }
+        } catch (DatabaseQueryException e) {
+            System.out.println(e.getFullMessage());
+            scanner.nextLine();
         } catch (Exception e) {
             System.out.println("Error! " + e.getClass().getSimpleName());
             scanner.nextLine(); //clean buffer

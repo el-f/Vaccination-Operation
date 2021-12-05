@@ -2,28 +2,21 @@ package project.model.entities;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
-@IdClass(VaccinationPK.class)
+//@IdClass(VaccinationPK.class)
 public class Vaccination {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "worker_id")
-    private int workerId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "citizen_id")
-    private int citizenId;
+    @EmbeddedId
+    private VaccinationPK vaccinationPK;
+
     @Basic
     @Column(name = "dose_barcode")
     private int doseBarcode;
     @Basic
     @Column(name = "date")
     private Timestamp date;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "phase")
-    private int phase;
+
     @ManyToOne
     @JoinColumn(name = "worker_id", referencedColumnName = "worker_id", nullable = false, updatable = false, insertable = false)
     private Worker workerByWorkerId;
@@ -33,22 +26,6 @@ public class Vaccination {
     @ManyToOne
     @JoinColumn(name = "dose_barcode", referencedColumnName = "barcode", nullable = false, updatable = false, insertable = false)
     private Dose doseByDoseBarcode;
-
-    public int getWorkerId() {
-        return workerId;
-    }
-
-    public void setWorkerId(int workerId) {
-        this.workerId = workerId;
-    }
-
-    public int getCitizenId() {
-        return citizenId;
-    }
-
-    public void setCitizenId(int citizenId) {
-        this.citizenId = citizenId;
-    }
 
     public int getDoseBarcode() {
         return doseBarcode;
@@ -66,14 +43,6 @@ public class Vaccination {
         this.date = date;
     }
 
-    public int getPhase() {
-        return phase;
-    }
-
-    public void setPhase(int phase) {
-        this.phase = phase;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -81,33 +50,28 @@ public class Vaccination {
 
         Vaccination that = (Vaccination) o;
 
-        if (workerId != that.workerId) return false;
-        if (citizenId != that.citizenId) return false;
         if (doseBarcode != that.doseBarcode) return false;
-        if (phase != that.phase) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-
-        return true;
+        if (!Objects.equals(vaccinationPK, that.vaccinationPK))
+            return false;
+        return Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        int result = workerId;
-        result = 31 * result + citizenId;
+        int result = vaccinationPK != null ? vaccinationPK.hashCode() : 0;
         result = 31 * result + doseBarcode;
         result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + phase;
         return result;
     }
 
     @Override
     public String toString() {
         return "Vaccination{" +
-                "workerId=" + workerId +
-                ", citizenId=" + citizenId +
+                "workerId=" + vaccinationPK.getWorkerId() +
+                ", citizenId=" + vaccinationPK.getCitizenId() +
                 ", doseBarcode=" + doseBarcode +
                 ", date=" + date +
-                ", phase=" + phase +
+                ", phase=" + vaccinationPK.getPhase() +
                 '}';
     }
 
@@ -176,11 +140,12 @@ public class Vaccination {
 
         public Vaccination build() {
             Vaccination vaccination = new Vaccination();
-            vaccination.setWorkerId(workerId);
-            vaccination.setCitizenId(citizenId);
+            vaccination.vaccinationPK = new VaccinationPK();
+            vaccination.vaccinationPK.setCitizenId(citizenId);
+            vaccination.vaccinationPK.setWorkerId(workerId);
+            vaccination.vaccinationPK.setPhase(phase);
             vaccination.setDoseBarcode(doseBarcode);
             vaccination.setDate(date);
-            vaccination.setPhase(phase);
             return vaccination;
         }
     }

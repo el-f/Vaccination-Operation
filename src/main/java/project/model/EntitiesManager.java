@@ -137,42 +137,22 @@ public class EntitiesManager {
      *******************************************
      */
 
-    /**
-     * A mySQL query to get all unused doses in the same clinic as a worker.
-     *
-     * @param workerId the worker id.
-     * @return The query as a string.
-     */
-    private String getUnusedDoseForWorker(int workerId) {
-        return "SELECT barcode\n" +
-                "FROM dose\n" +
-                "WHERE barcode NOT IN (\n" +
-                "    SELECT dose_barcode\n" +
-                "    FROM vaccination\n" +
-                ")\n" +
-                "  AND barcode IN (\n" +
-                "    SELECT barcode\n" +
-                "    FROM (SELECT c.clinic_id\n" +
-                "          FROM clinic c,\n" +
-                "               worker w\n" +
-                "          WHERE w.worker_id = " + workerId + "\n" +
-                "            AND c.clinic_id = w.clinic_id) AS cid,\n" +
-                "         supply,\n" +
-                "         dose\n" +
-                "    WHERE cid.clinic_id = supply.clinic_id\n" +
-                "      AND dose.supply_id = supply.supply_id\n" +
-                ")\n" +
-                "LIMIT 1;";
-    }
-
-    public void logVaccination(Worker worker, Citizen citizen, Timestamp timestamp, int phase) {
+    public void logVaccination(Worker worker, int citizenID) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
+        Exception exp = null;
 
         try {
             transaction.begin();
 
-            int unusedDoseBarcode = worker.getClinicByClinicId().getSuppliesByClinicId().stream()
+            Citizen citizen = em.find(Citizen.class, citizenID);
+            if (citizen == null) throw new DatabaseQueryException("No citizen with such ID!");
+            int phase = citizen.getPhasesComplete() + 1;
+            Timestamp timestamp = Utils.now();
+
+            Worker dummy = em.find(Worker.class, worker.getWorkerId());
+
+            int unusedDoseBarcode = dummy.getClinicByClinicId().getSuppliesByClinicId().stream()
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
                     .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
@@ -181,21 +161,15 @@ public class EntitiesManager {
                     .findFirst()
                     .orElse(ERROR_CODE);
 
-//            List<?> unusedDoses = em
-//                    .createNativeQuery(getUnusedDoseForWorker(worker.getWorkerId()))
-//                    .getResultList();
-//
-//            if (unusedDoses.isEmpty()) throw new DatabaseQueryException("Not enough doses in the worker's clinic");
             if (unusedDoseBarcode == ERROR_CODE)
                 throw new DatabaseQueryException("Not enough doses in the worker's clinic");
 
             Vaccination vaccination = Vaccination.VaccinationBuilder
                     .aVaccination()
-                    .withWorkerId(worker.getWorkerId())
+                    .withWorkerId(dummy.getWorkerId())
                     .withCitizenId(citizen.getCitizenId())
                     .withPhase(phase)
                     .withDate(timestamp)
-//                    .withDoseBarcode((int) unusedDoses.get(0))
                     .withDoseBarcode(unusedDoseBarcode)
                     .build();
 
@@ -207,13 +181,17 @@ public class EntitiesManager {
                 transaction.rollback();
             }
             e.printStackTrace();
+            exp = e;
         } finally {
             em.close(); // Close EntityManager
         }
+        if (exp != null) throw new DatabaseQueryException(exp.toString());
     }
 
     public List<Appointment> getPendingAppointmentsForWorker(Worker worker) {
-        return worker.getAppointmentsByWorkerId().stream()
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Worker dummy = em.find(Worker.class, worker.getWorkerId());
+        return dummy.getAppointmentsByWorkerId().stream()
                 .filter(appointment -> appointment.getDate().after(Utils.now()))
                 .collect(Collectors.toList());
     }
@@ -295,6 +273,7 @@ public class EntitiesManager {
         } finally {
             em.close(); // Close EntityManager
         }
+
     }
 
 
