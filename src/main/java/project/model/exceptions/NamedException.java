@@ -2,6 +2,11 @@ package project.model.exceptions;
 
 import project.model.Utils;
 
+/**
+ * A custom exception for better output and specific exception handling.
+ *
+ * @author Elazar Fine https://github.com/Elfein7Night
+ */
 public abstract class NamedException extends Exception {
     private final String FULL_MESSAGE;
 

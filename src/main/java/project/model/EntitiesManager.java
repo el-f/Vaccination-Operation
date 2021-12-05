@@ -9,14 +9,15 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * A class for managing the entities in the database through hibernate and / or native sql queries.
+ *
+ * @author Elazar Fine https://github.com/Elfein7Night
  */
 @SuppressWarnings("unchecked")
 public class EntitiesManager {
@@ -29,6 +30,13 @@ public class EntitiesManager {
         this.entityManagerFactory = entityManagerFactory;
     }
 
+    /**
+     * Get a {@link Citizen} entity from the database using its ID.
+     *
+     * @param id a citizen ID.
+     * @return a {@link Citizen} entity instance.
+     * @throws DatabaseQueryException if citizen not found.
+     */
     public Citizen getCitizenByID(int id) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         Citizen citizen = em.find(Citizen.class, id);
@@ -37,6 +45,13 @@ public class EntitiesManager {
         return citizen;
     }
 
+    /**
+     * Get a {@link Worker} entity from the database using its ID.
+     *
+     * @param id a worker ID.
+     * @return a {@link Worker} entity instance.
+     * @throws DatabaseQueryException if worker not found.
+     */
     public Worker getWorkerByID(int id) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         Worker worker = em.find(Worker.class, id);
@@ -45,6 +60,13 @@ public class EntitiesManager {
         return worker;
     }
 
+    /**
+     * Get a {@link Clinic} entity from the database using its ID.
+     *
+     * @param id a clinic ID.
+     * @return a {@link Clinic} entity instance.
+     * @throws DatabaseQueryException if clinic not found.
+     */
     public Clinic getClinicByID(int id) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         Clinic clinic = em.find(Clinic.class, id);
@@ -53,6 +75,9 @@ public class EntitiesManager {
         return clinic;
     }
 
+    /**
+     * @return A list of all {@link Clinic} entities in the DB.
+     */
     public List<Clinic> getAllClinics() {
         EntityManager em = entityManagerFactory.createEntityManager();
         List<Clinic> ret = em.createQuery("Select c from Clinic c").getResultList();
@@ -60,6 +85,9 @@ public class EntitiesManager {
         return ret;
     }
 
+    /**
+     * @return A list of all {@link Supply} entities in the DB.
+     */
     public List<Supply> getAllSupplies() {
         EntityManager em = entityManagerFactory.createEntityManager();
         List<Supply> ret = em.createQuery("Select s from Supply s").getResultList();
@@ -67,6 +95,9 @@ public class EntitiesManager {
         return ret;
     }
 
+    /**
+     * @return A list of all {@link Citizen} entities in the DB.
+     */
     public List<Citizen> getAllCitizens() {
         EntityManager em = entityManagerFactory.createEntityManager();
         List<Citizen> ret = em.createQuery("Select c from Citizen c").getResultList();
@@ -74,6 +105,9 @@ public class EntitiesManager {
         return ret;
     }
 
+    /**
+     * @return A list of all {@link Worker} entities in the DB.
+     */
     public List<Worker> getAllWorkers() {
         EntityManager em = entityManagerFactory.createEntityManager();
         List<Worker> ret = em.createQuery("Select w from Worker w").getResultList();
@@ -81,6 +115,9 @@ public class EntitiesManager {
         return ret;
     }
 
+    /**
+     * @return A list of all {@link Vaccination} entities in the DB.
+     */
     public List<Vaccination> getAllVaccinations() {
         EntityManager em = entityManagerFactory.createEntityManager();
         List<Vaccination> ret = em.createQuery("Select v from Vaccination v").getResultList();
@@ -88,6 +125,9 @@ public class EntitiesManager {
         return ret;
     }
 
+    /**
+     * @return A list of all {@link Appointment} entities in the DB.
+     */
     public List<Appointment> getAllAppointments() {
         EntityManager em = entityManagerFactory.createEntityManager();
         List<Appointment> ret = em.createQuery("Select a from Appointment a").getResultList();
@@ -102,6 +142,14 @@ public class EntitiesManager {
      *******************************************
      */
 
+    /**
+     * Create an appointment and add it to the DB.
+     *
+     * @param citizen   a {@link Citizen} entity - the user.
+     * @param clinic    a {@link Clinic} chosen by the user.
+     * @param timestamp the appointment date chosen by the user.
+     * @throws DatabaseQueryException if adding the appointment to the DB failed.
+     */
     public void createAppointment(Citizen citizen, Clinic clinic, Timestamp timestamp) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -131,6 +179,12 @@ public class EntitiesManager {
         if (exp != null) throw new DatabaseQueryException(exp.toString());
     }
 
+    /**
+     * Cancel an appointment chosen by the user.
+     *
+     * @param appointmentId the appointment id - chosen by the user.
+     * @throws DatabaseQueryException if removing the appointment from the DB failed.
+     */
     public void cancelAppointment(int appointmentId) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -155,6 +209,10 @@ public class EntitiesManager {
         if (exp != null) throw new DatabaseQueryException(exp.toString());
     }
 
+    /**
+     * @param citizen a {@link Citizen} entity instance.
+     * @return a list of pending appointments.
+     */
     public List<Appointment> getPendingAppointmentForCitizen(Citizen citizen) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Citizen attached = em.find(Citizen.class, citizen.getCitizenId());
@@ -163,6 +221,10 @@ public class EntitiesManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param citizen a {@link Citizen} entity instance.
+     * @return a collection of past vaccinations the citizen had.
+     */
     public Collection<Vaccination> getVaccinationsForCitizen(Citizen citizen) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Citizen attached = em.find(Citizen.class, citizen.getCitizenId());
@@ -175,6 +237,13 @@ public class EntitiesManager {
      *******************************************
      */
 
+    /**
+     * Log a Vaccination to the DB for a specific worker user and the citizen he vaccinated.
+     *
+     * @param worker    a {@link Worker} entity instance - the user.
+     * @param citizenID the citizen id of the citizen the worker vaccinated.
+     * @throws DatabaseQueryException if adding the Vaccination to the DB failed.
+     */
     public void logVaccination(Worker worker, int citizenID) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -225,6 +294,10 @@ public class EntitiesManager {
         if (exp != null) throw new DatabaseQueryException(exp);
     }
 
+    /**
+     * @param worker a {@link Worker} entity instance.
+     * @return a list of pending appointments which the worker is designated to.
+     */
     public List<Appointment> getPendingAppointmentsForWorker(Worker worker) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Worker attached = em.find(Worker.class, worker.getWorkerId());
@@ -233,6 +306,10 @@ public class EntitiesManager {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * @param worker a {@link Worker} entity instance.
+     * @return a list of vaccinations the worker administered.
+     */
     public Collection<Vaccination> getVaccinationsByWorker(Worker worker) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Worker attached = em.find(Worker.class, worker.getWorkerId());
@@ -245,24 +322,60 @@ public class EntitiesManager {
      *******************************************
      */
 
+    /**
+     * @param clinic a {@link Clinic} instance.
+     * @return the clinic's supplies held in a collection.
+     */
     public Collection<Supply> getSuppliesForClinic(Clinic clinic) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Clinic attached = em.find(Clinic.class, clinic.getClinicId());
         return attached.getSuppliesByClinicId();
     }
 
+    /**
+     * @param clinic a {@link Clinic} instance.
+     * @return the clinic's designated appointments held in a collection.
+     */
     public Collection<Appointment> getAppointmentsForClinic(Clinic clinic) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Clinic attached = em.find(Clinic.class, clinic.getClinicId());
         return attached.getAppointmentsByClinicId();
     }
 
+    /**
+     * @param clinic a {@link Clinic} instance.
+     * @return the clinic's designated workers held in a collection.
+     */
     public Collection<Worker> getWorkersForClinic(Clinic clinic) {
         EntityManager em = entityManagerFactory.createEntityManager();
         Clinic attached = em.find(Clinic.class, clinic.getClinicId());
         return attached.getWorkersByClinicId();
     }
 
+    /**
+     * Add a supply of each vaccine type to the clinic, the supply size is marked by {@code amount}.
+     *
+     * @param clinicID a clinic ID marking the clinic we add the supplies to.
+     * @param amount   number of doses from each vaccine type to add to the clinic.
+     * @throws DatabaseQueryException if adding the supplies to the DB failed.
+     * @throws InvalidInputException  if the amount of supplies requested is invalid.
+     */
+    public void addSuppliesToClinic(int clinicID, int amount) throws DatabaseQueryException, InvalidInputException {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Clinic clinic = em.find(Clinic.class, clinicID);
+        if (clinic == null) throw new DatabaseQueryException("No clinic with such ID!");
+        addSuppliesToClinic(clinic, amount);
+        em.close();
+    }
+
+    /**
+     * Add a supply of each vaccine type to the clinic, the supply size is marked by {@code amount}.
+     *
+     * @param clinic a {@link Clinic} instance marking the clinic we add the supplies to.
+     * @param amount number of doses from each vaccine type to add to the clinic.
+     * @throws DatabaseQueryException if adding the supplies to the DB failed.
+     * @throws InvalidInputException  if the amount of supplies requested is invalid.
+     */
     public void addSuppliesToClinic(Clinic clinic, int amount) throws DatabaseQueryException, InvalidInputException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -273,7 +386,7 @@ public class EntitiesManager {
         try {
             transaction.begin();
 
-            addDosesToClinic(amount, em, clinic);
+            addSuppliesToClinic(amount, em, clinic);
 
             transaction.commit();
         } catch (Exception e) {
@@ -288,7 +401,14 @@ public class EntitiesManager {
         if (exp != null) throw new DatabaseQueryException(exp);
     }
 
-    public long removeExpiredSupplies(Clinic clinic) throws DatabaseQueryException {
+    /**
+     * Remove from the clinic any supplies which had their expiration date pass.
+     *
+     * @param clinic a {@link Clinic} instance - marking the clinic we remove the supplies from.
+     * @return how many expired supplies were removed from the clinic.
+     * @throws DatabaseQueryException if removing the supplies from the DB failed.
+     */
+    public long removeExpiredSuppliesFromClinic(Clinic clinic) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         Exception exp = null;
@@ -323,7 +443,15 @@ public class EntitiesManager {
         return expiredAmount.get();
     }
 
-    public void replaceWorkerToAppointment(Clinic clinicManagerUser, int workerID, int appointmentID) throws DatabaseQueryException {
+    /**
+     * Replace a worker in an appointment with a new one..
+     *
+     * @param clinicManagerUser a {@link Clinic} instance marking the clinic for the appointment.
+     * @param workerID          a {@link Worker} ID marking the new worker which will administer the vaccine.
+     * @param appointmentID     an {@link Appointment} ID marking which appointment we replace the worker in.
+     * @throws DatabaseQueryException if replacing the worker for the appointment in the DB failed.
+     */
+    public void replaceWorkerInAppointment(Clinic clinicManagerUser, int workerID, int appointmentID) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         Exception exp = null;
@@ -373,62 +501,48 @@ public class EntitiesManager {
      */
 
     /**
-     * Get a table showing clinics with more appointments than vaccine doses:
+     * Get a map holding clinics with more appointments than vaccine doses:
      * <br><br/>
      * <pre>
-     *  | clinic_id | clinic_name | vaccines_total | appointments |
-     *  |-----------|-------------|----------------|--------------|
-     *  |    ---    |     ---     |       ---      |      ---     |
+     *  | key: Clinic | value: ( vaccines amount,  appointments amount ) |
+     *  |-------------|--------------------------------------------------|
+     *  |     ---     |                      ---                         |
      * </pre>
      *
-     * @return the result table shown above
+     * @return a Map instance holding low supply clinics.
      */
-    public List<Object[]> getLowSupplyClinics() throws DatabaseQueryException {
+    public Map<Clinic, Pair<Long, Long>> getLowSupplyClinics() {
         EntityManager em = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = em.getTransaction();
-        List<Object[]> lowSupplyClinics = Collections.emptyList();
-        Exception exp = null;
+        List<Clinic> allClinics = em.createQuery("select c from Clinic c").getResultList();
 
-        try {
-            transaction.begin();
+        return allClinics.stream().collect(
+                        Collectors.toMap(
+                                Function.identity(),
+                                clinic -> {
+                                    long vaccineAmount = clinic.getSuppliesByClinicId().stream()
+                                            .map(Supply::getDosesBySupplyId)
+                                            .flatMap(Collection::stream)
+                                            .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
+                                            .count();
 
-            lowSupplyClinics = em.createNativeQuery(
-                    "SELECT *\n" +
-                            "FROM (SELECT clinic.clinic_id,\n" +
-                            "             clinic.clinic_name,\n" +
-                            "             (SELECT COUNT(barcode)\n" +
-                            "              FROM dose\n" +
-                            "              WHERE dose.supply_id = supply.supply_id) AS vaccines_total,\n" +
-                            "             COUNT(appointment_id)                     AS appointments\n" +
-                            "      FROM (clinic JOIN appointment ap ON clinic.clinic_id = ap.clinic_id)\n" +
-                            "               JOIN supply ON supply.clinic_id = clinic.clinic_id\n" +
-                            "      GROUP BY clinic.clinic_id) AS all_clinics\n" +
-                            "WHERE appointments > vaccines_total\n" +
-                            "UNION\n" +
-                            "(SELECT clinic_id,\n" +
-                            "        clinic_name,\n" +
-                            "        (SELECT COUNT(clinic_id) FROM supply WHERE clinic.clinic_id = supply.clinic_id),\n" +
-                            "        (SELECT COUNT(clinic_id) FROM appointment WHERE clinic.clinic_id = appointment.clinic_id)\n" +
-                            " FROM clinic\n" +
-                            " WHERE clinic_id NOT IN (SELECT clinic_id FROM supply)\n" +
-                            "   AND clinic_id IN (SELECT clinic_id AS cid FROM appointment)\n" +
-                            ");"
-            ).getResultList();
-
-            transaction.commit();
-        } catch (Exception e) {
-            // If there is an exception rollback changes
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            exp = e;
-        } finally {
-            em.close(); // Close EntityManager
-        }
-        if (exp != null) throw new DatabaseQueryException(exp);
-        return lowSupplyClinics;
+                                    long appointmentsAmount = clinic.getAppointmentsByClinicId().size();
+                                    return new Pair<>(vaccineAmount, appointmentsAmount);
+                                }
+                        )
+                )
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().getFirst() < entry.getValue().getSecond())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
+    /**
+     * Add a supply of each vaccine type to all the operation's clinics, the supply size is marked by {@code amount}.
+     *
+     * @param amount number of doses from each vaccine type to add to each clinic.
+     * @throws DatabaseQueryException if adding the supplies to the DB failed.
+     * @throws InvalidInputException  if the amount of supplies requested is invalid.
+     */
     public void addSuppliesToAllClinics(int amount) throws DatabaseQueryException, InvalidInputException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -440,7 +554,7 @@ public class EntitiesManager {
             transaction.begin();
 
             List<Clinic> clinics = em.createQuery("select c from Clinic c").getResultList();
-            clinics.forEach(clinic -> addDosesToClinic(amount, em, clinic));
+            clinics.forEach(clinic -> addSuppliesToClinic(amount, em, clinic));
 
             transaction.commit();
         } catch (Exception e) {
@@ -455,7 +569,14 @@ public class EntitiesManager {
         if (exp != null) throw new DatabaseQueryException(exp);
     }
 
-    private void addDosesToClinic(int amount, EntityManager em, Clinic clinic) {
+    /**
+     * A helper function to add supplies to a clinic.
+     *
+     * @param amount amount of doses in each supply added.
+     * @param em     entity manager we use to query the DB.
+     * @param clinic the {@link Clinic} instance marking the clinic we add the supplies to.
+     */
+    private void addSuppliesToClinic(int amount, EntityManager em, Clinic clinic) {
         List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
         vaccineTypes.forEach(vaccineID -> {
             Supply supply = Supply.SupplyBuilder
@@ -468,9 +589,12 @@ public class EntitiesManager {
             em.persist(supply);
         });
 
-        List<Integer> newSuppliesIDs = em.createQuery("select s.supplyId " +
-                                                              "from Supply s " +
-                                                              "where s.dosesBySupplyId is empty").getResultList();
+        List<Integer> newSuppliesIDs = em.createQuery(
+                "select s.supplyId " +
+                        "from Supply s " +
+                        "where s.dosesBySupplyId is empty"
+        ).getResultList();
+
         newSuppliesIDs.forEach(supplyID -> {
             for (int i = 0; i < amount; i++) {
                 Dose dose = new Dose();

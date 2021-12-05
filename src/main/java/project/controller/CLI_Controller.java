@@ -1,6 +1,7 @@
 package project.controller;
 
 import project.model.EntitiesManager;
+import project.model.Pair;
 import project.model.entities.*;
 import project.model.exceptions.DatabaseQueryException;
 import project.model.exceptions.InvalidInputException;
@@ -9,8 +10,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
-
 
 enum UserType {
     Citizen,
@@ -29,6 +30,12 @@ enum UserType {
     }
 }
 
+/**
+ * The controller for the Command Line Interface version of the program.
+ *
+ * @author Elazar Fine https://github.com/Elfein7Night
+ * @see <a href="https://en.wikipedia.org/wiki/Command-line_interface">Command Line Interface - Wikipedia</a>
+ */
 public class CLI_Controller {
 
     EntityManagerFactory entityManagerFactory;
@@ -87,14 +94,17 @@ public class CLI_Controller {
                     System.out.println("Enter citizen ID:");
                     citizenUser = entitiesManager.getCitizenByID(scanner.nextInt());
                     break;
+
                 case Worker:
                     System.out.println("Enter worker ID:");
                     workerUser = entitiesManager.getWorkerByID(scanner.nextInt());
                     break;
+
                 case ClinicManager:
                     System.out.println("Enter clinic ID:");
                     clinicManagerUser = entitiesManager.getClinicByID(scanner.nextInt());
                     break;
+
                 default:
                     break;
             }
@@ -253,6 +263,7 @@ public class CLI_Controller {
                 case EXIT_OPTION:
                     System.out.println("Goodbye!");
                     break;
+
                 case 1:
                     Collection<Supply> supplies = entitiesManager.getSuppliesForClinic(clinicManagerUser);
                     if (supplies.isEmpty()) {
@@ -279,13 +290,15 @@ public class CLI_Controller {
                         appointments.forEach(System.out::println);
                     }
                     break;
+
                 case 4:
                     System.out.println("Please enter how many vaccine doses from each vaccine type you wish to add:");
                     entitiesManager.addSuppliesToClinic(clinicManagerUser, scanner.nextInt());
                     System.out.println("Supplies added!");
                     break;
+
                 case 5:
-                    long expiredAmount = entitiesManager.removeExpiredSupplies(clinicManagerUser);
+                    long expiredAmount = entitiesManager.removeExpiredSuppliesFromClinic(clinicManagerUser);
                     System.out.println("Removed " + expiredAmount + " expired doses from the clinic");
                     break;
 
@@ -295,7 +308,7 @@ public class CLI_Controller {
                     workerID = scanner.nextInt();
                     System.out.println("Enter the appointment ID:");
                     appointmentID = scanner.nextInt();
-                    entitiesManager.replaceWorkerToAppointment(clinicManagerUser, workerID, appointmentID);
+                    entitiesManager.replaceWorkerInAppointment(clinicManagerUser, workerID, appointmentID);
                     System.out.println("Worker assigned to appointment!");
                     break;
 
@@ -331,44 +344,63 @@ public class CLI_Controller {
                 case EXIT_OPTION:
                     System.out.println("Goodbye!");
                     break;
+
                 case 1:
                     entitiesManager.getAllClinics().forEach(System.out::println);
                     break;
+
                 case 2:
                     entitiesManager.getAllSupplies().forEach(System.out::println);
                     break;
+
                 case 3:
                     entitiesManager.getAllCitizens().forEach(System.out::println);
                     break;
+
                 case 4:
                     entitiesManager.getAllWorkers().forEach(System.out::println);
                     break;
+
                 case 5:
                     entitiesManager.getAllVaccinations().forEach(System.out::println);
                     break;
+
                 case 6:
                     entitiesManager.getAllAppointments().forEach(System.out::println);
                     break;
+
                 case 7:
-                    List<Object[]> lowSupplyClinicsTable = entitiesManager.getLowSupplyClinics();
-                    lowSupplyClinicsTable.forEach(row -> {
-                        int clinicID = (int) row[0];
-                        String clinicName = (String) row[1];
-                        int vaccinesTotal = (int) row[2];
-                        int appointments = (int) row[3];
-                    });
+                    System.out.println("Processing...");
+                    Map<Clinic, Pair<Long, Long>> lowSupplyClinicsTable = entitiesManager.getLowSupplyClinics();
+                    lowSupplyClinicsTable.forEach((clinic, vaccinesAppointmentsPair) -> System.out.println(
+                            "clinic ID = " + clinic.getClinicId() +
+                                    " | clinic Name = " + clinic.getClinicName() +
+                                    " | vaccines Total = " + vaccinesAppointmentsPair.getFirst() +
+                                    " | appointments = " + vaccinesAppointmentsPair.getSecond()
+                    ));
                     break;
+
                 case 8:
-
+                    System.out.println("Enter clinic ID to add doses to:");
+                    int clinicID = scanner.nextInt();
+                    System.out.println("How many doses would you like to add from each vaccine type?");
+                    int add = scanner.nextInt();
+                    entitiesManager.addSuppliesToClinic(clinicID, add);
+                    System.out.println("Supplies added!");
                     break;
+
                 case 9:
-
+                    System.out.println("How many doses would you like to add from each vaccine type?");
+                    entitiesManager.addSuppliesToAllClinics(scanner.nextInt());
+                    System.out.println("Supplies added!");
                     break;
+
                 default:
                     System.out.println("Invalid choice For choice Range [0-9]");
                     break;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Error! " + e.getClass().getSimpleName());
             scanner.nextLine(); //clean buffer
         }
