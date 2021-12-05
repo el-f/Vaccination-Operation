@@ -284,6 +284,12 @@ public class EntitiesManager {
 
             em.persist(vaccination);
             transaction.commit();
+        } catch (DatabaseQueryException e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            em.close();
+            throw e;
         } catch (Exception e) {
             // If there is an exception rollback changes
             if (transaction.isActive()) {
