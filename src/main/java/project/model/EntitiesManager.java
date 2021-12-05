@@ -196,6 +196,12 @@ public class EntitiesManager {
                 .collect(Collectors.toList());
     }
 
+    public Collection<Vaccination> getVaccinationsByWorker(Worker worker) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Worker dummy = em.find(Worker.class, worker.getWorkerId());
+        return dummy.getVaccinationsByWorkerId();
+    }
+
     /*
      *******************************************
      User type - clinic manager

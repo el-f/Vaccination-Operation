@@ -188,23 +188,35 @@ public class CLI_Controller {
             System.out.println("> Worker Menu:");
             System.out.println("1) Log a vaccination");
             System.out.println("2) Show all appointments");
+            System.out.println("3) Show all administered vaccinations");
             System.out.println("\n0) To exit");
             choice = scanner.nextInt();
             switch (choice) {
                 case EXIT_OPTION:
                     System.out.println("Goodbye!");
                     break;
+
                 case 1:
                     System.out.println("Enter vaccinated citizen ID:");
                     entitiesManager.logVaccination(workerUser, scanner.nextInt());
                     System.out.println("Vaccination logged!");
                     break;
+
                 case 2:
                     List<Appointment> pending = entitiesManager.getPendingAppointmentsForWorker(workerUser);
                     if (pending.isEmpty()) {
                         System.out.println("No pending appointments!");
                     } else {
                         pending.forEach(System.out::println);
+                    }
+                    break;
+
+                case 3:
+                    Collection<Vaccination> vaccinations = entitiesManager.getVaccinationsByWorker(workerUser);
+                    if (vaccinations.isEmpty()) {
+                        System.out.println("No administered vaccinations for worker!");
+                    } else {
+                        vaccinations.forEach(System.out::println);
                     }
                     break;
 
