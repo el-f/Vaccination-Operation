@@ -580,7 +580,8 @@ public class EntitiesManager {
 
     /**
      * A helper function to add supplies to a clinic.
-     *  @param em     entity manager we use to query the DB.
+     *
+     * @param em     entity manager we use to query the DB.
      * @param clinic the {@link Clinic} instance marking the clinic we add the supplies to.
      * @param amount amount of doses in each supply added.
      */
