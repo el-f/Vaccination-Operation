@@ -11,6 +11,7 @@ public class InvalidInputException extends NamedException {
         super(_msg);
     }
 
+    @SuppressWarnings("unused")
     public InvalidInputException(Throwable throwable) {
         super(throwable);
     }

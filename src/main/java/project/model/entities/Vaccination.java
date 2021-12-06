@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
-//@IdClass(VaccinationPK.class)
 public class Vaccination {
     @EmbeddedId
     private VaccinationPK vaccinationPK;

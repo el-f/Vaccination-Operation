@@ -48,9 +48,7 @@ public class VaccinationPK implements Serializable {
 
         if (workerId != that.workerId) return false;
         if (citizenId != that.citizenId) return false;
-        if (phase != that.phase) return false;
-
-        return true;
+        return phase == that.phase;
     }
 
     @Override

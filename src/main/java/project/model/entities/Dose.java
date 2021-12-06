@@ -3,6 +3,7 @@ package project.model.entities;
 import javax.persistence.*;
 import java.util.Collection;
 
+@SuppressWarnings("unused")
 @Entity
 public class Dose {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +43,7 @@ public class Dose {
         Dose dose = (Dose) o;
 
         if (barcode != dose.barcode) return false;
-        if (supplyId != dose.supplyId) return false;
-
-        return true;
+        return supplyId == dose.supplyId;
     }
 
     @Override

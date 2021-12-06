@@ -5,7 +5,9 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 public class Supply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -71,10 +73,8 @@ public class Supply {
 
         if (supplyId != supply.supplyId) return false;
         if (vaccineId != supply.vaccineId) return false;
-        if (clinicId != null ? !clinicId.equals(supply.clinicId) : supply.clinicId != null) return false;
-        if (expiryDate != null ? !expiryDate.equals(supply.expiryDate) : supply.expiryDate != null) return false;
-
-        return true;
+        if (!Objects.equals(clinicId, supply.clinicId)) return false;
+        return Objects.equals(expiryDate, supply.expiryDate);
     }
 
     @Override

@@ -2,7 +2,9 @@ package project.model.entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 public class Clinic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -99,13 +101,11 @@ public class Clinic {
 
         if (clinicId != clinic.clinicId) return false;
         if (houseNum != clinic.houseNum) return false;
-        if (clinicName != null ? !clinicName.equals(clinic.clinicName) : clinic.clinicName != null) return false;
-        if (phoneNum != null ? !phoneNum.equals(clinic.phoneNum) : clinic.phoneNum != null) return false;
-        if (email != null ? !email.equals(clinic.email) : clinic.email != null) return false;
-        if (street != null ? !street.equals(clinic.street) : clinic.street != null) return false;
-        if (district != null ? !district.equals(clinic.district) : clinic.district != null) return false;
-
-        return true;
+        if (!Objects.equals(clinicName, clinic.clinicName)) return false;
+        if (!Objects.equals(phoneNum, clinic.phoneNum)) return false;
+        if (!Objects.equals(email, clinic.email)) return false;
+        if (!Objects.equals(street, clinic.street)) return false;
+        return Objects.equals(district, clinic.district);
     }
 
     @Override

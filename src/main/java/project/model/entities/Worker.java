@@ -2,7 +2,9 @@ package project.model.entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 public class Worker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -101,12 +103,10 @@ public class Worker {
         if (workerId != worker.workerId) return false;
         if (medicalLicense != worker.medicalLicense) return false;
         if (seniority != worker.seniority) return false;
-        if (firstName != null ? !firstName.equals(worker.firstName) : worker.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(worker.lastName) : worker.lastName != null) return false;
-        if (phoneNum != null ? !phoneNum.equals(worker.phoneNum) : worker.phoneNum != null) return false;
-        if (clinicId != null ? !clinicId.equals(worker.clinicId) : worker.clinicId != null) return false;
-
-        return true;
+        if (!Objects.equals(firstName, worker.firstName)) return false;
+        if (!Objects.equals(lastName, worker.lastName)) return false;
+        if (!Objects.equals(phoneNum, worker.phoneNum)) return false;
+        return Objects.equals(clinicId, worker.clinicId);
     }
 
     @Override

@@ -2,7 +2,9 @@ package project.model.entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 public class Vaccine {
     @Id
@@ -49,10 +51,8 @@ public class Vaccine {
         Vaccine vaccine = (Vaccine) o;
 
         if (vaccineId != vaccine.vaccineId) return false;
-        if (vaccineName != null ? !vaccineName.equals(vaccine.vaccineName) : vaccine.vaccineName != null) return false;
-        if (company != null ? !company.equals(vaccine.company) : vaccine.company != null) return false;
-
-        return true;
+        if (!Objects.equals(vaccineName, vaccine.vaccineName)) return false;
+        return Objects.equals(company, vaccine.company);
     }
 
     @Override

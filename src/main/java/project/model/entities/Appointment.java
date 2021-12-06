@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

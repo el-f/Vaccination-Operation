@@ -2,7 +2,9 @@ package project.model.entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Entity
 public class Citizen {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -133,14 +135,12 @@ public class Citizen {
         if (age != citizen.age) return false;
         if (weight != citizen.weight) return false;
         if (phasesComplete != citizen.phasesComplete) return false;
-        if (firstName != null ? !firstName.equals(citizen.firstName) : citizen.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(citizen.lastName) : citizen.lastName != null) return false;
-        if (phoneNum != null ? !phoneNum.equals(citizen.phoneNum) : citizen.phoneNum != null) return false;
-        if (email != null ? !email.equals(citizen.email) : citizen.email != null) return false;
-        if (district != null ? !district.equals(citizen.district) : citizen.district != null) return false;
-        if (riskGroup != null ? !riskGroup.equals(citizen.riskGroup) : citizen.riskGroup != null) return false;
-
-        return true;
+        if (!Objects.equals(firstName, citizen.firstName)) return false;
+        if (!Objects.equals(lastName, citizen.lastName)) return false;
+        if (!Objects.equals(phoneNum, citizen.phoneNum)) return false;
+        if (!Objects.equals(email, citizen.email)) return false;
+        if (!Objects.equals(district, citizen.district)) return false;
+        return Objects.equals(riskGroup, citizen.riskGroup);
     }
 
     @Override
