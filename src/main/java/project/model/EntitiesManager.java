@@ -534,6 +534,7 @@ public class EntitiesManager {
                                             .count();
 
                                     long appointmentsAmount = clinic.getAppointmentsByClinicId().size();
+
                                     return new Pair<>(vaccineAmount, appointmentsAmount);
                                 }
                         )
