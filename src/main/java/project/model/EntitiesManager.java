@@ -522,27 +522,23 @@ public class EntitiesManager {
     public Map<Clinic, Pair<Long, Long>> getLowSupplyClinics() {
         EntityManager em = entityManagerFactory.createEntityManager();
         List<Clinic> allClinics = em.createQuery("select c from Clinic c").getResultList();
+        Map<Clinic, Pair<Long, Long>> lowSupplyClinicsTable = new HashMap<>();
 
-        return allClinics.stream().collect(
-                        Collectors.toMap(
-                                Function.identity(),
-                                clinic -> {
-                                    long vaccineAmount = clinic.getSuppliesByClinicId().stream()
-                                            .map(Supply::getDosesBySupplyId)
-                                            .flatMap(Collection::stream)
-                                            .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
-                                            .count();
+        allClinics.forEach(clinic -> {
+            long vaccineAmount = clinic.getSuppliesByClinicId().stream()
+                    .map(Supply::getDosesBySupplyId)
+                    .flatMap(Collection::stream)
+                    .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
+                    .count();
 
-                                    long appointmentsAmount = clinic.getAppointmentsByClinicId().size();
+            long appointmentsAmount = clinic.getAppointmentsByClinicId().size();
 
-                                    return new Pair<>(vaccineAmount, appointmentsAmount);
-                                }
-                        )
-                )
-                .entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().getFirst() < entry.getValue().getSecond())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+            if (vaccineAmount < appointmentsAmount) {
+                lowSupplyClinicsTable.put(clinic, new Pair<>(vaccineAmount, appointmentsAmount));
+            }
+        });
+
+        return lowSupplyClinicsTable;
     }
 
     /**
