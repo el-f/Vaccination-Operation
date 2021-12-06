@@ -256,7 +256,7 @@ public class CLI_Controller {
             System.out.println("3) Show all clinic appointments");
             System.out.println("4) Add supplies to clinic");
             System.out.println("5) Remove expired supplies from clinic");
-            System.out.println("6) Add worker to appointment");
+            System.out.println("6) Replace worker in appointment");
             System.out.println("\n0) To exit");
             choice = scanner.nextInt();
             switch (choice) {
