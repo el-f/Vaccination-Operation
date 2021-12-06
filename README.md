@@ -7,8 +7,9 @@ The purpose of the system is to facilitate vaccination appointments for citizens
 
 #### The system has three front ends:
 - One for citizens - to make appointments and track their status through an app and a website.
-- Second for city leaders / project managers - to overlook the operation and get relevant information to make informed logistical and managerial decisions.
-- Third for health care workers – to log vaccine administrations and to view their schedule.
+- Second and Third for clinic managers to overlook their clinic and get relevant information to make informed logistical and managerial decisions.
+- Third for operation managers - to overlook the operation and get relevant information to make informed logistical and managerial decisions.
+- Forth for health care workers – to log vaccine administrations and to view their schedule.
 
 
 ### Progress:
