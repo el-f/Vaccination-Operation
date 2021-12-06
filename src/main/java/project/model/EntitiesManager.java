@@ -394,7 +394,7 @@ public class EntitiesManager {
         try {
             transaction.begin();
 
-            addSuppliesToClinic(amount, em, clinic);
+            addSuppliesToClinic(em, clinic, amount);
 
             transaction.commit();
         } catch (Exception e) {
@@ -563,7 +563,7 @@ public class EntitiesManager {
             transaction.begin();
 
             List<Clinic> clinics = em.createQuery("select c from Clinic c").getResultList();
-            clinics.forEach(clinic -> addSuppliesToClinic(amount, em, clinic));
+            clinics.forEach(clinic -> addSuppliesToClinic(em, clinic, amount));
 
             transaction.commit();
         } catch (Exception e) {
@@ -580,12 +580,11 @@ public class EntitiesManager {
 
     /**
      * A helper function to add supplies to a clinic.
-     *
-     * @param amount amount of doses in each supply added.
-     * @param em     entity manager we use to query the DB.
+     *  @param em     entity manager we use to query the DB.
      * @param clinic the {@link Clinic} instance marking the clinic we add the supplies to.
+     * @param amount amount of doses in each supply added.
      */
-    private void addSuppliesToClinic(int amount, EntityManager em, Clinic clinic) {
+    private void addSuppliesToClinic(EntityManager em, Clinic clinic, int amount) {
         List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
         vaccineTypes.forEach(vaccineID -> {
             Supply supply = Supply.SupplyBuilder
