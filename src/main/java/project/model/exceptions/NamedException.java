@@ -5,7 +5,7 @@ import project.model.util.UtilMethods;
 /**
  * A custom exception for better output and specific exception handling.
  *
- * @author Elazar Fine https://github.com/Elfein7Night
+ * @author Elazar Fine  - github.com/Elfein7Night
  */
 public abstract class NamedException extends Exception {
     private final String FULL_MESSAGE;

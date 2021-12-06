@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * A class for managing the entities in the database through hibernate and / or native sql queries.
  *
- * @author Elazar Fine https://github.com/Elfein7Night
+ * @author Elazar Fine  - github.com/Elfein7Night
  */
 @SuppressWarnings("unchecked")
 public class EntitiesManager {

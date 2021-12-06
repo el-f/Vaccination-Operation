@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 /**
  * A class for utility methods.
  *
- * @author Elazar Fine https://github.com/Elfein7Night
+ * @author Elazar Fine  - github.com/Elfein7Night
  */
 public class UtilMethods {
 

@@ -33,7 +33,7 @@ enum UserType {
 /**
  * The controller for the Command Line Interface version of the program.
  *
- * @author Elazar Fine https://github.com/Elfein7Night
+ * @author Elazar Fine  - github.com/Elfein7Night
  * @see <a href="https://en.wikipedia.org/wiki/Command-line_interface">Command Line Interface - Wikipedia</a>
  */
 public class CLI_Controller {

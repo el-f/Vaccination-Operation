@@ -15,7 +15,7 @@ package project.model.util;
  *      );
  * </pre>
  *
- * @author Elazar Fine https://github.com/Elfein7Night
+ * @author Elazar Fine  - github.com/Elfein7Night
  */
 @SuppressWarnings("unused") //  All methods are here for completion sake, even if unused.
 public class Pair<F, S> {
