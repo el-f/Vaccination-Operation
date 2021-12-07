@@ -6,8 +6,6 @@ import project.model.entities.*;
 import project.model.exceptions.DatabaseQueryException;
 import project.model.exceptions.InvalidInputException;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -40,18 +38,16 @@ enum UserType {
  */
 public class CLI_Controller {
 
-    EntityManagerFactory entityManagerFactory;
-    EntitiesManager entitiesManager;
-    Citizen citizenUser;
-    Worker workerUser;
-    Clinic clinicManagerUser;
-    UserType currentUserType;
+    private static EntitiesManager entitiesManager;
+    private Citizen citizenUser;
+    private Worker workerUser;
+    private Clinic clinicManagerUser;
+    private UserType currentUserType;
 
     private final static int EXIT_OPTION = 0;
 
     public CLI_Controller() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("default");
-        entitiesManager = new EntitiesManager(entityManagerFactory);
+        entitiesManager = EntitiesManager.instance();
 
         Scanner scanner = new Scanner(System.in);
         initializeUser(scanner);
@@ -73,7 +69,7 @@ public class CLI_Controller {
         }
 
         // close before exit
-        entityManagerFactory.close();
+        EntitiesManager.close();
     }
 
     void initializeUser(Scanner scanner) {

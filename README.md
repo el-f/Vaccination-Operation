@@ -13,20 +13,20 @@ The purpose of the system is to facilitate vaccination appointments for citizens
 
 
 ### Progress:
-| Component     	| Status        	|
-|---------------	|---------------	|
-| Database      	| done ✅        	|
-| Back-end      	| done ✅        	|
-| CLI front-end 	| done ✅        	|
-| GUI front-end 	| in-progress ⏳ 	|
+| Component     	 | Status        	 |
+|-----------------|-----------------|
+| Database      	 | done ✅        	 |
+| Back-end      	 | done ✅        	 |
+| CLI front-end 	 | done ✅        	 |
+| GUI front-end 	 | in-progress ⏳ 	 |
 
 ### Authors:
-|  Author                                     	| Component                                           	|
-|----------------------------------------------	|--------------------------------------------------	|
-| [Elazar Fine](https://github.com/Elfein7Night)  | Database, Back-end, CLI front-end, GUI front-end 	|
-| [Maor Ofek](https://github.com/maorofek)        | GUI front-end                                    	|
-| [Ron Beraha](https://github.com/RonBless)       | GUI front-end                                    	|
-| [Tal Benita](https://github.com/TalBenitaKoala) | GUI front-end                                    	|
+| Author                                     	    | Component                                           	 |
+|-------------------------------------------------|-------------------------------------------------------|
+| [Elazar Fine](https://github.com/Elfein7Night)  | Database, Back-end, CLI front-end, GUI front-end 	    |
+| [Maor Ofek](https://github.com/maorofek)        | GUI front-end                                    	    |
+| [Ron Beraha](https://github.com/RonBless)       | GUI front-end                                    	    |
+| [Tal Benita](https://github.com/TalBenitaKoala) | GUI front-end                                    	    |
 
 ### Technologies:
 - Java 11 + OpenJFX 11
@@ -37,3 +37,4 @@ The purpose of the system is to facilitate vaccination appointments for citizens
 #### Design patterns worth mentioning:
 - The system structure design is the `MVC` pattern.
 - Complex entities are instantiated using the `Builder` pattern.
+- The primary model class `EntitiesManager` is implemented as a `Singleton`.

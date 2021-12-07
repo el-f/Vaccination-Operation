@@ -9,6 +9,7 @@ import project.model.util.UtilMethods;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,13 +24,32 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public class EntitiesManager {
 
+    public static final String PERSISTENCE_UNIT_NAME = "default";
     public static final int ERROR_CODE = -1;
 
-    private final EntityManagerFactory entityManagerFactory;
+    private static EntityManagerFactory entityManagerFactory;
+    private static EntitiesManager _instance;
 
-    public EntitiesManager(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
+    private EntitiesManager() {
+        entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
     }
+
+    /**
+     * @return a singleton instance of the class.
+     */
+    public static EntitiesManager instance() {
+        if (_instance == null) _instance = new EntitiesManager();
+        return _instance;
+    }
+
+    /**
+     * Before exiting the program it's best practice closing any connection to the database.
+     */
+    public static void close() {
+        if (_instance != null) entityManagerFactory.close();
+    }
+
+    /* ********************************************************** */
 
     /**
      * Get a {@link Citizen} entity from the database using its ID.
