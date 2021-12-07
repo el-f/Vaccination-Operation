@@ -1,7 +1,6 @@
 package project.model.entities;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @SuppressWarnings("unused")
 @Entity
@@ -16,8 +15,8 @@ public class Dose {
     @ManyToOne
     @JoinColumn(name = "supply_id", referencedColumnName = "supply_id", nullable = false,  updatable = false, insertable = false)
     private Supply supplyBySupplyId;
-    @OneToMany(mappedBy = "doseByDoseBarcode")
-    private Collection<Vaccination> vaccinationsByBarcode;
+    @OneToOne(mappedBy = "doseByDoseBarcode")
+    private Vaccination vaccinationByBarcode;
 
     public int getBarcode() {
         return barcode;
@@ -69,12 +68,20 @@ public class Dose {
         this.supplyBySupplyId = supplyBySupplyId;
     }
 
-    public Collection<Vaccination> getVaccinationsByBarcode() {
-        return vaccinationsByBarcode;
+    public Vaccination getVaccinationByBarcode() {
+        return vaccinationByBarcode;
     }
 
-    public void setVaccinationsByBarcode(Collection<Vaccination> vaccinationsByBarcode) {
-        this.vaccinationsByBarcode = vaccinationsByBarcode;
+    public void setVaccinationByBarcode(Vaccination vaccinationsByBarcode) {
+        this.vaccinationByBarcode = vaccinationsByBarcode;
+    }
+
+    public boolean isUnused() {
+        return this.getVaccinationByBarcode() == null;
+    }
+
+    public boolean isUsed() {
+        return this.getVaccinationByBarcode() != null;
     }
 
 }

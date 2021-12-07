@@ -263,7 +263,7 @@ public class EntitiesManager {
             int unusedDoseBarcode = attached.getClinicByClinicId().getSuppliesByClinicId().stream()
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
-                    .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
+                    .filter(Dose::isUnused)
                     .limit(1)
                     .map(Dose::getBarcode)
                     .findFirst()
@@ -430,7 +430,7 @@ public class EntitiesManager {
                     .filter(supply -> supply.getExpiryDate().before(UtilMethods.now()))
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
-                    .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
+                    .filter(Dose::isUnused)
                     .forEach(dose -> {
                         em.remove(dose);
                         expiredAmount.incrementAndGet();
@@ -527,7 +527,7 @@ public class EntitiesManager {
             long vaccineAmount = clinic.getSuppliesByClinicId().stream()
                     .map(Supply::getDosesBySupplyId)
                     .flatMap(Collection::stream)
-                    .filter(dose -> dose.getVaccinationsByBarcode().isEmpty())
+                    .filter(Dose::isUnused)
                     .count();
 
             long appointmentsAmount = clinic.getAppointmentsByClinicId().size();

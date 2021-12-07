@@ -1,6 +1,7 @@
 package project;
 
 import project.model.entities.Citizen;
+import project.model.entities.Dose;
 import project.model.entities.Vaccine;
 
 import javax.persistence.*;
@@ -47,6 +48,9 @@ public class HibernateMainExample {
 
             Citizen citizen2 = entityManager.find(Citizen.class, 1);
             System.out.println(citizen2 == null);
+
+            Dose dose = entityManager.find(Dose.class,22469);
+            System.out.println(dose.getVaccinationByBarcode());
 
 //            TypedQuery<Employee> empByDeptQuery = entityManager.createNamedQuery("Employee.byDept", Employee.class);
 //            empByDeptQuery.setParameter(1, "Java Advocacy");

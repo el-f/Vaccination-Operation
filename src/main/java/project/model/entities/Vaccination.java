@@ -23,7 +23,7 @@ public class Vaccination {
     @ManyToOne
     @JoinColumn(name = "citizen_id", referencedColumnName = "citizen_id", nullable = false, updatable = false, insertable = false)
     private Citizen citizenByCitizenId;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "dose_barcode", referencedColumnName = "barcode", nullable = false, updatable = false, insertable = false)
     private Dose doseByDoseBarcode;
 
