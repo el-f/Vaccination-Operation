@@ -451,14 +451,14 @@ public class EntitiesManager {
     }
 
     /**
-     * Replace a worker in an appointment with a new one..
+     * Assign a worker to an appointment. If the appointment already had a worker assigned to it, it simply replaces them.
      *
      * @param clinicManagerUser a {@link Clinic} instance marking the clinic for the appointment.
-     * @param workerID          a {@link Worker} ID marking the new worker which will administer the vaccine.
+     * @param workerID          a {@link Worker} ID marking the worker which will administer the vaccine.
      * @param appointmentID     an {@link Appointment} ID marking which appointment we replace the worker in.
      * @throws DatabaseQueryException if replacing the worker for the appointment in the DB failed.
      */
-    public void replaceWorkerInAppointment(Clinic clinicManagerUser, int workerID, int appointmentID) throws DatabaseQueryException {
+    public void assignWorkerToAppointment(Clinic clinicManagerUser, int workerID, int appointmentID) throws DatabaseQueryException {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = em.getTransaction();
         Exception exp = null;

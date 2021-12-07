@@ -310,7 +310,7 @@ public class CLI_Controller {
                     workerID = scanner.nextInt();
                     out.println("Enter the appointment ID:");
                     appointmentID = scanner.nextInt();
-                    entitiesManager.replaceWorkerInAppointment(clinicManagerUser, workerID, appointmentID);
+                    entitiesManager.assignWorkerToAppointment(clinicManagerUser, workerID, appointmentID);
                     out.println("Worker assigned to appointment!");
                     break;
 
