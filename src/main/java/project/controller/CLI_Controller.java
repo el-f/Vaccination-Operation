@@ -374,12 +374,17 @@ public class CLI_Controller {
                 case 7:
                     out.println("Processing...");
                     Map<Clinic, Pair<Long, Long>> lowSupplyClinicsTable = entitiesManager.getLowSupplyClinics();
-                    lowSupplyClinicsTable.forEach((clinic, vaccinesAppointmentsPair) -> out.println(
-                            "clinic ID = " + clinic.getClinicId() +
-                                    " | clinic Name = " + clinic.getClinicName() +
-                                    " | vaccines Total = " + vaccinesAppointmentsPair.getFirst() +
-                                    " | appointments = " + vaccinesAppointmentsPair.getSecond()
-                    ));
+                    if (lowSupplyClinicsTable.isEmpty()) {
+                        out.println("All clinics are well supplied!");
+                    } else {
+                        out.println("Low supply clinics:");
+                        lowSupplyClinicsTable.forEach((clinic, vaccinesAppointmentsPair) -> out.println(
+                                "clinic ID = " + clinic.getClinicId() +
+                                        " | clinic Name = " + clinic.getClinicName() +
+                                        " | vaccines Total = " + vaccinesAppointmentsPair.getFirst() +
+                                        " | appointments = " + vaccinesAppointmentsPair.getSecond()
+                        ));
+                    }
                     break;
 
                 case 8:
