@@ -1,6 +1,7 @@
 package project.controller;
 
 import project.model.EntitiesManager;
+import project.model.EntitiesManager.UserType;
 import project.model.util.Pair;
 import project.model.entities.*;
 import project.model.exceptions.DatabaseQueryException;
@@ -12,23 +13,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 import static java.lang.System.out;
-
-enum UserType {
-    Citizen,
-    Worker,
-    ClinicManager {
-        @Override
-        public String toString() {
-            return "Clinic Manager";
-        }
-    },
-    OperationManager {
-        @Override
-        public String toString() {
-            return "Operation Manager";
-        }
-    }
-}
 
 /**
  * The controller for the Command Line Interface version of the program.

@@ -52,6 +52,28 @@ public class EntitiesManager {
     /* ********************************************************** */
 
     /**
+     * Enum for easier handling of user types.
+     */
+    public enum UserType {
+        Citizen,
+        Worker,
+        ClinicManager {
+            @Override
+            public String toString() {
+                return "Clinic Manager";
+            }
+        },
+        OperationManager {
+            @Override
+            public String toString() {
+                return "Operation Manager";
+            }
+        }
+    }
+
+    /* ********************************************************** */
+
+    /**
      * Get a {@link Citizen} entity from the database using its ID.
      *
      * @param id a citizen ID.
