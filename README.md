@@ -7,9 +7,9 @@ The purpose of the system is to facilitate vaccination appointments for citizens
 
 #### The system has 4 front ends:
 1) for citizens - to make appointments and track their status through an app and a website.
-2) for clinic managers to overlook their clinic and get relevant information to make informed logistical and managerial decisions.
+2) for clinic managers - to overlook their clinic and get relevant information to make informed logistical and managerial decisions.
 3) for operation managers - to overlook the operation and get relevant information to make informed logistical and managerial decisions.
-4) for health care workers – to log vaccine administrations and to view their schedule.
+4) for health care workers - to log vaccine administrations and to view their schedule.
 
 
 ### Progress:
