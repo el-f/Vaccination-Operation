@@ -2,10 +2,9 @@ package project.controller;
 
 import project.model.EntitiesManager;
 import project.model.EntitiesManager.UserType;
+import project.model.exceptions.NamedException;
 import project.model.util.Pair;
 import project.model.entities.*;
-import project.model.exceptions.DatabaseQueryException;
-import project.model.exceptions.InvalidInputException;
 
 import java.util.Collection;
 import java.util.List;
@@ -91,7 +90,7 @@ public class CLI_Controller {
                     break;
             }
             success = true;
-        } catch (DatabaseQueryException e) {
+        } catch (NamedException e) {
             out.println(e.getFullMessage());
             scanner.nextLine();
         } catch (Exception e) {
@@ -169,7 +168,7 @@ public class CLI_Controller {
                     out.println("Invalid choice For choice Range [0 - 4]");
                     break;
             }
-        } catch (DatabaseQueryException e) {
+        } catch (NamedException e) {
             out.println(e.getFullMessage());
             scanner.nextLine();
         } catch (Exception e) {
@@ -220,7 +219,7 @@ public class CLI_Controller {
                     out.println("Invalid choice For choice Range [0 - 3]");
                     break;
             }
-        } catch (DatabaseQueryException e) {
+        } catch (NamedException e) {
             out.println(e.getFullMessage());
             scanner.nextLine();
         } catch (Exception e) {
@@ -298,7 +297,7 @@ public class CLI_Controller {
                     out.println("Invalid choice For choice Range [0 - 6]");
                     break;
             }
-        } catch (DatabaseQueryException | InvalidInputException e) {
+        } catch (NamedException e) {
             out.println(e.getFullMessage());
             scanner.nextLine();
         } catch (Exception e) {
@@ -370,14 +369,14 @@ public class CLI_Controller {
                 case 8:
                     out.println("Enter clinic ID to add doses to:");
                     int clinicID = scanner.nextInt();
-                    out.println("How many doses would you like to add from each vaccine type?");
+                    out.println("How many doses would you like to add from each vaccine type? (1 - 1000)");
                     int add = scanner.nextInt();
                     entitiesManager.addSuppliesToClinic(clinicID, add);
                     out.println("Supplies added!");
                     break;
 
                 case 9:
-                    out.println("How many doses would you like to add from each vaccine type?");
+                    out.println("How many doses would you like to add from each vaccine type? (1 - 1000)");
                     entitiesManager.addSuppliesToAllClinics(scanner.nextInt());
                     out.println("Supplies added!");
                     break;
@@ -386,8 +385,10 @@ public class CLI_Controller {
                     out.println("Invalid choice For choice Range [0 - 9]");
                     break;
             }
+        } catch (NamedException e) {
+            out.println(e.getFullMessage());
+            scanner.nextLine();
         } catch (Exception e) {
-            e.printStackTrace();
             out.println("Error! " + e.getClass().getSimpleName());
             scanner.nextLine(); //clean buffer
         }
