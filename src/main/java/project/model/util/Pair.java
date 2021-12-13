@@ -8,11 +8,7 @@ package project.model.util;
  *
  * For example:
  * <pre>
- *  Pair&#60;List&#60;Integer&#62;, Pair&#60;HashMap&#60;String, Integer&#62;, Long&#62;&#62; listPairPair =
- *      new Pair&#60;&#62;(
- *              new ArrayList&#60;&#62;(),
- *              new Pair&#60;&#62;( new HashMap&#60;&#62;(), 1L )
- *      );
+ *  Pair&#60;Integer, String&#62; intStrPair = new Pair&#60;&#62;(42, "I love refrigerators!");
  * </pre>
  *
  * @author Elazar Fine  - github.com/Elfein7Night
