@@ -260,7 +260,7 @@ public class EntitiesManager {
         EntityManager em = entityManagerFactory.createEntityManager();
         Citizen attached = em.find(Citizen.class, citizen.getCitizenId());
         return attached.getAppointmentsByCitizenId().stream()
-                .filter(appointment -> appointment.getDate().after(Timestamp.valueOf(LocalDateTime.now())))
+                .filter(appointment -> appointment.getDate().after(UtilMethods.now()))
                 .collect(Collectors.toList());
     }
 
