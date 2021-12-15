@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 public class EntitiesManager {
 
     public static final String PERSISTENCE_UNIT_NAME = "default";
-    public static final int ERROR_CODE = -1;
 
     private static EntityManagerFactory entityManagerFactory;
     private static EntitiesManager _instance;
@@ -308,10 +307,7 @@ public class EntitiesManager {
                     .limit(1)
                     .map(Dose::getBarcode)
                     .findFirst()
-                    .orElse(ERROR_CODE);
-
-            if (unusedDoseBarcode == ERROR_CODE)
-                throw new DatabaseQueryException("Not enough doses in the worker's clinic");
+                    .orElseThrow(() -> new DatabaseQueryException("Not enough doses in the worker's clinic"));
 
             Vaccination vaccination = Vaccination.VaccinationBuilder
                     .aVaccination()
