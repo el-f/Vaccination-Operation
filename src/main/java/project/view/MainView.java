@@ -24,7 +24,23 @@ public class MainView extends ScrollPane {
             new Background(new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(0), new Insets(0, 0, 0, 0)));
     public static final Insets TABLE_INSETS = new Insets(10, 0, 5, 0);
 
+    public enum TableColumns {
+        CLINIC("Clinic"),
+        ADDRESS("Address"),
+        WORKER("Worker"),
+        NAME("Name"),
+        DATETIME("Date / Time");
 
+        private final String name;
+
+        TableColumns(final String text) {
+            this.name = text;
+        }
+
+        public String toString() {
+            return name;
+        }
+    }
     private final Alert alert;
 
     public MainView(Stage _stage) {
@@ -36,6 +52,7 @@ public class MainView extends ScrollPane {
         setFitToWidth(true);
         setFitToHeight(true);
         setBackground(DEFAULT_BLANK_BG);
+
         _stage.setTitle("Vaccination Operation");
         _stage.getIcons().add(new Image("project/images/syringe.png"));
         _stage.setScene(new Scene(this, WIDTH, HEIGHT));

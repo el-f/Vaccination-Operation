@@ -20,14 +20,6 @@ The purpose of the system is to facilitate vaccination appointments for citizens
 | CLI front-end 	 | done ✅        	 |
 | GUI front-end 	 | in-progress ⏳ 	 |
 
-### Authors:
-| Author                                     	    | Component                                           	 |
-|-------------------------------------------------|-------------------------------------------------------|
-| [Elazar Fine](https://github.com/Elfein7Night)  | Database, Back-end, CLI front-end, GUI front-end 	    |
-| [Maor Ofek](https://github.com/maorofek)        | GUI front-end                                    	    |
-| [Ron Beraha](https://github.com/RonBless)       | GUI front-end                                    	    |
-| [Tal Benita](https://github.com/TalBenitaKoala) | GUI front-end                                    	    |
-
 ### Technologies:
 - Java 11 + OpenJFX 11
 - MySQL

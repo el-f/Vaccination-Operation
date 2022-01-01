@@ -92,6 +92,10 @@ public class Clinic {
         this.district = district;
     }
 
+    public String getAddress() {
+        return street + " " + houseNum + ", " + district;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

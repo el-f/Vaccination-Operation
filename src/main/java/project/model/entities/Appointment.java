@@ -5,6 +5,7 @@ import project.model.exceptions.InvalidInputException;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
@@ -73,6 +74,10 @@ public class Appointment {
 
     public Timestamp getDate() {
         return date;
+    }
+
+    public String getDateString() {
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(date);
     }
 
     public void setDate(Timestamp date) {

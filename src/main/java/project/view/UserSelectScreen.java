@@ -19,13 +19,13 @@ public class UserSelectScreen extends VBox {
         clinicManager = new PrettyButton("Clinic Manager", "project/images/clinic_manager.png");
         operationManager = new PrettyButton("Operation Manager", "project/images/operation_manager.png");
 
-        HBox images = new HBox(citizen, worker, clinicManager, operationManager);
-        images.setSpacing(20);
-        images.setAlignment(Pos.CENTER);
+        HBox buttons = new HBox(citizen, worker, clinicManager, operationManager);
+        buttons.setSpacing(20);
+        buttons.setAlignment(Pos.CENTER);
 
-        Text instruction = MainView.getPrettyText("Who are you?", 25, Color.WHITE, Color.BLACK, FontWeight.BOLD);
+        Text instruction = MainView.getPrettyText("Login As:", 25, Color.WHITE, Color.BLACK, FontWeight.BOLD);
 
-        getChildren().addAll(instruction, images);
+        getChildren().addAll(instruction, buttons);
         setSpacing(50);
         setAlignment(Pos.CENTER);
         setBackground(MainView.DEFAULT_BLANK_BG);
