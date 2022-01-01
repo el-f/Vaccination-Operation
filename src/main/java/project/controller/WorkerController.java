@@ -2,7 +2,7 @@ package project.controller;
 
 import project.model.entities.Worker;
 import project.view.MainView;
-import project.view.WorkerView;
+import project.view.worker.WorkerView;
 
 public class WorkerController {
 

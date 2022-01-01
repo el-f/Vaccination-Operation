@@ -4,10 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -25,6 +22,9 @@ public class MainView extends ScrollPane {
     public static final int HEIGHT = 650;
     public static final Background DEFAULT_BLANK_BG =
             new Background(new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(0), new Insets(0, 0, 0, 0)));
+    public static final Insets TABLE_INSETS = new Insets(10, 0, 5, 0);
+
+
     private final Alert alert;
 
     public MainView(Stage _stage) {
@@ -73,11 +73,11 @@ public class MainView extends ScrollPane {
         return result.map(String::valueOf).orElse(null);
     }
 
-    public static Text getPrettyText(String msg, int size, Color fill, Color stroke) {
+    public static Text getPrettyText(String msg, int size, Color fill, Color stroke, FontWeight fontWeight) {
         Text text = new Text(msg);
-        text.setFont(Font.font("Tahoma Bold", FontWeight.BOLD, size));
-        text.setFill(fill);
-        text.setStroke(stroke);
+        text.setFont(Font.font("Tahoma Bold", fontWeight, size));
+        if (fill != null) text.setFill(fill);
+        if (stroke != null) text.setStroke(stroke);
         return text;
     }
 
@@ -87,4 +87,24 @@ public class MainView extends ScrollPane {
         piBox.setSpacing(20);
         setContent(piBox);
     }
+
+    public static void centerColumn(TableColumn<?, ?> tc) {
+        tc.setStyle("-fx-alignment: center;");
+    }
+
+//    public void showProgressAlert(String message) {
+//        Platform.runLater(()-> {
+//            alert.setGraphic(new ProgressIndicator());
+//            alert.setTitle(message);
+//            alert.setAlertType(Alert.AlertType.NONE);
+//            alert.setContentText(message);
+//            alert.setHeaderText(message);
+//            alert.show();
+//        });
+//    }
+//
+//    public void hideAlert() {
+//        Platform.runLater(alert::close);
+//    }
+
 }

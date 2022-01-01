@@ -1,4 +1,4 @@
-package project.view;
+package project.view.clinic_manager;
 
 import javafx.scene.layout.BorderPane;
 

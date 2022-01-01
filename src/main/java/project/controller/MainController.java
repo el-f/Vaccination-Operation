@@ -8,7 +8,7 @@ import project.model.entities.Clinic;
 import project.model.entities.Worker;
 import project.model.exceptions.DatabaseQueryException;
 import project.view.MainView;
-import project.view.forms.UserSelectScreen;
+import project.view.UserSelectScreen;
 
 public class MainController {
 

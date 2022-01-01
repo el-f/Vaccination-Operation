@@ -1,7 +1,7 @@
 package project.controller;
 
 import project.model.entities.Clinic;
-import project.view.ClinicManagerView;
+import project.view.clinic_manager.ClinicManagerView;
 import project.view.MainView;
 
 public class ClinicManagerController {

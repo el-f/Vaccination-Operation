@@ -1,7 +1,7 @@
 package project.controller;
 
 import project.view.MainView;
-import project.view.OperationManagerView;
+import project.view.operation_manager.OperationManagerView;
 
 public class OperationManagerController {
 

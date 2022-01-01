@@ -1,4 +1,4 @@
-package project.view.forms;
+package project.view;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -6,9 +6,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import project.view.MainView;
-import project.view.PrettyButton;
 
 public class UserSelectScreen extends VBox {
 
@@ -16,7 +15,7 @@ public class UserSelectScreen extends VBox {
 
     public UserSelectScreen() {
         citizen = new PrettyButton("Citizen", "project/images/citizen.png");
-        worker = new PrettyButton("Worker", "project/images/worker.png");
+        worker = new PrettyButton("Healthcare Worker", "project/images/worker.png");
         clinicManager = new PrettyButton("Clinic Manager", "project/images/clinic_manager.png");
         operationManager = new PrettyButton("Operation Manager", "project/images/operation_manager.png");
 
@@ -24,7 +23,7 @@ public class UserSelectScreen extends VBox {
         images.setSpacing(20);
         images.setAlignment(Pos.CENTER);
 
-        Text instruction = MainView.getPrettyText("Please select your user type:", 25, Color.WHITE, Color.BLACK);
+        Text instruction = MainView.getPrettyText("Who are you?", 25, Color.WHITE, Color.BLACK, FontWeight.BOLD);
 
         getChildren().addAll(instruction, images);
         setSpacing(50);

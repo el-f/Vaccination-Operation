@@ -1,4 +1,4 @@
-package project.view;
+package project.view.operation_manager;
 
 import javafx.scene.layout.BorderPane;
 
