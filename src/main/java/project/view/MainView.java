@@ -1,18 +1,16 @@
 package project.view;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -79,5 +77,12 @@ public class MainView extends ScrollPane {
         text.setFill(fill);
         text.setStroke(stroke);
         return text;
+    }
+
+    public void indicateProgress(String message) {
+        VBox piBox = new VBox(new Text(message), new ProgressIndicator());
+        piBox.setAlignment(Pos.CENTER);
+        piBox.setSpacing(20);
+        setContent(piBox);
     }
 }
