@@ -11,6 +11,10 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontSmoothingType;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import project.model.exceptions.NamedException;
 
@@ -20,7 +24,8 @@ public class MainView extends ScrollPane {
 
     public static final int WIDTH = 1100;
     public static final int HEIGHT = 650;
-
+    public static final Background DEFAULT_BLANK_BG =
+            new Background(new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(0), new Insets(0, 0, 0, 0)));
     private final Alert alert;
 
     public MainView(Stage _stage) {
@@ -31,7 +36,7 @@ public class MainView extends ScrollPane {
 
         setFitToWidth(true);
         setFitToHeight(true);
-        setBackground(new Background(new BackgroundFill(Color.CORNFLOWERBLUE, new CornerRadii(0), new Insets(0, 0, 0, 0))));
+        setBackground(DEFAULT_BLANK_BG);
         _stage.setTitle("Vaccination Operation");
         _stage.setScene(new Scene(this, WIDTH, HEIGHT));
         _stage.show();
@@ -66,5 +71,13 @@ public class MainView extends ScrollPane {
         dialog.setContentText(expectedInput + ":");
         Optional<String> result = dialog.showAndWait();
         return result.map(String::valueOf).orElse(null);
+    }
+
+    public static Text getPrettyText(String msg, int size, Color fill, Color stroke) {
+        Text text = new Text(msg);
+        text.setFont(Font.font("Tahoma Bold", FontWeight.BOLD, size));
+        text.setFill(fill);
+        text.setStroke(stroke);
+        return text;
     }
 }

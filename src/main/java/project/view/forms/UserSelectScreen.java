@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import project.view.MainView;
@@ -35,7 +36,7 @@ public class UserSelectScreen extends VBox {
                     imageView.setFitWidth(150);
                     imageView.setFitHeight(150);
 
-                    VBox imgBox = new VBox(imageView, new Label(imageView.getId()));
+                    VBox imgBox = new VBox(imageView, MainView.getPrettyText(imageView.getId(), 20, Color.WHITE, Color.BLACK));
                     imgBox.setSpacing(10);
                     imgBox.setAlignment(Pos.CENTER);
                     MainView.setCursorAsSelectInRegion(imgBox);
@@ -45,12 +46,12 @@ public class UserSelectScreen extends VBox {
         images.setSpacing(20);
         images.setAlignment(Pos.CENTER);
 
-        Text instruction = new Text("Please select your user type:");
-        instruction.setFont(Font.font(16));
+        Text instruction = MainView.getPrettyText("Please select your user type:", 25, Color.WHITE, Color.BLACK);
 
         getChildren().addAll(instruction, images);
         setSpacing(50);
         setAlignment(Pos.CENTER);
+        setBackground(MainView.DEFAULT_BLANK_BG);
     }
 
     public void citizenSetOnClick(EventHandler<MouseEvent> eventHandler) {
