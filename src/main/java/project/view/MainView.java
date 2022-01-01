@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -36,6 +37,7 @@ public class MainView extends ScrollPane {
         setFitToHeight(true);
         setBackground(DEFAULT_BLANK_BG);
         _stage.setTitle("Vaccination Operation");
+        _stage.getIcons().add(new Image("project/images/syringe.png"));
         _stage.setScene(new Scene(this, WIDTH, HEIGHT));
         _stage.show();
     }
@@ -55,11 +57,11 @@ public class MainView extends ScrollPane {
     }
 
     public void alertForException(Exception exception) {
-        showAlert(Alert.AlertType.ERROR, new NamedException(exception).getSimpleMessage());
+        showAlert(Alert.AlertType.WARNING, new NamedException(exception).getSimpleMessage());
     }
 
     public void alertForException(NamedException exception) {
-        showAlert(Alert.AlertType.ERROR, exception.getFullMessage());
+        showAlert(Alert.AlertType.WARNING, exception.getFullMessage());
     }
 
     public static String getSingularUserInput(String message, String expectedInput) {
