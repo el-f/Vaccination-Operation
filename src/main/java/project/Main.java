@@ -1,11 +1,17 @@
 package project;
 
-import project.controller.CLI_Controller;
+import javafx.application.Application;
+import javafx.stage.Stage;
+import project.controller.MainController;
 
-public class Main {
+public class Main extends Application {
 
     public static void main(String[] args) {
-        new CLI_Controller();
+        launch(args);
     }
 
+    @Override
+    public void start(Stage primaryStage) {
+        new MainController(primaryStage);
+    }
 }

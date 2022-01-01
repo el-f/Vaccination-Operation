@@ -645,5 +645,16 @@ public class EntitiesManager {
         });
     }
 
+    /**
+     * Authenticate an Operation Manager before login.
+     * @param auth authentication string.
+     * @throws DatabaseQueryException if not authenticated.
+     */
+    public void authenticateOperationManager(String auth) throws DatabaseQueryException {
+        // just a theoretical example of course, this placeholder implementation can be easily changed with an database check!
+        if (!auth.equals("1234")) throw new DatabaseQueryException("Invalid Operation Manager Authentication!");
+
+    }
+
 }
 
