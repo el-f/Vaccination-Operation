@@ -8,8 +8,10 @@ import javafx.scene.text.Text;
 
 public class PrettyButton extends VBox {
 
+    private final ImageView imgView;
+
     public PrettyButton(String text, String imgURL) {
-        ImageView imgView = new ImageView(imgURL);
+        imgView = new ImageView(imgURL);
         imgView.setFitWidth(150);
         imgView.setFitHeight(150);
 
@@ -21,6 +23,8 @@ public class PrettyButton extends VBox {
         getChildren().addAll(imgView, description);
 
         MainView.setCursorAsSelectInRegion(this);
+        setOnMouseEntered(event -> imgView.setOpacity(0.7));
+        setOnMouseExited(event -> imgView.setOpacity(1.0));
     }
 
 }
