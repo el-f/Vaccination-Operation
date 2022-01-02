@@ -54,7 +54,7 @@ public class WorkerView extends BorderPane {
         TableColumn<Appointment, String> citizen = new TableColumn<>(MainView.TableColumns.CITIZEN.toString());
         TableColumn<Appointment, String> citizenID = new TableColumn<>(MainView.TableColumns.ID.toString());
         TableColumn<Appointment, String> citizenName = new TableColumn<>(MainView.TableColumns.NAME.toString());
-        TableColumn<Appointment, String> citizenPhone = new TableColumn<>(MainView.TableColumns.PHONE_NUMBER.toString());
+        TableColumn<Appointment, String> citizenPhone = new TableColumn<>(MainView.TableColumns.PHONE.toString());
 
 
         citizen.getColumns().addAll(citizenID, citizenName, citizenPhone);

@@ -13,8 +13,8 @@ public class ClinicManagerMenu extends VBox {
     private final PrettyButton workers, supplies, appointments;
 
     public ClinicManagerMenu() {
-        workers = new PrettyButton("Manage Workers", "project/images/worker_alt.png");
-        supplies = new PrettyButton("Manage Supplies", "project/images/supplies.png");
+        workers = new PrettyButton("Workers", "project/images/worker_alt.png");
+        supplies = new PrettyButton("Supplies", "project/images/supplies.png");
         appointments = new PrettyButton("Appointments", "project/images/calendar.png");
 
         HBox buttons = new HBox(workers, supplies, appointments);

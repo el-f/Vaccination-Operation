@@ -13,8 +13,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public class ViewUtils {
 
@@ -73,6 +75,33 @@ public class ViewUtils {
         homeButton.setOnMouseClicked(homeButtonEventHandler);
         bp.setTop(new HBox(homeButton));
         bp.setBackground(MainView.DEFAULT_BLANK_BG);
+    }
+
+    public static <T> void addActionableColumnToTableView(TableView<T> tableView, String description, String imgURL, Consumer<T> action) {
+        TableColumn<T, Void> replaceCol = new TableColumn<>(description);
+
+        replaceCol.setCellFactory(new Callback<>() {
+            @Override
+            public TableCell<T, Void> call(final TableColumn<T, Void> param) {
+                return new TableCell<>() {
+                    private final PrettyButton removeBtn = new PrettyButton(imgURL);
+
+                    {
+                        removeBtn.setOnMouseClicked(click -> action.accept(getTableRow().getItem()));
+                        removeBtn.setSize(30);
+                        setAlignment(Pos.CENTER);
+                    }
+
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) setGraphic(null);
+                        else setGraphic(removeBtn);
+                    }
+                };
+            }
+        });
+        tableView.getColumns().add(replaceCol);
     }
 
 }

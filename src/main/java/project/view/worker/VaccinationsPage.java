@@ -53,7 +53,7 @@ public class VaccinationsPage extends VBox {
         TableColumn<Vaccination, String> citizen = new TableColumn<>(MainView.TableColumns.CITIZEN.toString());
         TableColumn<Vaccination, String> citizenID = new TableColumn<>(MainView.TableColumns.ID.toString());
         TableColumn<Vaccination, String> citizenName = new TableColumn<>(MainView.TableColumns.NAME.toString());
-        TableColumn<Vaccination, String> citizenPhone = new TableColumn<>(MainView.TableColumns.PHONE_NUMBER.toString());
+        TableColumn<Vaccination, String> citizenPhone = new TableColumn<>(MainView.TableColumns.PHONE.toString());
 
         citizen.getColumns().addAll(citizenID, citizenName, citizenPhone);
         tableView.getColumns().addAll(barcode, dateTime, citizen);

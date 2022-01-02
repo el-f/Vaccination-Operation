@@ -20,14 +20,14 @@ public class ClinicManagerView extends BorderPane {
     }
 
     public void workersSetOnClick(EventHandler<MouseEvent> eventHandler) {
-        mainMenu.setOnMouseClicked(eventHandler);
+        mainMenu.workersSetOnClick(eventHandler);
     }
 
     public void suppliesSetOnClick(EventHandler<MouseEvent> eventHandler) {
-        mainMenu.setOnMouseClicked(eventHandler);
+        mainMenu.suppliesSetOnClick(eventHandler);
     }
 
     public void appointmentsSetOnClick(EventHandler<MouseEvent> eventHandler) {
-        mainMenu.setOnMouseClicked(eventHandler);
+        mainMenu.appointmentsSetOnClick(eventHandler);
     }
 }

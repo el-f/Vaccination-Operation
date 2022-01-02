@@ -1,17 +1,14 @@
 package project.view.citizen;
 
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import project.model.entities.Appointment;
 import project.model.entities.Worker;
 import project.model.util.UtilMethods;
@@ -91,33 +88,14 @@ public class AppointmentsPage extends VBox {
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);
 
-        TableColumn<Appointment, Void> remCol = new TableColumn<>("Cancel Appointment:");
+        ViewUtils.addActionableColumnToTableView(
+                tableView,
+                "Cancel Appointment:",
+                "project/images/remove.png",
+                appointmentCanceller
+        );
 
-        remCol.setCellFactory(new Callback<>() {
-            @Override
-            public TableCell<Appointment, Void> call(final TableColumn<Appointment, Void> param) {
-                return new TableCell<>() {
-                    private final PrettyButton removeBtn = new PrettyButton("project/images/remove.png");
-
-                    {
-                        removeBtn.setOnMouseClicked(click -> appointmentCanceller.accept(getTableRow().getItem()));
-                        removeBtn.setSize(30);
-                        setAlignment(Pos.CENTER);
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) setGraphic(null);
-                        else setGraphic(removeBtn);
-                    }
-                };
-            }
-        });
-
-        tableView.getColumns().add(remCol);
         tableView.getItems().addAll(appointments);
-
         tableView.setMinWidth(800);
 
         ViewUtils.unHighlightTable(tableView);

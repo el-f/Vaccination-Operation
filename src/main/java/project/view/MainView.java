@@ -22,7 +22,7 @@ public class MainView extends ScrollPane {
     public enum TableColumns {
         NAME("Name"),
         ID("ID"),
-        PHONE_NUMBER("Phone #"),
+        PHONE("Phone #"),
         CLINIC("Clinic"),
         ADDRESS("Address"),
         WORKER("Worker"),
