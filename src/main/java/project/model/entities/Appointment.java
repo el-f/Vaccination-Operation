@@ -38,7 +38,7 @@ public class Appointment {
     private Worker workerByWorkerId;
 
     public static final int MIN_DAYS_RANGE_FOR_APPOINT = 1;
-    public static final int MAX_DAYS_RANGE_FOR_APPOINT = 14;
+    public static final int MAX_DAYS_RANGE_FOR_APPOINT = 30;
 
     public int getAppointmentId() {
         return appointmentId;

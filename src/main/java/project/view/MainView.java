@@ -2,19 +2,14 @@ package project.view;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import project.model.exceptions.NamedException;
-
-import java.util.Optional;
 
 public class MainView extends ScrollPane {
 
@@ -41,6 +36,7 @@ public class MainView extends ScrollPane {
             return name;
         }
     }
+
     private final Alert alert;
 
     public MainView(Stage _stage) {
@@ -57,10 +53,6 @@ public class MainView extends ScrollPane {
         _stage.getIcons().add(new Image("project/images/syringe.png"));
         _stage.setScene(new Scene(this, WIDTH, HEIGHT));
         _stage.show();
-    }
-
-    public static void setCursorAsSelectInRegion(Region region) {
-        region.setCursor(Cursor.HAND);
     }
 
     private void showAlert(Alert.AlertType type, String message) {
@@ -81,32 +73,11 @@ public class MainView extends ScrollPane {
         showAlert(Alert.AlertType.WARNING, exception.getFullMessage());
     }
 
-    public static String getSingularUserInput(String message, String expectedInput) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle(null);
-        dialog.setHeaderText(message);
-        dialog.setContentText(expectedInput + ":");
-        Optional<String> result = dialog.showAndWait();
-        return result.map(String::valueOf).orElse(null);
-    }
-
-    public static Text getPrettyText(String msg, int size, Color fill, Color stroke, FontWeight fontWeight) {
-        Text text = new Text(msg);
-        text.setFont(Font.font("Tahoma Bold", fontWeight, size));
-        if (fill != null) text.setFill(fill);
-        if (stroke != null) text.setStroke(stroke);
-        return text;
-    }
-
     public void indicateProgress(String message) {
         VBox piBox = new VBox(new Text(message), new ProgressIndicator());
         piBox.setAlignment(Pos.CENTER);
         piBox.setSpacing(20);
         setContent(piBox);
-    }
-
-    public static void centerColumn(TableColumn<?, ?> tc) {
-        tc.setStyle("-fx-alignment: center;");
     }
 
 //    public void showProgressAlert(String message) {

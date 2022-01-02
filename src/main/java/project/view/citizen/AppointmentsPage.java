@@ -16,6 +16,7 @@ import project.model.entities.Appointment;
 import project.model.entities.Worker;
 import project.view.MainView;
 import project.view.PrettyButton;
+import project.view.ViewUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -33,7 +34,7 @@ public class AppointmentsPage extends VBox {
     ) {
         appointmentsTable = getAppointmentsTableForCitizen(appointments, appointmentCanceller);
         PrettyButton setAppointmentsButton = new PrettyButton("Set an appointment", "project/images/calendar_add.png");
-        setAppointmentsButton.setSize(100, 100);
+        setAppointmentsButton.setSize(100);
         setAppointmentsButton.setOnMouseClicked(addEventHandler);
 
         getChildren().addAll(appointmentsTable, setAppointmentsButton);
@@ -74,7 +75,7 @@ public class AppointmentsPage extends VBox {
                 worker,
                 workerName,
                 dateTime
-        ).forEach(MainView::centerColumn);
+        ).forEach(ViewUtils::centerColumn);
 
         // generate column values
         clinicName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getClinicByClinicId().getClinicName()));
@@ -99,7 +100,7 @@ public class AppointmentsPage extends VBox {
 
                     {
                         removeBtn.setOnMouseClicked(click -> appointmentCanceller.accept(getTableRow().getItem()));
-                        removeBtn.setSize(30, 30);
+                        removeBtn.setSize(30);
                         setAlignment(Pos.CENTER);
                     }
 

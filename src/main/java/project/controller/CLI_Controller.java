@@ -123,7 +123,7 @@ public class CLI_Controller {
                         out.println((i + 1) + ") " + clinics.get(i));
                     }
                     Clinic chosenClinic = clinics.get(scanner.nextInt() - 1);
-                    out.println("How many days from now? (1 - 14)");
+                    out.println("How many days from now? (1 - 30)");
                     entitiesManager.createAppointment(
                             citizenUser,
                             chosenClinic,

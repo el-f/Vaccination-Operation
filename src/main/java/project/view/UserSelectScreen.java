@@ -23,7 +23,7 @@ public class UserSelectScreen extends VBox {
         buttons.setSpacing(20);
         buttons.setAlignment(Pos.CENTER);
 
-        Text instruction = MainView.getPrettyText("Login As:", 25, Color.WHITE, Color.BLACK, FontWeight.BOLD);
+        Text instruction = ViewUtils.getPrettyText("Login As:", 25, Color.WHITE, Color.BLACK, FontWeight.BOLD);
 
         getChildren().addAll(instruction, buttons);
         setSpacing(50);

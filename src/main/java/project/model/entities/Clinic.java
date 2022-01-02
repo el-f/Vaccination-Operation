@@ -93,7 +93,11 @@ public class Clinic {
     }
 
     public String getAddress() {
-        return street + " " + houseNum + ", " + district;
+        return street + " " + houseNum + ", " + district + " district";
+    }
+
+    public String getPrettyString() {
+        return getClinicName() + " | " + getAddress();
     }
 
     @Override
