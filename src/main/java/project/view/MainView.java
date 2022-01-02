@@ -29,6 +29,13 @@ public class MainView extends ScrollPane {
         CITIZEN("Citizen"),
         PHASE("Phase"),
         BARCODE("Barcode"),
+        EXPIRY_DATE("Expiry Date"),
+        VACCINE("Vaccine"),
+        AMOUNT("Amount"),
+        AVAILABLE_DOSES("Available Doses"),
+        COMPANY("Company"),
+        SENIORITY("Seniority"),
+        LICENSE("License"),
         DATETIME("Date / Time");
 
         private final String name;

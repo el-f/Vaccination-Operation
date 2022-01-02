@@ -77,7 +77,7 @@ public class WorkerView extends BorderPane {
             return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
         });
         citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateString(param.getValue().getDate())));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);
         tableView.setMinWidth(500);

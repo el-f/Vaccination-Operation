@@ -88,7 +88,7 @@ public class ClinicAppointmentsPage extends VBox {
             Worker actualWorker = param.getValue().getWorkerByWorkerId();
             return new SimpleStringProperty(actualWorker.getFirstName() + " " + actualWorker.getLastName());
         });
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateString(param.getValue().getDate())));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
         workerPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getWorkerByWorkerId().getPhoneNum()));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);

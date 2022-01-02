@@ -84,7 +84,7 @@ public class AppointmentsPage extends VBox {
             return new SimpleStringProperty(actualWorker.getFirstName() + " " + actualWorker.getLastName());
         });
 
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateString(param.getValue().getDate())));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);
 

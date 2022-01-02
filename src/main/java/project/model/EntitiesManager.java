@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
@@ -619,22 +620,28 @@ public class EntitiesManager {
      */
     private void addSuppliesToClinic(EntityManager em, Clinic clinic, int amount) {
         List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
+        Date expiryDate = Supply.DEFAULT_EXPIRATION();
         vaccineTypes.forEach(vaccineID -> {
             Supply supply = Supply.SupplyBuilder
                     .aSupply()
                     .withVaccineId(vaccineID)
                     .withClinicId(clinic.getClinicId())
-                    .withExpiryDate(Supply.DEFAULT_EXPIRATION())
+                    .withExpiryDate(expiryDate)
                     .build();
 
             em.persist(supply);
         });
 
         List<Integer> newSuppliesIDs = em.createQuery(
-                "select s.supplyId " +
-                        "from Supply s " +
-                        "where s.dosesBySupplyId is empty"
-        ).getResultList();
+                        "select s.supplyId " +
+                                "from Supply s " +
+                                "where s.dosesBySupplyId is empty " +
+                                "and s.clinicId = :cid " +
+                                "and s.expiryDate = :exp"
+                )
+                .setParameter("cid", clinic.getClinicId())
+                .setParameter("exp", expiryDate)
+                .getResultList();
 
         newSuppliesIDs.forEach(supplyID -> {
             for (int i = 0; i < amount; i++) {
@@ -647,6 +654,7 @@ public class EntitiesManager {
 
     /**
      * Authenticate an Operation Manager before login.
+     *
      * @param auth authentication string.
      * @throws DatabaseQueryException if not authenticated.
      */

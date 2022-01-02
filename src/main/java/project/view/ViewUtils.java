@@ -1,10 +1,12 @@
 package project.view;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -14,7 +16,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import project.model.entities.Worker;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -102,6 +107,47 @@ public class ViewUtils {
             }
         });
         tableView.getColumns().add(replaceCol);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static TableView<Worker> getWorkerTableView(Collection<Worker> workers) {
+        TableView<Worker> tableView = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Set Columns
+        TableColumn<Worker, String> ID = new TableColumn<>(MainView.TableColumns.ID.toString());
+        TableColumn<Worker, String> name = new TableColumn<>(MainView.TableColumns.NAME.toString());
+        TableColumn<Worker, String> phone = new TableColumn<>(MainView.TableColumns.PHONE.toString());
+        TableColumn<Worker, String> license = new TableColumn<>(MainView.TableColumns.LICENSE.toString());
+        TableColumn<Worker, String> seniority = new TableColumn<>(MainView.TableColumns.SENIORITY.toString());
+
+        tableView.getColumns().addAll(ID, name, phone, license, seniority);
+
+        Arrays.asList(
+                ID,
+                name,
+                phone,
+                license,
+                seniority
+        ).forEach(ViewUtils::centerColumn);
+
+        // generate column values
+        ID.setCellValueFactory(new PropertyValueFactory<>("workerId"));
+        name.setCellValueFactory(param -> new SimpleStringProperty(
+                param.getValue().getFirstName() + " " + param.getValue().getLastName()
+        ));
+        phone.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
+        license.setCellValueFactory(new PropertyValueFactory<>("medicalLicense"));
+        seniority.setCellValueFactory(new PropertyValueFactory<>("seniority"));
+
+        HBox.setMargin(tableView, MainView.TABLE_INSETS);
+        tableView.getItems().addAll(workers);
+        tableView.setMinWidth(500);
+
+        ViewUtils.unHighlightTable(tableView);
+
+
+        return tableView;
     }
 
 }

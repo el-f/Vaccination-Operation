@@ -44,8 +44,12 @@ public class UtilMethods {
         return result;
     }
 
-    public static String getDateString(Date _date) {
+    public static String getDateTimeString(Timestamp _date) {
         return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(_date);
+    }
+
+    public static String getDateString(Date _date) {
+        return new SimpleDateFormat("dd/MM/yyyy").format(_date);
     }
 
 }

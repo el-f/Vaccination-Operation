@@ -74,7 +74,7 @@ public class VaccinationsPage extends VBox {
         });
         citizenID.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getPK().getCitizenId())));
         citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateString(param.getValue().getDate())));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
         barcode.setCellValueFactory(new PropertyValueFactory<>("doseBarcode"));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);

@@ -62,7 +62,7 @@ public class CitizenView extends BorderPane {
 
         barcode.setCellValueFactory(new PropertyValueFactory<>("doseBarcode"));
         phase.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getPK().getPhase())));
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateString(param.getValue().getDate())));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
         workerName.setCellValueFactory(param -> {
             Worker actualWorker = param.getValue().getWorkerByWorkerId();
             return new SimpleStringProperty(actualWorker.getFirstName() + " " + actualWorker.getLastName());
