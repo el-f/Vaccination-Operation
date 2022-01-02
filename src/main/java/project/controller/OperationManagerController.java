@@ -24,7 +24,7 @@ public class OperationManagerController {
     private ClinicSupplyForm clinicSupplyForm;
 
     public OperationManagerController(MainView _mainView) {
-        operationManagerView = new OperationManagerView();
+        operationManagerView = new OperationManagerView(_mainView);
         mainView = _mainView;
         mainView.setContent(operationManagerView);
 

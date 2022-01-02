@@ -27,7 +27,7 @@ public class ClinicManagerController {
     public ClinicManagerController(Clinic _clinicManagerUser, MainView _mainView) {
         clinicManagerUser = _clinicManagerUser;
         mainView = _mainView;
-        clinicManagerView = new ClinicManagerView();
+        clinicManagerView = new ClinicManagerView(_mainView);
         mainView.setContent(clinicManagerView);
 
         Consumer<Appointment> workerAssigner = appointment -> {

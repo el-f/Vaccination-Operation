@@ -5,7 +5,6 @@ import project.model.exceptions.InvalidInputException;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 @SuppressWarnings("unused")

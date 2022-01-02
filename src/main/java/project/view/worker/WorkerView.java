@@ -25,8 +25,8 @@ public class WorkerView extends BorderPane {
 
     private final SimpleMainMenu mainMenu;
 
-    public WorkerView() {
-        ViewUtils.initBorderPane(this, click -> showMainMenu());
+    public WorkerView(MainView mainView) {
+        ViewUtils.initBorderPane(this, click -> showMainMenu(), mainView);
         mainMenu = new SimpleMainMenu();
         showMainMenu();
     }

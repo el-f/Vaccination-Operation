@@ -15,12 +15,13 @@ public class MainController {
 
 
     private final MainView mainView;
+    public static UserSelectScreen userSelectScreen;
 
     public MainController(Stage _stage) {
         mainView = new MainView(_stage);
 
         try {
-            UserSelectScreen userSelectScreen = new UserSelectScreen();
+            userSelectScreen = new UserSelectScreen();
 
             userSelectScreen.citizenSetOnClick(event -> {
                 try {

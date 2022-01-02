@@ -27,7 +27,7 @@ public class AppointmentForm extends Form {
 
     public AppointmentForm(Collection<Clinic> clinics) {
         super("Set Appointment");
-        datePicker = new DatePicker(LocalDate.now());
+        datePicker = new DatePicker(LocalDate.now().plusDays(1));
         datePicker.setMaxWidth(110);
         hourPicker = new Spinner<>(0, 23, 11);
         hourPicker.setEditable(true);
@@ -62,10 +62,8 @@ public class AppointmentForm extends Form {
         if (h < 0 || h > 23 || m < 0 || m > 59) throw new InvalidInputException("Invalid Time! (" + h + ":" + m + ")");
 
         return Appointment.createAppointmentDate((int) DAYS.between(
-                LocalDateTime.now(),
-                datePicker.getValue().atStartOfDay()
-                        .plusHours(h)
-                        .plusMinutes(m)
+                LocalDateTime.now().toLocalDate(),
+                datePicker.getValue()
         ));
     }
 

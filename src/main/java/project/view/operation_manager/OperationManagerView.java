@@ -3,6 +3,7 @@ package project.view.operation_manager;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import project.view.MainView;
 import project.view.ViewUtils;
 
 public class OperationManagerView extends BorderPane {
@@ -10,8 +11,8 @@ public class OperationManagerView extends BorderPane {
 
     private final OperationManagerMenu mainMenu;
 
-    public OperationManagerView() {
-        ViewUtils.initBorderPane(this, click -> showMainMenu());
+    public OperationManagerView(MainView mainView) {
+        ViewUtils.initBorderPane(this, click -> showMainMenu(), mainView);
         mainMenu = new OperationManagerMenu();
         showMainMenu();
     }

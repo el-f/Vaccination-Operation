@@ -25,8 +25,8 @@ public class CitizenView extends BorderPane {
 
     private final SimpleMainMenu mainMenu;
 
-    public CitizenView() {
-        ViewUtils.initBorderPane(this, click -> showMainMenu());
+    public CitizenView(MainView mainView) {
+        ViewUtils.initBorderPane(this, click -> showMainMenu(), mainView);
         mainMenu = new SimpleMainMenu();
         showMainMenu();
     }

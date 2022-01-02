@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import project.controller.MainController;
 import project.model.entities.*;
 import project.model.util.UtilMethods;
 
@@ -75,13 +76,23 @@ public class ViewUtils {
                 .addListener((obs, oldV, newV) -> Platform.runLater(() -> tableView.getSelectionModel().clearSelection()));
     }
 
-    public static void initBorderPane(BorderPane bp, EventHandler<MouseEvent> homeButtonEventHandler) {
-        PrettyButton homeButton = new PrettyButton("project/images/home.png");
+    public static void initBorderPane(
+            BorderPane borderPane,
+            EventHandler<MouseEvent> homeButtonEventHandler,
+            MainView mainView
+    ) {
+        PrettyButton homeButton = new PrettyButton("project/images/home3.png");
         homeButton.setSize(50);
         homeButton.setAlignment(Pos.TOP_LEFT);
         homeButton.setOnMouseClicked(homeButtonEventHandler);
-        bp.setTop(new HBox(homeButton));
-        bp.setBackground(MainView.DEFAULT_BLANK_BG);
+
+        PrettyButton logOutButton = new PrettyButton("project/images/logout.png");
+        logOutButton.setSize(50);
+        logOutButton.setAlignment(Pos.TOP_LEFT);
+        logOutButton.setOnMouseClicked(click -> mainView.setContent(MainController.userSelectScreen));
+
+        borderPane.setTop(new HBox(homeButton, logOutButton));
+        borderPane.setBackground(MainView.DEFAULT_BLANK_BG);
     }
 
     public static void markColumnAsNumerical(TableColumn<?, String> col) {

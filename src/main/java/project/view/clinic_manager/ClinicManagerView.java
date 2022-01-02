@@ -8,6 +8,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import project.model.entities.Worker;
+import project.view.MainView;
 import project.view.ViewUtils;
 
 import java.util.Collection;
@@ -16,8 +17,8 @@ public class ClinicManagerView extends BorderPane {
 
     private final ClinicManagerMenu mainMenu;
 
-    public ClinicManagerView() {
-        ViewUtils.initBorderPane(this, click -> showMainMenu());
+    public ClinicManagerView(MainView mainView) {
+        ViewUtils.initBorderPane(this, click -> showMainMenu(), mainView);
         mainMenu = new ClinicManagerMenu();
         showMainMenu();
     }

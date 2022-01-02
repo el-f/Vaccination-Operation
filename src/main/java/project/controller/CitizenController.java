@@ -27,7 +27,7 @@ public class CitizenController {
     public CitizenController(Citizen _citizenUser, MainView _mainView) {
         mainView = _mainView;
         citizenUser = _citizenUser;
-        citizenView = new CitizenView();
+        citizenView = new CitizenView(_mainView);
         mainView.setContent(citizenView);
 
         Consumer<Appointment> appointmentCanceller = appointment -> {

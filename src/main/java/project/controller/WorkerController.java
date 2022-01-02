@@ -23,7 +23,7 @@ public class WorkerController {
     public WorkerController(Worker _workerUser, MainView _mainView) {
         workerUser = _workerUser;
         mainView = _mainView;
-        workerView = new WorkerView();
+        workerView = new WorkerView(_mainView);
         mainView.setContent(workerView);
 
         workerView.appointmentsSetOnClick(click -> workerView.showAppointmentsPage(
