@@ -20,10 +20,13 @@ public class MainView extends ScrollPane {
     public static final Insets TABLE_INSETS = new Insets(10, 0, 5, 0);
 
     public enum TableColumns {
+        NAME("Name"),
+        ID("ID"),
+        PHONE_NUMBER("Phone #"),
         CLINIC("Clinic"),
         ADDRESS("Address"),
         WORKER("Worker"),
-        NAME("Name"),
+        CITIZEN("Citizen"),
         PHASE("Phase"),
         BARCODE("Barcode"),
         DATETIME("Date / Time");
@@ -72,7 +75,7 @@ public class MainView extends ScrollPane {
     }
 
     public void alertForException(NamedException exception) {
-        showAlert(Alert.AlertType.WARNING, exception.getFullMessage());
+        showAlert(Alert.AlertType.WARNING, exception.getSimpleMessage());
     }
 
     public void indicateProgress(String message) {

@@ -11,7 +11,7 @@ public class SimpleMainMenu extends VBox {
     private final PrettyButton appointments, vaccinations;
 
     public SimpleMainMenu() {
-        appointments = new PrettyButton("Appointments", "project/images/calendar.png");
+        appointments = new PrettyButton("Pending Appointments", "project/images/calendar.png");
         vaccinations = new PrettyButton("Vaccinations", "project/images/vaccination.png");
 
         HBox buttons = new HBox(appointments, vaccinations);

@@ -6,7 +6,6 @@ import project.model.EntitiesManager;
 import project.model.entities.Appointment;
 import project.model.entities.Citizen;
 import project.model.entities.Clinic;
-import project.model.entities.Vaccination;
 import project.model.exceptions.NamedException;
 import project.view.ViewUtils;
 import project.view.citizen.AppointmentsPage;
@@ -56,7 +55,7 @@ public class CitizenController {
         ));
     }
 
-    public void buildAndShowAppointmentsPage(
+    private void buildAndShowAppointmentsPage(
             Collection<Appointment> appointments,
             Consumer<Appointment> appointmentCanceller,
             EventHandler<MouseEvent> addEventHandler
@@ -65,7 +64,7 @@ public class CitizenController {
         citizenView.setCenter(appointmentsPage);
     }
 
-    public void showAppointmentForm(Collection<Clinic> clinics) {
+    private void showAppointmentForm(Collection<Clinic> clinics) {
         appointmentForm = new AppointmentForm(clinics);
         appointmentForm.addEventHandlerToSubmitButton(click -> {
             try {
@@ -85,7 +84,7 @@ public class CitizenController {
         citizenView.setCenter(appointmentForm);
     }
 
-    public void refreshAppointmentsPage() {
+    private void refreshAppointmentsPage() {
         appointmentsPage.refreshTable(EntitiesManager.instance().getPendingAppointmentForCitizen(citizenUser));
         citizenView.setCenter(appointmentsPage);
     }
