@@ -69,6 +69,8 @@ public class ClinicSuppliesPage extends VBox {
         TableColumn<Supply, String> amount = new TableColumn<>(MainView.TableColumns.AVAILABLE_DOSES.toString());
         TableColumn<Supply, String> expiryDate = new TableColumn<>(MainView.TableColumns.EXPIRY_DATE.toString());
 
+        ViewUtils.markColumnAsNumerical(amount);
+
         vaccine.getColumns().addAll(vaccineID, vaccineCompany, amount);
         tableView.getColumns().addAll(ID, vaccine, expiryDate);
 

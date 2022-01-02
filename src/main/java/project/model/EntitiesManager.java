@@ -505,7 +505,7 @@ public class EntitiesManager {
             transaction.begin();
 
             Worker worker = em.find(Worker.class, workerID);
-            if (worker == null) throw new DatabaseQueryException("No worker such ID!");
+            if (worker == null) throw new DatabaseQueryException("No worker with such ID!");
             if (worker.getClinicId() != clinicManagerUser.getClinicId()) {
                 throw new DatabaseQueryException("This worker is not assigned to this clinic!");
             }

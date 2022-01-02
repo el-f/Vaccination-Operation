@@ -20,6 +20,7 @@ import project.model.entities.Worker;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -80,6 +81,10 @@ public class ViewUtils {
         homeButton.setOnMouseClicked(homeButtonEventHandler);
         bp.setTop(new HBox(homeButton));
         bp.setBackground(MainView.DEFAULT_BLANK_BG);
+    }
+
+    public static void markColumnAsNumerical(TableColumn<?, String> col) {
+        col.setComparator(Comparator.comparingInt(Integer::parseInt));
     }
 
     public static <T> void addActionableColumnToTableView(TableView<T> tableView, String description, String imgURL, Consumer<T> action) {
