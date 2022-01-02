@@ -1,14 +1,20 @@
 package project.view;
 
+import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.control.skin.TableViewSkin;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ViewUtils {
 
@@ -53,4 +59,12 @@ public class ViewUtils {
     public static void centerColumn(TableColumn<?, ?> tc) {
         tc.setStyle("-fx-alignment: center;");
     }
+
+    public static void unHighlightTable(TableView<?> tableView) {
+        tableView.getSelectionModel()
+                .selectedIndexProperty()
+                .addListener((obs, oldV, newV) -> Platform.runLater(() -> tableView.getSelectionModel().clearSelection()));
+    }
+
 }
+

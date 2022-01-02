@@ -27,6 +27,10 @@ public class Vaccination {
     @JoinColumn(name = "dose_barcode", referencedColumnName = "barcode", nullable = false, updatable = false, insertable = false)
     private Dose doseByDoseBarcode;
 
+    public VaccinationPK getPK(){
+        return vaccinationPK;
+    }
+
     public int getDoseBarcode() {
         return doseBarcode;
     }

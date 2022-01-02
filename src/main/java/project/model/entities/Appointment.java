@@ -76,10 +76,6 @@ public class Appointment {
         return date;
     }
 
-    public String getDateString() {
-        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(date);
-    }
-
     public void setDate(Timestamp date) {
         this.date = date;
     }

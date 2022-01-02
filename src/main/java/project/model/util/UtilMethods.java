@@ -1,7 +1,9 @@
 package project.model.util;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * A class for utility methods.
@@ -40,6 +42,10 @@ public class UtilMethods {
             result = cause;
         }
         return result;
+    }
+
+    public static String getDateString(Date _date) {
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(_date);
     }
 
 }

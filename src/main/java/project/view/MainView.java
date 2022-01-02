@@ -24,6 +24,8 @@ public class MainView extends ScrollPane {
         ADDRESS("Address"),
         WORKER("Worker"),
         NAME("Name"),
+        PHASE("Phase"),
+        BARCODE("Barcode"),
         DATETIME("Date / Time");
 
         private final String name;

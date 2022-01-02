@@ -51,7 +51,7 @@ public class CitizenController {
                 appointmentCanceller,
                 addEvent -> showAppointmentForm(EntitiesManager.instance().getAllClinics())
         ));
-        citizenView.vaccinationsSetOnClick(event -> showVaccinationsPage(
+        citizenView.vaccinationsSetOnClick(event -> citizenView.showVaccinationsPage(
                 EntitiesManager.instance().getVaccinationsForCitizen(citizenUser)
         ));
     }
@@ -90,7 +90,4 @@ public class CitizenController {
         citizenView.setCenter(appointmentsPage);
     }
 
-    public void showVaccinationsPage(Collection<Vaccination> vaccinationsForCitizen) {
-
-    }
 }

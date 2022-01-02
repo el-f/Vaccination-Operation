@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import project.model.entities.Appointment;
 import project.model.entities.Worker;
+import project.model.util.UtilMethods;
 import project.view.MainView;
 import project.view.PrettyButton;
 import project.view.ViewUtils;
@@ -86,7 +87,7 @@ public class AppointmentsPage extends VBox {
             return new SimpleStringProperty(actualWorker.getFirstName() + " " + actualWorker.getLastName());
         });
 
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getDateString()));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateString(param.getValue().getDate())));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);
 
@@ -118,10 +119,8 @@ public class AppointmentsPage extends VBox {
         tableView.getItems().addAll(appointments);
 
         tableView.setMinWidth(800);
-        tableView.getSelectionModel()
-                .selectedIndexProperty()
-                .addListener((obs, oldV, newV) -> Platform.runLater(() -> tableView.getSelectionModel().clearSelection()));
 
+        ViewUtils.unHighlightTable(tableView);
         return tableView;
     }
 
