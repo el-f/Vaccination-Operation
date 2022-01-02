@@ -36,6 +36,11 @@ public class MainView extends ScrollPane {
         COMPANY("Company"),
         SENIORITY("Seniority"),
         LICENSE("License"),
+        AGE("Age"),
+        WEIGHT("Weight"),
+        EMAIL("Email"),
+        RISKGROUP("Risk Group"),
+        DISTRICT("District"),
         DATETIME("Date / Time");
 
         private final String name;

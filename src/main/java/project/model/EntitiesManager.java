@@ -664,5 +664,18 @@ public class EntitiesManager {
 
     }
 
+    /**
+     * Return a count of how many available (unused) doses a supply has.
+     * @param supply the supply to check.
+     * @return amount of available doses.
+     */
+    public long getUnusedDosesAmount(Supply supply) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        Supply attached = em.find(Supply.class, supply.getSupplyId());
+        return attached.getDosesBySupplyId().stream()
+                .filter(Dose::isUnused)
+                .count();
+    }
+
 }
 

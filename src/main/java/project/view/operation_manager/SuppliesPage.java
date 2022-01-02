@@ -1,4 +1,4 @@
-package project.view.clinic_manager;
+package project.view.operation_manager;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
@@ -10,7 +10,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import project.model.entities.Dose;
+import project.model.EntitiesManager;
+import project.model.entities.Appointment;
 import project.model.entities.Supply;
 import project.model.util.UtilMethods;
 import project.view.MainView;
@@ -20,26 +21,26 @@ import project.view.ViewUtils;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class ClinicSuppliesPage extends VBox {
+public class SuppliesPage extends VBox {
 
     private final TableView<Supply> suppliesTable;
 
-    public ClinicSuppliesPage(
+    public SuppliesPage(
             Collection<Supply> supplies,
-            EventHandler<MouseEvent> removeExpiredHandler,
-            EventHandler<MouseEvent> addSuppliesHandler
+            EventHandler<MouseEvent> addToClinicHandler,
+            EventHandler<MouseEvent> addToAllHandler
     ) {
-        suppliesTable = getSuppliesTableForClinic(supplies);
+        suppliesTable = getSuppliesTable(supplies);
 
-        PrettyButton removeExpired = new PrettyButton("Remove Expired Supplies", "project/images/expired.png");
-        removeExpired.setSize(100);
-        removeExpired.setOnMouseClicked(removeExpiredHandler);
+        PrettyButton addToClinic = new PrettyButton("Add to a clinic", "project/images/add_supply.png");
+        addToClinic.setSize(100);
+        addToClinic.setOnMouseClicked(addToClinicHandler);
 
-        PrettyButton addSupplies = new PrettyButton("Add Supplies", "project/images/add_supply.png");
-        addSupplies.setSize(100);
-        addSupplies.setOnMouseClicked(addSuppliesHandler);
+        PrettyButton AddToAll = new PrettyButton("Add to all", "project/images/add_supply.png");
+        AddToAll.setSize(100);
+        AddToAll.setOnMouseClicked(addToAllHandler);
 
-        HBox buttons = new HBox(removeExpired, addSupplies);
+        HBox buttons = new HBox(addToClinic, AddToAll);
         buttons.setAlignment(Pos.CENTER);
         buttons.setSpacing(40);
 
@@ -55,7 +56,7 @@ public class ClinicSuppliesPage extends VBox {
     }
 
     @SuppressWarnings("unchecked")
-    public TableView<Supply> getSuppliesTableForClinic(
+    public TableView<Supply> getSuppliesTable(
             Collection<Supply> supplies
     ) {
         TableView<Supply> tableView = new TableView<>();
@@ -63,6 +64,10 @@ public class ClinicSuppliesPage extends VBox {
 
         // Set Columns
         TableColumn<Supply, String> ID = new TableColumn<>(MainView.TableColumns.ID.toString());
+        TableColumn<Appointment, String> clinic = new TableColumn<>(MainView.TableColumns.CLINIC.toString());
+        TableColumn<Appointment, String> clinicID = new TableColumn<>(MainView.TableColumns.ID.toString());
+        TableColumn<Appointment, String> clinicName = new TableColumn<>(MainView.TableColumns.NAME.toString());
+
         TableColumn<Supply, String> vaccine = new TableColumn<>(MainView.TableColumns.VACCINE.toString());
         TableColumn<Supply, String> vaccineID = new TableColumn<>(MainView.TableColumns.ID.toString());
         TableColumn<Supply, String> vaccineCompany = new TableColumn<>(MainView.TableColumns.COMPANY.toString());
@@ -70,7 +75,7 @@ public class ClinicSuppliesPage extends VBox {
         TableColumn<Supply, String> expiryDate = new TableColumn<>(MainView.TableColumns.EXPIRY_DATE.toString());
 
         ViewUtils.markColumnAsNumerical(amount);
-
+        clinic.getColumns().addAll(clinicID, clinicName);
         vaccine.getColumns().addAll(vaccineID, vaccineCompany, amount);
         tableView.getColumns().addAll(ID, vaccine, expiryDate);
 
@@ -90,14 +95,14 @@ public class ClinicSuppliesPage extends VBox {
 
         // generate column values
         ID.setCellValueFactory(new PropertyValueFactory<>("supplyId"));
+        clinicID.setCellValueFactory(new PropertyValueFactory<>("clinicId"));
+        clinicName.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getClinicByClinicId().getClinicName()));
         vaccineID.setCellValueFactory(new PropertyValueFactory<>("vaccineId"));
         vaccineCompany.setCellValueFactory(param -> new SimpleStringProperty(
                 param.getValue().getVaccineByVaccineId().getCompany()
         ));
         amount.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(
-                param.getValue().getDosesBySupplyId().stream()
-                        .filter(Dose::isUnused)
-                        .count()
+                EntitiesManager.instance().getUnusedDosesAmount(param.getValue())
         )));
         expiryDate.setCellValueFactory(param -> new SimpleStringProperty(
                 UtilMethods.getDateString(param.getValue().getExpiryDate())

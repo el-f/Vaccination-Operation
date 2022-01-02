@@ -44,4 +44,5 @@ public class OperationManagerView extends BorderPane {
         mainMenu.appointmentsSetOnClick(eventHandler);
     }
 
+
 }
