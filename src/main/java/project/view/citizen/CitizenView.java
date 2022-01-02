@@ -14,9 +14,8 @@ import javafx.scene.layout.VBox;
 import project.model.entities.Vaccination;
 import project.model.entities.Worker;
 import project.model.util.UtilMethods;
-import project.view.PrettyButton;
-import project.view.SimpleMainMenu;
 import project.view.MainView;
+import project.view.SimpleMainMenu;
 import project.view.ViewUtils;
 
 import java.util.Arrays;
@@ -27,14 +26,8 @@ public class CitizenView extends BorderPane {
     private final SimpleMainMenu mainMenu;
 
     public CitizenView() {
-        PrettyButton homeButton = new PrettyButton("project/images/home.png");
-        homeButton.setSize(50);
-        homeButton.setAlignment(Pos.TOP_LEFT);
-        homeButton.setOnMouseClicked(click -> showMainMenu());
-        setTop(new HBox(homeButton));
-
+        ViewUtils.initBorderPane(this, click -> showMainMenu());
         mainMenu = new SimpleMainMenu();
-        setBackground(MainView.DEFAULT_BLANK_BG);
         showMainMenu();
     }
 

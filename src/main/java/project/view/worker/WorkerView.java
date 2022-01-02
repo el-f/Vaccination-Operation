@@ -15,7 +15,6 @@ import project.model.entities.Appointment;
 import project.model.entities.Citizen;
 import project.model.util.UtilMethods;
 import project.view.MainView;
-import project.view.PrettyButton;
 import project.view.SimpleMainMenu;
 import project.view.ViewUtils;
 
@@ -27,14 +26,8 @@ public class WorkerView extends BorderPane {
     private final SimpleMainMenu mainMenu;
 
     public WorkerView() {
-        PrettyButton homeButton = new PrettyButton("project/images/home.png");
-        homeButton.setSize(50);
-        homeButton.setAlignment(Pos.TOP_LEFT);
-        homeButton.setOnMouseClicked(click -> showMainMenu());
-        setTop(new HBox(homeButton));
-
+        ViewUtils.initBorderPane(this, click -> showMainMenu());
         mainMenu = new SimpleMainMenu();
-        setBackground(MainView.DEFAULT_BLANK_BG);
         showMainMenu();
     }
 

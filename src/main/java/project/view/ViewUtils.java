@@ -1,20 +1,20 @@
 package project.view;
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.control.skin.TableViewSkin;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ViewUtils {
 
@@ -64,6 +64,15 @@ public class ViewUtils {
         tableView.getSelectionModel()
                 .selectedIndexProperty()
                 .addListener((obs, oldV, newV) -> Platform.runLater(() -> tableView.getSelectionModel().clearSelection()));
+    }
+
+    public static void initBorderPane(BorderPane bp, EventHandler<MouseEvent> homeButtonEventHandler) {
+        PrettyButton homeButton = new PrettyButton("project/images/home.png");
+        homeButton.setSize(50);
+        homeButton.setAlignment(Pos.TOP_LEFT);
+        homeButton.setOnMouseClicked(homeButtonEventHandler);
+        bp.setTop(new HBox(homeButton));
+        bp.setBackground(MainView.DEFAULT_BLANK_BG);
     }
 
 }

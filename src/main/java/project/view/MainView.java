@@ -54,7 +54,7 @@ public class MainView extends ScrollPane {
         setFitToHeight(true);
         setBackground(DEFAULT_BLANK_BG);
 
-        _stage.setTitle("Vaccination Operation");
+        _stage.setTitle("For Better Life");
         _stage.getIcons().add(new Image("project/images/syringe.png"));
         _stage.setScene(new Scene(this, WIDTH, HEIGHT));
         _stage.show();
