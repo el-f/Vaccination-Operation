@@ -13,10 +13,10 @@ public class OperationManagerMenu extends VBox {
     private final PrettyButton clinics, supplies, citizens, workers, vaccinations, appointments;
 
     public OperationManagerMenu() {
-        clinics = new PrettyButton("Clinics", "project/images/syringe.png");
+        clinics = new PrettyButton("Clinics", "project/images/clinic.png");
         supplies = new PrettyButton("Supplies", "project/images/supplies.png");
-        citizens = new PrettyButton("Citizens", "project/images/citizen.png");
-        workers = new PrettyButton("Workers", "project/images/worker.png");
+        citizens = new PrettyButton("Citizens", "project/images/citizen2.png");
+        workers = new PrettyButton("Workers", "project/images/worker_alt.png");
         vaccinations = new PrettyButton("Vaccinations", "project/images/vaccination.png");
         appointments = new PrettyButton("Appointments", "project/images/calendar.png");
 
