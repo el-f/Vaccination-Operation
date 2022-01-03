@@ -20,10 +20,14 @@ import project.view.ViewUtils;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class SuppliesPage extends VBox {
 
     private final TableView<Supply> suppliesTable;
+    private Map<Supply, Long> availableDoses;
 
     public SuppliesPage(
             Collection<Supply> supplies,
@@ -31,6 +35,7 @@ public class SuppliesPage extends VBox {
             EventHandler<MouseEvent> addToAllHandler
     ) {
         suppliesTable = getSuppliesTable(supplies);
+        fillAvailabilityMap(supplies);
 
         PrettyButton addToClinic = new PrettyButton("Add to a clinic", "project/images/add_supply.png");
         addToClinic.setSize(100);
@@ -50,7 +55,15 @@ public class SuppliesPage extends VBox {
         setPadding(new Insets(15));
     }
 
+    private void fillAvailabilityMap(Collection<Supply> supplies) {
+        availableDoses = supplies.stream().collect(Collectors.toMap(
+                Function.identity(),
+                EntitiesManager.instance()::getUnusedDosesAmount
+        ));
+    }
+
     public void refreshTable(Collection<Supply> supplies) {
+        fillAvailabilityMap(supplies);
         suppliesTable.getItems().clear();
         suppliesTable.getItems().addAll(supplies);
     }
@@ -102,7 +115,7 @@ public class SuppliesPage extends VBox {
                 param.getValue().getVaccineByVaccineId().getCompany()
         ));
         amount.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(
-                EntitiesManager.instance().getUnusedDosesAmount(param.getValue())
+                availableDoses.get(param.getValue())
         )));
         expiryDate.setCellValueFactory(param -> new SimpleStringProperty(
                 UtilMethods.getDateString(param.getValue().getExpiryDate())

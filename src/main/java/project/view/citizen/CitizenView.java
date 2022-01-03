@@ -50,7 +50,7 @@ public class CitizenView extends BorderPane {
 
         // Set Columns
         TableColumn<Vaccination, String> dateTime = new TableColumn<>(MainView.TableColumns.DATETIME.toString());
-        TableColumn<Vaccination, String> workerName = new TableColumn<>(MainView.TableColumns.NAME.toString());
+        TableColumn<Vaccination, String> workerName = new TableColumn<>("Worker " + MainView.TableColumns.NAME);
         TableColumn<Vaccination, String> barcode = new TableColumn<>(MainView.TableColumns.BARCODE.toString());
         TableColumn<Vaccination, String> phase = new TableColumn<>(MainView.TableColumns.PHASE.toString());
 
