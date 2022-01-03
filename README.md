@@ -11,14 +11,24 @@ The purpose of the system is to facilitate vaccination appointments for citizens
 3) for operation managers - to overlook the operation and get relevant information to make informed logistical and managerial decisions.
 4) for health care workers - to log vaccine administrations and to view their schedule.
 
-
 ### Progress:
 | Component     	 | Status        	 |
 |-----------------|-----------------|
 | Database      	 | done ✅        	 |
 | Back-end      	 | done ✅        	 |
 | CLI front-end 	 | done ✅        	 |
-| GUI front-end 	 | in-progress ⏳ 	 |
+| GUI front-end 	 | done ✅        	 |
+
+### Demos:
+https://user-images.githubusercontent.com/39451680/147891259-10276769-f650-41f1-94d0-8fdbb6419b16.mp4
+
+https://user-images.githubusercontent.com/39451680/147891291-d4b142e4-2ce5-4fda-8882-d6e9fb7262be.mp4
+
+https://user-images.githubusercontent.com/39451680/147891281-da29314e-528f-4566-a881-a142c352b055.mp4
+
+https://user-images.githubusercontent.com/39451680/147891298-c22ac0c1-1f13-4649-b810-1d4665e03372.mp4
+
+
 
 ### Technologies:
 - Java 11 + OpenJFX 11
