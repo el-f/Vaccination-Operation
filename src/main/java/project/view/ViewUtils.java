@@ -100,17 +100,17 @@ public class ViewUtils {
     }
 
     public static <T> void addActionableColumnToTableView(TableView<T> tableView, String description, String imgURL, Consumer<T> action) {
-        TableColumn<T, Void> replaceCol = new TableColumn<>(description);
+        TableColumn<T, Void> actionableCol = new TableColumn<>(description);
 
-        replaceCol.setCellFactory(new Callback<>() {
+        actionableCol.setCellFactory(new Callback<>() {
             @Override
             public TableCell<T, Void> call(final TableColumn<T, Void> param) {
                 return new TableCell<>() {
-                    private final PrettyButton removeBtn = new PrettyButton(imgURL);
+                    private final PrettyButton actionButton = new PrettyButton(imgURL);
 
                     {
-                        removeBtn.setOnMouseClicked(click -> action.accept(getTableRow().getItem()));
-                        removeBtn.setSize(30);
+                        actionButton.setOnMouseClicked(click -> action.accept(getTableRow().getItem()));
+                        actionButton.setSize(30);
                         setAlignment(Pos.CENTER);
                     }
 
@@ -118,12 +118,12 @@ public class ViewUtils {
                     public void updateItem(Void item, boolean empty) {
                         super.updateItem(item, empty);
                         if (empty) setGraphic(null);
-                        else setGraphic(removeBtn);
+                        else setGraphic(actionButton);
                     }
                 };
             }
         });
-        tableView.getColumns().add(replaceCol);
+        tableView.getColumns().add(actionableCol);
     }
 
     @SuppressWarnings("unchecked")
