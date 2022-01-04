@@ -11,7 +11,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import project.model.EntitiesManager;
-import project.model.entities.Appointment;
 import project.model.entities.Supply;
 import project.model.util.UtilMethods;
 import project.view.MainView;
@@ -77,9 +76,9 @@ public class SuppliesPage extends VBox {
 
         // Set Columns
         TableColumn<Supply, String> ID = new TableColumn<>(MainView.TableColumns.ID.toString());
-        TableColumn<Appointment, String> clinic = new TableColumn<>(MainView.TableColumns.CLINIC.toString());
-        TableColumn<Appointment, String> clinicID = new TableColumn<>(MainView.TableColumns.ID.toString());
-        TableColumn<Appointment, String> clinicName = new TableColumn<>(MainView.TableColumns.NAME.toString());
+        TableColumn<Supply, String> clinic = new TableColumn<>(MainView.TableColumns.CLINIC.toString());
+        TableColumn<Supply, String> clinicID = new TableColumn<>(MainView.TableColumns.ID.toString());
+        TableColumn<Supply, String> clinicName = new TableColumn<>(MainView.TableColumns.NAME.toString());
 
         TableColumn<Supply, String> vaccine = new TableColumn<>(MainView.TableColumns.VACCINE.toString());
         TableColumn<Supply, String> vaccineID = new TableColumn<>(MainView.TableColumns.ID.toString());
@@ -90,7 +89,7 @@ public class SuppliesPage extends VBox {
         ViewUtils.markColumnAsNumerical(amount);
         clinic.getColumns().addAll(clinicID, clinicName);
         vaccine.getColumns().addAll(vaccineID, vaccineCompany, amount);
-        tableView.getColumns().addAll(ID, vaccine, expiryDate);
+        tableView.getColumns().addAll(ID, vaccine, clinic, expiryDate);
 
         ID.setMaxWidth(60);
         ID.setMinWidth(60);
@@ -102,6 +101,8 @@ public class SuppliesPage extends VBox {
                 vaccine,
                 vaccineID,
                 vaccineCompany,
+                clinicID,
+                clinicName,
                 amount,
                 expiryDate
         ).forEach(ViewUtils::centerColumn);
@@ -125,8 +126,8 @@ public class SuppliesPage extends VBox {
 
 
         tableView.getItems().addAll(supplies);
-        tableView.setMinWidth(500);
-        tableView.setMaxWidth(500);
+        tableView.setMinWidth(800);
+        tableView.setMaxWidth(800);
 
         ViewUtils.unHighlightTable(tableView);
         return tableView;
