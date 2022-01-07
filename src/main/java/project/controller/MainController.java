@@ -68,7 +68,7 @@ public class MainController {
 
             userSelectScreen.operationManagerSetOnClick(event -> {
                 try {
-                    String password = ViewUtils.getSingularUserInput("Please Enter Your Password", "Password");
+                    String password = ViewUtils.getHiddenInput("Please Enter Your Password", "Password");
                     if (password == null) return;
                     EntitiesManager.authenticateOperationManager(password);
                     new OperationManagerController(mainView);

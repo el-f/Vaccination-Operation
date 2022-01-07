@@ -5,10 +5,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -37,8 +39,44 @@ public class ViewUtils {
         dialog.setTitle(null);
         dialog.setHeaderText(message);
         dialog.setContentText(expectedInput + ":");
+        Node submitButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
+        dialog.getEditor().textProperty().addListener(
+                (observable, oldV, newV) -> submitButton.setDisable(newV.trim().isEmpty())
+        );
+        submitButton.setDisable(true);
+
         Optional<String> result = dialog.showAndWait();
-        return result.map(String::valueOf).orElse(null);
+        return result.orElse(null);
+    }
+
+    public static String getHiddenInput(String message, String expectedInput) {
+        // Create the custom dialog.
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setHeaderText(message);
+
+        // Set the button types.
+        ButtonType submitBtnType = new ButtonType("Submit", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(submitBtnType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+
+        // Enable/Disable submit button depending on whether a username was entered.
+        Node submitButton = dialog.getDialogPane().lookupButton(submitBtnType);
+        submitButton.setDisable(true);
+
+        PasswordField hiddenInput = new PasswordField();
+        hiddenInput.setPromptText(expectedInput);
+        grid.add(new Label(expectedInput + ":"), 0, 1);
+        grid.add(hiddenInput, 1, 1);
+        dialog.getDialogPane().setContent(grid);
+
+        hiddenInput.textProperty().addListener((observable, oldV, newV) -> submitButton.setDisable(newV.trim().isEmpty()));
+        dialog.setResultConverter(dialogButton -> dialogButton == submitBtnType ? hiddenInput.getText() : null);
+
+        Optional<String> result = dialog.showAndWait();
+        return result.orElse(null);
     }
 
     public static boolean getUserConfirmation(String message) {
