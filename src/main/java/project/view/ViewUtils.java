@@ -30,6 +30,23 @@ import java.util.function.Consumer;
 
 public class ViewUtils {
 
+    public static void doHeavyOperation(
+            Region viewAfterOperation,
+            MainView mainView,
+            String msg,
+            Runnable operation,
+            Runnable AfterOpViewUpdater
+    ) {
+        mainView.indicateProgress(msg);
+        new Thread(() -> {
+            operation.run();
+            Platform.runLater(() -> {
+                AfterOpViewUpdater.run();
+                mainView.setContent(viewAfterOperation);
+            });
+        }).start();
+    }
+
     public static void setCursorAsSelectInRegion(Region region) {
         region.setCursor(Cursor.HAND);
     }
@@ -74,6 +91,9 @@ public class ViewUtils {
 
         hiddenInput.textProperty().addListener((observable, oldV, newV) -> submitButton.setDisable(newV.trim().isEmpty()));
         dialog.setResultConverter(dialogButton -> dialogButton == submitBtnType ? hiddenInput.getText() : null);
+
+        // Request focus on the input field by default.
+        Platform.runLater(hiddenInput::requestFocus);
 
         Optional<String> result = dialog.showAndWait();
         return result.orElse(null);

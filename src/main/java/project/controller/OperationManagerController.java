@@ -98,8 +98,13 @@ public class OperationManagerController {
             EventHandler<MouseEvent> addToClinicHandler,
             EventHandler<MouseEvent> addToAllHandler
     ) {
-        suppliesPage = new SuppliesPage(supplies, addToClinicHandler, addToAllHandler);
-        operationManagerView.setCenter(suppliesPage);
+        ViewUtils.doHeavyOperation(
+                operationManagerView,
+                mainView,
+                "Processing Supplies...",
+                () -> suppliesPage = new SuppliesPage(supplies, addToClinicHandler, addToAllHandler),
+                () -> operationManagerView.setCenter(suppliesPage)
+        );
     }
 
     private void refreshSuppliesPage() {

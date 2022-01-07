@@ -1,6 +1,5 @@
 package project.controller;
 
-import javafx.application.Platform;
 import javafx.stage.Stage;
 import project.model.EntitiesManager;
 import project.model.entities.Citizen;
@@ -79,12 +78,13 @@ public class MainController {
                 }
             });
 
-            mainView.indicateProgress("Connecting to database...");
-
-            new Thread(() -> {
-                EntitiesManager.init(); // do heavy initialization first to avoid slowdown later
-                Platform.runLater(() -> mainView.setContent(userSelectScreen));
-            }).start();
+            ViewUtils.doHeavyOperation(
+                    userSelectScreen,
+                    mainView,
+                    "Connecting to database...",
+                    EntitiesManager::init,
+                    () -> {}
+            );
 
         } catch (Exception e) {
             mainView.alertForException(e);
