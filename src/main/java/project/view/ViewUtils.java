@@ -79,7 +79,7 @@ public class ViewUtils {
         grid.setHgap(10);
         grid.setVgap(10);
 
-        // Enable/Disable submit button depending on whether a username was entered.
+        // Enable/Disable submit button depending on whether an input was entered.
         Node submitButton = dialog.getDialogPane().lookupButton(submitBtnType);
         submitButton.setDisable(true);
 
