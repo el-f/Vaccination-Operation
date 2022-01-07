@@ -29,19 +29,19 @@ public class OperationManagerController {
         mainView.setContent(operationManagerView);
 
         operationManagerView.appointmentsSetOnClick(click -> operationManagerView.setCenter(
-                ViewUtils.getAppointmentTableView(EntitiesManager.instance().getAllAppointments())
+                ViewUtils.getAppointmentTableView(EntitiesManager.getAllAppointments())
         ));
         operationManagerView.vaccinationsSetOnClick(click -> operationManagerView.setCenter(
-                ViewUtils.getVaccinationTableView(EntitiesManager.instance().getAllVaccinations())
+                ViewUtils.getVaccinationTableView(EntitiesManager.getAllVaccinations())
         ));
         operationManagerView.suppliesSetOnClick(click -> buildAndShowSuppliesPage(
-                EntitiesManager.instance().getAllSupplies(),
-                addToClinicClick -> showClinicForm(EntitiesManager.instance().getAllClinics()),
+                EntitiesManager.getAllSupplies(),
+                addToClinicClick -> showClinicForm(EntitiesManager.getAllClinics()),
                 addToAllClick -> {
                     try {
                         String input = ViewUtils.getSingularUserInput("Please enter amount of doses to add", "amount");
                         if (input == null) return;
-                        EntitiesManager.instance().addSuppliesToAllClinics(Integer.parseInt(input));
+                        EntitiesManager.addSuppliesToAllClinics(Integer.parseInt(input));
                         refreshSuppliesPage();
                         mainView.updateForSuccess("Supplies Added!");
                     } catch (NamedException e) {
@@ -53,18 +53,18 @@ public class OperationManagerController {
         ));
 // TODO
 //        operationManagerView.clinicsSetOnClick(click -> buildAndShowClinicsPage(
-//                EntitiesManager.instance().getAllClinics(),
+//                EntitiesManager.getAllClinics(),
 //                getLowClick -> {},
 //                getAllClick -> {}
 //        ));
         operationManagerView.clinicsSetOnClick(click -> operationManagerView.setCenter(
-                ViewUtils.getClinicTableView(EntitiesManager.instance().getAllClinics())
+                ViewUtils.getClinicTableView(EntitiesManager.getAllClinics())
         ));
         operationManagerView.workersSetOnClick(click -> operationManagerView.setCenter(
-                ViewUtils.getWorkerTableView(EntitiesManager.instance().getAllWorkers())
+                ViewUtils.getWorkerTableView(EntitiesManager.getAllWorkers())
         ));
         operationManagerView.citizensSetOnClick(click -> operationManagerView.setCenter(
-                ViewUtils.getCitizenTableView(EntitiesManager.instance().getAllCitizens())
+                ViewUtils.getCitizenTableView(EntitiesManager.getAllCitizens())
         ));
     }
 
@@ -72,7 +72,7 @@ public class OperationManagerController {
         clinicSupplyForm = new ClinicSupplyForm(clinics);
         clinicSupplyForm.addEventHandlerToSubmitButton(click -> {
             try {
-                EntitiesManager.instance().addSuppliesToClinic(clinicSupplyForm.getClinic(), clinicSupplyForm.getAmount());
+                EntitiesManager.addSuppliesToClinic(clinicSupplyForm.getClinic(), clinicSupplyForm.getAmount());
                 refreshSuppliesPage();
                 mainView.updateForSuccess("Supplies Added!");
             } catch (NamedException e) {
@@ -103,7 +103,7 @@ public class OperationManagerController {
     }
 
     private void refreshSuppliesPage() {
-        suppliesPage.refreshTable(EntitiesManager.instance().getAllSupplies());
+        suppliesPage.refreshTable(EntitiesManager.getAllSupplies());
         operationManagerView.setCenter(suppliesPage);
     }
 

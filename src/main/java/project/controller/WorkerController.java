@@ -27,16 +27,16 @@ public class WorkerController {
         mainView.setContent(workerView);
 
         workerView.appointmentsSetOnClick(click -> workerView.showAppointmentsPage(
-                EntitiesManager.instance().getPendingAppointmentsForWorker(workerUser)
+                EntitiesManager.getPendingAppointmentsForWorker(workerUser)
         ));
 
         workerView.vaccinationsSetOnClick(click -> showVaccinationsPage(
-                EntitiesManager.instance().getVaccinationsByWorker(workerUser),
+                EntitiesManager.getVaccinationsByWorker(workerUser),
                 logEventHandler -> {
                     try {
                         String inputID = ViewUtils.getSingularUserInput("Please enter citizen ID", "ID");
                         if (inputID == null) return;
-                        EntitiesManager.instance().logVaccination(workerUser, Integer.parseInt(inputID));
+                        EntitiesManager.logVaccination(workerUser, Integer.parseInt(inputID));
                         refreshVaccinationsPage();
                         mainView.updateForSuccess("Vaccination Logged!");
                     } catch (NamedException e) {
@@ -57,7 +57,7 @@ public class WorkerController {
     }
 
     private void refreshVaccinationsPage() {
-        vaccinationsPage.refreshTable(EntitiesManager.instance().getVaccinationsByWorker(workerUser));
+        vaccinationsPage.refreshTable(EntitiesManager.getVaccinationsByWorker(workerUser));
         workerView.setCenter(vaccinationsPage);
     }
 

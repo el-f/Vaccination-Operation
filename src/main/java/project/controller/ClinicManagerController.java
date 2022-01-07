@@ -34,7 +34,7 @@ public class ClinicManagerController {
             try {
                 String input = ViewUtils.getSingularUserInput("Enter new worker ID", "ID");
                 if (input == null) return;
-                EntitiesManager.instance().assignWorkerToAppointment(
+                EntitiesManager.assignWorkerToAppointment(
                         clinicManagerUser,
                         Integer.parseInt(input),
                         appointment.getAppointmentId()
@@ -49,13 +49,13 @@ public class ClinicManagerController {
         };
 
         clinicManagerView.workersSetOnClick(click -> clinicManagerView.showWorkersPage(
-                EntitiesManager.instance().getWorkersForClinic(clinicManagerUser)
+                EntitiesManager.getWorkersForClinic(clinicManagerUser)
         ));
         clinicManagerView.suppliesSetOnClick(click -> buildAndShowSuppliesPage(
-                EntitiesManager.instance().getSuppliesForClinic(clinicManagerUser),
+                EntitiesManager.getSuppliesForClinic(clinicManagerUser),
                 remClick -> {
                     try {
-                        long amountRemoved = EntitiesManager.instance().removeExpiredSuppliesFromClinic(clinicManagerUser);
+                        long amountRemoved = EntitiesManager.removeExpiredSuppliesFromClinic(clinicManagerUser);
                         refreshSuppliesPage();
                         mainView.updateForSuccess("Removed " + amountRemoved + " expired doses from the clinic");
                     } catch (NamedException e) {
@@ -71,7 +71,7 @@ public class ClinicManagerController {
                                 "amount"
                         );
                         if (input == null) return;
-                        EntitiesManager.instance().addSuppliesToClinic(clinicManagerUser, Integer.parseInt(input));
+                        EntitiesManager.addSuppliesToClinic(clinicManagerUser, Integer.parseInt(input));
                         refreshSuppliesPage();
                         mainView.updateForSuccess("Supplies added successfully");
                     } catch (NamedException e) {
@@ -82,7 +82,7 @@ public class ClinicManagerController {
                 }
         ));
         clinicManagerView.appointmentsSetOnClick(click -> buildAndShowAppointmentsPage(
-                EntitiesManager.instance().getAppointmentsForClinic(clinicManagerUser),
+                EntitiesManager.getAppointmentsForClinic(clinicManagerUser),
                 workerAssigner
         ));
     }
@@ -96,7 +96,7 @@ public class ClinicManagerController {
     }
 
     private void refreshAppointmentsPage() {
-        appointmentsPage.refreshTable(EntitiesManager.instance().getAppointmentsForClinic(clinicManagerUser));
+        appointmentsPage.refreshTable(EntitiesManager.getAppointmentsForClinic(clinicManagerUser));
         clinicManagerView.setCenter(appointmentsPage);
     }
 
@@ -110,7 +110,7 @@ public class ClinicManagerController {
     }
 
     private void refreshSuppliesPage() {
-        suppliesPage.refreshTable(EntitiesManager.instance().getSuppliesForClinic(clinicManagerUser));
+        suppliesPage.refreshTable(EntitiesManager.getSuppliesForClinic(clinicManagerUser));
         clinicManagerView.setCenter(suppliesPage);
     }
 

@@ -35,7 +35,7 @@ public class CitizenController {
                 if (!ViewUtils.getUserConfirmation("Are you sure you want to delete this appointment?")) {
                     return;
                 }
-                EntitiesManager.instance().cancelAppointment(appointment.getAppointmentId());
+                EntitiesManager.cancelAppointment(appointment.getAppointmentId());
                 refreshAppointmentsPage();
                 mainView.updateForSuccess("Appointment cancelled!");
             } catch (NamedException e) {
@@ -46,12 +46,12 @@ public class CitizenController {
         };
 
         citizenView.appointmentsSetOnClick(event -> buildAndShowAppointmentsPage(
-                EntitiesManager.instance().getPendingAppointmentForCitizen(citizenUser),
+                EntitiesManager.getPendingAppointmentForCitizen(citizenUser),
                 appointmentCanceller,
-                addEvent -> showAppointmentForm(EntitiesManager.instance().getAllClinics())
+                addEvent -> showAppointmentForm(EntitiesManager.getAllClinics())
         ));
         citizenView.vaccinationsSetOnClick(event -> citizenView.showVaccinationsPage(
-                EntitiesManager.instance().getVaccinationsForCitizen(citizenUser)
+                EntitiesManager.getVaccinationsForCitizen(citizenUser)
         ));
     }
 
@@ -68,7 +68,7 @@ public class CitizenController {
         appointmentForm = new AppointmentForm(clinics);
         appointmentForm.addEventHandlerToSubmitButton(click -> {
             try {
-                EntitiesManager.instance().createAppointment(
+                EntitiesManager.createAppointment(
                         citizenUser,
                         appointmentForm.getClinic(),
                         appointmentForm.getTimestamp()
@@ -85,7 +85,7 @@ public class CitizenController {
     }
 
     private void refreshAppointmentsPage() {
-        appointmentsPage.refreshTable(EntitiesManager.instance().getPendingAppointmentForCitizen(citizenUser));
+        appointmentsPage.refreshTable(EntitiesManager.getPendingAppointmentForCitizen(citizenUser));
         citizenView.setCenter(appointmentsPage);
     }
 

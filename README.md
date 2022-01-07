@@ -39,4 +39,3 @@ https://user-images.githubusercontent.com/39451680/147891298-c22ac0c1-1f13-4649-
 #### Design patterns worth mentioning:
 - The system structure design is the `MVC` pattern.
 - Complex entities are instantiated using the `Builder` pattern.
-- The primary model class `EntitiesManager` is implemented as a `Singleton`.

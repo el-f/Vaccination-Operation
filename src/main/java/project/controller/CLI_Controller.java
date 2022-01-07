@@ -21,7 +21,6 @@ import static java.lang.System.out;
  */
 public class CLI_Controller {
 
-    private static EntitiesManager entitiesManager;
     private Citizen citizenUser;
     private Worker workerUser;
     private Clinic clinicManagerUser;
@@ -30,7 +29,7 @@ public class CLI_Controller {
     private final static int EXIT_OPTION = 0;
 
     public CLI_Controller() {
-        entitiesManager = EntitiesManager.instance();
+        EntitiesManager.init();
 
         Scanner scanner = new Scanner(System.in);
         initializeUser(scanner);
@@ -73,17 +72,17 @@ public class CLI_Controller {
             switch (currentUserType) {
                 case Citizen:
                     out.println("Enter citizen ID:");
-                    citizenUser = entitiesManager.getCitizenByID(scanner.nextInt());
+                    citizenUser = EntitiesManager.getCitizenByID(scanner.nextInt());
                     break;
 
                 case Worker:
                     out.println("Enter worker ID:");
-                    workerUser = entitiesManager.getWorkerByID(scanner.nextInt());
+                    workerUser = EntitiesManager.getWorkerByID(scanner.nextInt());
                     break;
 
                 case ClinicManager:
                     out.println("Enter clinic ID:");
-                    clinicManagerUser = entitiesManager.getClinicByID(scanner.nextInt());
+                    clinicManagerUser = EntitiesManager.getClinicByID(scanner.nextInt());
                     break;
 
                 default:
@@ -118,13 +117,13 @@ public class CLI_Controller {
 
                 case 1:
                     out.println("> Select clinic:");
-                    List<Clinic> clinics = entitiesManager.getAllClinics();
+                    List<Clinic> clinics = EntitiesManager.getAllClinics();
                     for (int i = 0; i < clinics.size(); i++) {
                         out.println((i + 1) + ") " + clinics.get(i));
                     }
                     Clinic chosenClinic = clinics.get(scanner.nextInt() - 1);
                     out.println("How many days from now? (1 - 30)");
-                    entitiesManager.createAppointment(
+                    EntitiesManager.createAppointment(
                             citizenUser,
                             chosenClinic,
                             Appointment.createAppointmentDate(scanner.nextInt())
@@ -134,20 +133,20 @@ public class CLI_Controller {
 
                 case 2:
                     out.println("> Select appointment:");
-                    List<Appointment> pendingAppointments = entitiesManager.getPendingAppointmentForCitizen(citizenUser);
+                    List<Appointment> pendingAppointments = EntitiesManager.getPendingAppointmentForCitizen(citizenUser);
                     if (pendingAppointments.isEmpty()) out.println("No pending appointments!");
                     else {
                         for (int i = 0; i < pendingAppointments.size(); i++) {
                             out.println((i + 1) + ") " + pendingAppointments.get(i));
                         }
                         Appointment chosenAppointment = pendingAppointments.get(scanner.nextInt() - 1);
-                        entitiesManager.cancelAppointment(chosenAppointment.getAppointmentId());
+                        EntitiesManager.cancelAppointment(chosenAppointment.getAppointmentId());
                         out.println("Appointment canceled!");
                     }
                     break;
 
                 case 3:
-                    List<Appointment> pending = entitiesManager.getPendingAppointmentForCitizen(citizenUser);
+                    List<Appointment> pending = EntitiesManager.getPendingAppointmentForCitizen(citizenUser);
                     if (pending.isEmpty()) {
                         out.println("No pending appointments!");
                     } else {
@@ -156,7 +155,7 @@ public class CLI_Controller {
                     break;
 
                 case 4:
-                    Collection<Vaccination> administered = entitiesManager.getVaccinationsForCitizen(citizenUser);
+                    Collection<Vaccination> administered = EntitiesManager.getVaccinationsForCitizen(citizenUser);
                     if (administered.isEmpty()) {
                         out.println("No vaccination records!");
                     } else {
@@ -193,12 +192,12 @@ public class CLI_Controller {
 
                 case 1:
                     out.println("Enter vaccinated citizen ID:");
-                    entitiesManager.logVaccination(workerUser, scanner.nextInt());
+                    EntitiesManager.logVaccination(workerUser, scanner.nextInt());
                     out.println("Vaccination logged!");
                     break;
 
                 case 2:
-                    List<Appointment> pending = entitiesManager.getPendingAppointmentsForWorker(workerUser);
+                    List<Appointment> pending = EntitiesManager.getPendingAppointmentsForWorker(workerUser);
                     if (pending.isEmpty()) {
                         out.println("No pending appointments!");
                     } else {
@@ -207,7 +206,7 @@ public class CLI_Controller {
                     break;
 
                 case 3:
-                    Collection<Vaccination> vaccinations = entitiesManager.getVaccinationsByWorker(workerUser);
+                    Collection<Vaccination> vaccinations = EntitiesManager.getVaccinationsByWorker(workerUser);
                     if (vaccinations.isEmpty()) {
                         out.println("No administered vaccinations for worker!");
                     } else {
@@ -246,7 +245,7 @@ public class CLI_Controller {
                     break;
 
                 case 1:
-                    Collection<Supply> supplies = entitiesManager.getSuppliesForClinic(clinicManagerUser);
+                    Collection<Supply> supplies = EntitiesManager.getSuppliesForClinic(clinicManagerUser);
                     if (supplies.isEmpty()) {
                         out.println("No supplies for clinic!");
                     } else {
@@ -255,7 +254,7 @@ public class CLI_Controller {
                     break;
 
                 case 2:
-                    Collection<Worker> workers = entitiesManager.getWorkersForClinic(clinicManagerUser);
+                    Collection<Worker> workers = EntitiesManager.getWorkersForClinic(clinicManagerUser);
                     if (workers.isEmpty()) {
                         out.println("No workers in clinic!");
                     } else {
@@ -264,7 +263,7 @@ public class CLI_Controller {
                     break;
 
                 case 3:
-                    Collection<Appointment> appointments = entitiesManager.getAppointmentsForClinic(clinicManagerUser);
+                    Collection<Appointment> appointments = EntitiesManager.getAppointmentsForClinic(clinicManagerUser);
                     if (appointments.isEmpty()) {
                         out.println("No appointments for clinic!");
                     } else {
@@ -274,12 +273,12 @@ public class CLI_Controller {
 
                 case 4:
                     out.println("Please enter how many vaccine doses from each vaccine type you wish to add:");
-                    entitiesManager.addSuppliesToClinic(clinicManagerUser, scanner.nextInt());
+                    EntitiesManager.addSuppliesToClinic(clinicManagerUser, scanner.nextInt());
                     out.println("Supplies added!");
                     break;
 
                 case 5:
-                    long expiredAmount = entitiesManager.removeExpiredSuppliesFromClinic(clinicManagerUser);
+                    long expiredAmount = EntitiesManager.removeExpiredSuppliesFromClinic(clinicManagerUser);
                     out.println("Removed " + expiredAmount + " expired doses from the clinic");
                     break;
 
@@ -289,7 +288,7 @@ public class CLI_Controller {
                     workerID = scanner.nextInt();
                     out.println("Enter the appointment ID:");
                     appointmentID = scanner.nextInt();
-                    entitiesManager.assignWorkerToAppointment(clinicManagerUser, workerID, appointmentID);
+                    EntitiesManager.assignWorkerToAppointment(clinicManagerUser, workerID, appointmentID);
                     out.println("Worker assigned to appointment!");
                     break;
 
@@ -327,32 +326,32 @@ public class CLI_Controller {
                     break;
 
                 case 1:
-                    entitiesManager.getAllClinics().forEach(out::println);
+                    EntitiesManager.getAllClinics().forEach(out::println);
                     break;
 
                 case 2:
-                    entitiesManager.getAllSupplies().forEach(out::println);
+                    EntitiesManager.getAllSupplies().forEach(out::println);
                     break;
 
                 case 3:
-                    entitiesManager.getAllCitizens().forEach(out::println);
+                    EntitiesManager.getAllCitizens().forEach(out::println);
                     break;
 
                 case 4:
-                    entitiesManager.getAllWorkers().forEach(out::println);
+                    EntitiesManager.getAllWorkers().forEach(out::println);
                     break;
 
                 case 5:
-                    entitiesManager.getAllVaccinations().forEach(out::println);
+                    EntitiesManager.getAllVaccinations().forEach(out::println);
                     break;
 
                 case 6:
-                    entitiesManager.getAllAppointments().forEach(out::println);
+                    EntitiesManager.getAllAppointments().forEach(out::println);
                     break;
 
                 case 7:
                     out.println("Processing...");
-                    Map<Clinic, Pair<Long, Long>> lowSupplyClinicsTable = entitiesManager.getLowSupplyClinics();
+                    Map<Clinic, Pair<Long, Long>> lowSupplyClinicsTable = EntitiesManager.getLowSupplyClinics();
                     if (lowSupplyClinicsTable.isEmpty()) {
                         out.println("All clinics are well supplied!");
                     } else {
@@ -371,13 +370,13 @@ public class CLI_Controller {
                     int clinicID = scanner.nextInt();
                     out.println("How many doses would you like to add from each vaccine type? (1 - 1000)");
                     int add = scanner.nextInt();
-                    entitiesManager.addSuppliesToClinic(clinicID, add);
+                    EntitiesManager.addSuppliesToClinic(clinicID, add);
                     out.println("Supplies added!");
                     break;
 
                 case 9:
                     out.println("How many doses would you like to add from each vaccine type? (1 - 1000)");
-                    entitiesManager.addSuppliesToAllClinics(scanner.nextInt());
+                    EntitiesManager.addSuppliesToAllClinics(scanner.nextInt());
                     out.println("Supplies added!");
                     break;
 

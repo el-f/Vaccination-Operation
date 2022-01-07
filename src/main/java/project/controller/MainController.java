@@ -19,6 +19,7 @@ public class MainController {
 
     public MainController(Stage _stage) {
         mainView = new MainView(_stage);
+        _stage.setOnCloseRequest(r -> EntitiesManager.close());
 
         try {
             userSelectScreen = new UserSelectScreen();
@@ -28,7 +29,7 @@ public class MainController {
                     String input = ViewUtils.getSingularUserInput("Please Enter Citizen ID", "ID");
                     if (input == null) return;
                     int citizenID = Integer.parseInt(input);
-                    Citizen citizenUser = EntitiesManager.instance().getCitizenByID(citizenID);
+                    Citizen citizenUser = EntitiesManager.getCitizenByID(citizenID);
                     new CitizenController(citizenUser, mainView);
                 } catch (DatabaseQueryException e) {
                     mainView.alertForException(e);
@@ -42,7 +43,7 @@ public class MainController {
                     String input = ViewUtils.getSingularUserInput("Please Enter Worker ID", "ID");
                     if (input == null) return;
                     int workerID = Integer.parseInt(input);
-                    Worker workerUser = EntitiesManager.instance().getWorkerByID(workerID);
+                    Worker workerUser = EntitiesManager.getWorkerByID(workerID);
                     new WorkerController(workerUser, mainView);
                 } catch (DatabaseQueryException e) {
                     mainView.alertForException(e);
@@ -56,7 +57,7 @@ public class MainController {
                     String input = ViewUtils.getSingularUserInput("Please Enter Clinic ID", "ID");
                     if (input == null) return;
                     int clinicID = Integer.parseInt(input);
-                    Clinic clinicManagerUser = EntitiesManager.instance().getClinicByID(clinicID);
+                    Clinic clinicManagerUser = EntitiesManager.getClinicByID(clinicID);
                     new ClinicManagerController(clinicManagerUser, mainView);
                 } catch (DatabaseQueryException e) {
                     mainView.alertForException(e);
@@ -69,7 +70,7 @@ public class MainController {
                 try {
                     String password = ViewUtils.getSingularUserInput("Please Enter Your Password", "Password");
                     if (password == null) return;
-                    EntitiesManager.instance().authenticateOperationManager(password);
+                    EntitiesManager.authenticateOperationManager(password);
                     new OperationManagerController(mainView);
                 } catch (DatabaseQueryException e) {
                     mainView.alertForException(e);
@@ -81,7 +82,7 @@ public class MainController {
             mainView.indicateProgress("Connecting to database...");
 
             new Thread(() -> {
-                EntitiesManager.instance(); // init heavy singleton first to avoid slowdown later
+                EntitiesManager.init(); // do heavy initialization first to avoid slowdown later
                 Platform.runLater(() -> mainView.setContent(userSelectScreen));
             }).start();
 

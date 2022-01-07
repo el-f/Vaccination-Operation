@@ -57,7 +57,7 @@ public class SuppliesPage extends VBox {
     private void fillAvailabilityMap(Collection<Supply> supplies) {
         availableDoses = supplies.stream().collect(Collectors.toMap(
                 Function.identity(),
-                EntitiesManager.instance()::getUnusedDosesAmount
+                EntitiesManager::getUnusedDosesAmount
         ));
     }
 
