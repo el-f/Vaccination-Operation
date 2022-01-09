@@ -89,7 +89,7 @@ public class ViewUtils {
         grid.add(hiddenInput, 1, 1);
         dialog.getDialogPane().setContent(grid);
 
-        hiddenInput.textProperty().addListener((observable, oldV, newV) -> submitButton.setDisable(newV.trim().isEmpty()));
+        hiddenInput.textProperty().addListener((observable, oldV, newV) -> submitButton.setDisable(newV.isEmpty()));
         dialog.setResultConverter(dialogButton -> dialogButton == submitBtnType ? hiddenInput.getText() : null);
 
         // Request focus on the input field by default.
