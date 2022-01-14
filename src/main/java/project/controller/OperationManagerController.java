@@ -9,7 +9,6 @@ import project.model.exceptions.NamedException;
 import project.view.MainView;
 import project.view.ViewUtils;
 import project.view.forms.ClinicSupplyForm;
-import project.view.operation_manager.ClinicsPage;
 import project.view.operation_manager.OperationManagerView;
 import project.view.operation_manager.SuppliesPage;
 
@@ -19,7 +18,6 @@ public class OperationManagerController {
 
     private final OperationManagerView operationManagerView;
     private final MainView mainView;
-    private ClinicsPage clinicsPage;
     private SuppliesPage suppliesPage;
     private ClinicSupplyForm clinicSupplyForm;
 
@@ -51,12 +49,7 @@ public class OperationManagerController {
                     }
                 }
         ));
-// TODO
-//        operationManagerView.clinicsSetOnClick(click -> buildAndShowClinicsPage(
-//                EntitiesManager.getAllClinics(),
-//                getLowClick -> {},
-//                getAllClick -> {}
-//        ));
+
         operationManagerView.clinicsSetOnClick(click -> operationManagerView.setCenter(
                 ViewUtils.getClinicTableView(EntitiesManager.getAllClinics())
         ));
@@ -82,15 +75,6 @@ public class OperationManagerController {
             }
         });
         operationManagerView.setCenter(clinicSupplyForm);
-    }
-
-    private void buildAndShowClinicsPage(
-            Collection<Clinic> clinics,
-            EventHandler<MouseEvent> getLowSuppliesHandler,
-            EventHandler<MouseEvent> getAllHandler
-    ) {
-        clinicsPage = new ClinicsPage(clinics, getLowSuppliesHandler, getAllHandler);
-        operationManagerView.setCenter(clinicsPage);
     }
 
     private void buildAndShowSuppliesPage(

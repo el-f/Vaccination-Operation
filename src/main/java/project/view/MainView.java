@@ -31,7 +31,6 @@ public class MainView extends ScrollPane {
         BARCODE("Barcode"),
         EXPIRY_DATE("Expiry Date"),
         VACCINE("Vaccine"),
-        AMOUNT("Amount"),
         AVAILABLE_DOSES("Available Doses"),
         COMPANY("Company"),
         SENIORITY("Seniority"),
@@ -96,20 +95,5 @@ public class MainView extends ScrollPane {
         piBox.setSpacing(20);
         setContent(piBox);
     }
-
-//    public void showProgressAlert(String message) {
-//        Platform.runLater(()-> {
-//            alert.setGraphic(new ProgressIndicator());
-//            alert.setTitle(message);
-//            alert.setAlertType(Alert.AlertType.NONE);
-//            alert.setContentText(message);
-//            alert.setHeaderText(message);
-//            alert.show();
-//        });
-//    }
-//
-//    public void hideAlert() {
-//        Platform.runLater(alert::close);
-//    }
 
 }

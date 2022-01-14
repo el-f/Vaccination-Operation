@@ -2,7 +2,6 @@ package project.model.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;

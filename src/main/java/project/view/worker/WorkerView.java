@@ -6,13 +6,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import project.model.entities.Appointment;
-import project.model.entities.Citizen;
 import project.model.util.UtilMethods;
 import project.view.MainView;
 import project.view.SimpleMainMenu;
@@ -50,11 +48,11 @@ public class WorkerView extends BorderPane {
 
         // Set Columns
         TableColumn<Appointment, String> ID = new TableColumn<>(MainView.TableColumns.ID.toString());
-        TableColumn<Appointment, String> dateTime = new TableColumn<>(MainView.TableColumns.DATETIME.toString());
         TableColumn<Appointment, String> citizen = new TableColumn<>(MainView.TableColumns.CITIZEN.toString());
         TableColumn<Appointment, String> citizenID = new TableColumn<>(MainView.TableColumns.ID.toString());
         TableColumn<Appointment, String> citizenName = new TableColumn<>(MainView.TableColumns.NAME.toString());
         TableColumn<Appointment, String> citizenPhone = new TableColumn<>(MainView.TableColumns.PHONE.toString());
+        TableColumn<Appointment, String> dateTime = new TableColumn<>(MainView.TableColumns.DATETIME.toString());
 
 
         citizen.getColumns().addAll(citizenID, citizenName, citizenPhone);
@@ -70,13 +68,7 @@ public class WorkerView extends BorderPane {
         ).forEach(ViewUtils::centerColumn);
 
         // generate column values
-        ID.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-        citizenID.setCellValueFactory(new PropertyValueFactory<>("citizenId"));
-        citizenName.setCellValueFactory(param -> {
-            Citizen c = param.getValue().getCitizenByCitizenId();
-            return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
-        });
-        citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
+        ViewUtils.setAppointmentTableFactories(ID, citizenID, citizenName, citizenPhone);
         dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);

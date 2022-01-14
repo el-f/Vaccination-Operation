@@ -1,6 +1,5 @@
 package project.view.worker;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,9 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import project.model.entities.Citizen;
 import project.model.entities.Vaccination;
-import project.model.util.UtilMethods;
 import project.view.MainView;
 import project.view.PrettyButton;
 import project.view.ViewUtils;
@@ -68,13 +65,7 @@ public class VaccinationsPage extends VBox {
         ).forEach(ViewUtils::centerColumn);
 
         // generate column values
-        citizenName.setCellValueFactory(param -> {
-            Citizen c = param.getValue().getCitizenByCitizenId();
-            return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
-        });
-        citizenID.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getPK().getCitizenId())));
-        citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
+        ViewUtils.setVaccinationTableFactories(dateTime, citizenID, citizenName, citizenPhone);
         barcode.setCellValueFactory(new PropertyValueFactory<>("doseBarcode"));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);

@@ -5,12 +5,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import project.model.entities.Appointment;
-import project.model.entities.Citizen;
-import project.model.entities.Worker;
 import project.model.util.UtilMethods;
 import project.view.MainView;
 import project.view.ViewUtils;
@@ -76,20 +73,8 @@ public class ClinicAppointmentsPage extends VBox {
         ).forEach(ViewUtils::centerColumn);
 
         // generate column values
-        citizenID.setCellValueFactory(new PropertyValueFactory<>("citizenId"));
-        ID.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-        citizenName.setCellValueFactory(param -> {
-            Citizen c = param.getValue().getCitizenByCitizenId();
-            return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
-        });
-        citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
-        workerID.setCellValueFactory(new PropertyValueFactory<>("workerId"));
-        workerName.setCellValueFactory(param -> {
-            Worker actualWorker = param.getValue().getWorkerByWorkerId();
-            return new SimpleStringProperty(actualWorker.getFirstName() + " " + actualWorker.getLastName());
-        });
+        ViewUtils.setAppointmentTableFactories(ID, citizenID, citizenName, citizenPhone, workerID, workerName, workerPhone);
         dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
-        workerPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getWorkerByWorkerId().getPhoneNum()));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);
 

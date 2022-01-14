@@ -79,7 +79,6 @@ public class SuppliesPage extends VBox {
         TableColumn<Supply, String> clinic = new TableColumn<>(MainView.TableColumns.CLINIC.toString());
         TableColumn<Supply, String> clinicID = new TableColumn<>(MainView.TableColumns.ID.toString());
         TableColumn<Supply, String> clinicName = new TableColumn<>(MainView.TableColumns.NAME.toString());
-
         TableColumn<Supply, String> vaccine = new TableColumn<>(MainView.TableColumns.VACCINE.toString());
         TableColumn<Supply, String> vaccineID = new TableColumn<>(MainView.TableColumns.ID.toString());
         TableColumn<Supply, String> vaccineCompany = new TableColumn<>(MainView.TableColumns.COMPANY.toString());

@@ -22,10 +22,7 @@ import project.controller.MainController;
 import project.model.entities.*;
 import project.model.util.UtilMethods;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class ViewUtils {
@@ -243,7 +240,6 @@ public class ViewUtils {
         TableColumn<Appointment, String> clinicID = new TableColumn<>(MainView.TableColumns.ID.toString());
         TableColumn<Appointment, String> clinicName = new TableColumn<>(MainView.TableColumns.NAME.toString());
         TableColumn<Appointment, String> clinicPhone = new TableColumn<>(MainView.TableColumns.PHONE.toString());
-
         TableColumn<Appointment, String> dateTime = new TableColumn<>(MainView.TableColumns.DATETIME.toString());
 
         citizen.getColumns().addAll(citizenID, citizenName, citizenPhone);
@@ -260,20 +256,7 @@ public class ViewUtils {
         ).forEach(ViewUtils::centerColumn);
 
         // generate column values
-        ID.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
-        citizenID.setCellValueFactory(new PropertyValueFactory<>("citizenId"));
-        citizenName.setCellValueFactory(param -> {
-            Citizen c = param.getValue().getCitizenByCitizenId();
-            return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
-        });
-        citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
-        workerID.setCellValueFactory(new PropertyValueFactory<>("workerId"));
-        workerName.setCellValueFactory(param -> {
-            Worker actualWorker = param.getValue().getWorkerByWorkerId();
-            return new SimpleStringProperty(actualWorker.getFirstName() + " " + actualWorker.getLastName());
-        });
-        workerPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getWorkerByWorkerId().getPhoneNum()));
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
+        setAppointmentTableFactories(ID, citizenID, citizenName, citizenPhone, workerID, workerName, workerPhone);
         clinicID.setCellValueFactory(new PropertyValueFactory<>("clinicId"));
         clinicName.setCellValueFactory(param -> new SimpleStringProperty(
                 param.getValue().getClinicByClinicId().getClinicName()
@@ -281,6 +264,7 @@ public class ViewUtils {
         clinicPhone.setCellValueFactory(param -> new SimpleStringProperty(
                 param.getValue().getClinicByClinicId().getPhoneNum()
         ));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
 
         HBox.setMargin(tableView, MainView.TABLE_INSETS);
 
@@ -291,10 +275,31 @@ public class ViewUtils {
         return tableView;
     }
 
+    public static void setAppointmentTableFactories(TableColumn<Appointment, String> ID, TableColumn<Appointment, String> citizenID, TableColumn<Appointment, String> citizenName, TableColumn<Appointment, String> citizenPhone, TableColumn<Appointment, String> workerID, TableColumn<Appointment, String> workerName, TableColumn<Appointment, String> workerPhone) {
+        setAppointmentTableFactories(ID, citizenID, citizenName, citizenPhone);
+        workerID.setCellValueFactory(new PropertyValueFactory<>("workerId"));
+        workerName.setCellValueFactory(param -> {
+            Worker actualWorker = param.getValue().getWorkerByWorkerId();
+            return new SimpleStringProperty(actualWorker.getFirstName() + " " + actualWorker.getLastName());
+        });
+        workerPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getWorkerByWorkerId().getPhoneNum()));
+    }
+
+    public static void setAppointmentTableFactories(TableColumn<Appointment, String> ID, TableColumn<Appointment, String> citizenID, TableColumn<Appointment, String> citizenName, TableColumn<Appointment, String> citizenPhone) {
+        ID.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        citizenID.setCellValueFactory(new PropertyValueFactory<>("citizenId"));
+        citizenName.setCellValueFactory(param -> {
+            Citizen c = param.getValue().getCitizenByCitizenId();
+            return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
+        });
+        citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
+    }
+
     @SuppressWarnings("unchecked")
     public static TableView<Vaccination> getVaccinationTableView(Collection<Vaccination> vaccinations) {
         TableView<Vaccination> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
         // Set Columns
         TableColumn<Vaccination, String> barcode = new TableColumn<>(MainView.TableColumns.BARCODE.toString());
         TableColumn<Vaccination, String> dateTime = new TableColumn<>(MainView.TableColumns.DATETIME.toString());
@@ -321,13 +326,7 @@ public class ViewUtils {
         ).forEach(ViewUtils::centerColumn);
 
         // generate column values
-        citizenName.setCellValueFactory(param -> {
-            Citizen c = param.getValue().getCitizenByCitizenId();
-            return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
-        });
-        citizenID.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getPK().getCitizenId())));
-        citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
-        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
+        setVaccinationTableFactories(dateTime, citizenID, citizenName, citizenPhone);
         barcode.setCellValueFactory(new PropertyValueFactory<>("doseBarcode"));
         workerID.setCellValueFactory(param -> new SimpleStringProperty(
                 String.valueOf(param.getValue().getWorkerByWorkerId().getWorkerId())
@@ -347,6 +346,16 @@ public class ViewUtils {
 
         tableView.getItems().addAll(vaccinations);
         return tableView;
+    }
+
+    public static void setVaccinationTableFactories(TableColumn<Vaccination, String> dateTime, TableColumn<Vaccination, String> citizenID, TableColumn<Vaccination, String> citizenName, TableColumn<Vaccination, String> citizenPhone) {
+        citizenID.setCellValueFactory(param -> new SimpleStringProperty(String.valueOf(param.getValue().getPK().getCitizenId())));
+        citizenName.setCellValueFactory(param -> {
+            Citizen c = param.getValue().getCitizenByCitizenId();
+            return new SimpleStringProperty(c.getFirstName() + " " + c.getLastName());
+        });
+        citizenPhone.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getCitizenByCitizenId().getPhoneNum()));
+        dateTime.setCellValueFactory(param -> new SimpleStringProperty(UtilMethods.getDateTimeString(param.getValue().getDate())));
     }
 
     @SuppressWarnings("unchecked")
@@ -424,4 +433,3 @@ public class ViewUtils {
     }
 
 }
-
