@@ -43,7 +43,7 @@ public class ClinicSupplyForm extends Form {
 
     public Clinic getClinic() throws NamedException {
         if (isFormReady()) return clinicPicker.getValue();
-        throw new NamedException("Can't submit before selecting a date and a clinic!");
+        throw new NamedException("Can't submit before selecting a clinic!");
     }
 
     @Override
