@@ -17,12 +17,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 import project.controller.MainController;
 import project.model.entities.*;
 import project.model.util.UtilMethods;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 public class ViewUtils {
@@ -154,28 +156,28 @@ public class ViewUtils {
         col.setComparator(Comparator.comparingInt(Integer::parseInt));
     }
 
-    public static <T> void addActionableColumnToTableView(TableView<T> tableView, String description, String imgURL, Consumer<T> action) {
+    public static <T> void addActionableColumnToTableView(
+            TableView<T> tableView,
+            String description,
+            String imgURL,
+            Consumer<T> action
+    ) {
         TableColumn<T, Void> actionableCol = new TableColumn<>(description);
 
-        actionableCol.setCellFactory(new Callback<>() {
+        actionableCol.setCellFactory(col -> new TableCell<>() {
+            private final PrettyButton actionButton = new PrettyButton(imgURL);
+
+            {
+                actionButton.setOnMouseClicked(click -> action.accept(getTableRow().getItem()));
+                actionButton.setSize(30);
+                setAlignment(Pos.CENTER);
+            }
+
             @Override
-            public TableCell<T, Void> call(final TableColumn<T, Void> param) {
-                return new TableCell<>() {
-                    private final PrettyButton actionButton = new PrettyButton(imgURL);
-
-                    {
-                        actionButton.setOnMouseClicked(click -> action.accept(getTableRow().getItem()));
-                        actionButton.setSize(30);
-                        setAlignment(Pos.CENTER);
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) setGraphic(null);
-                        else setGraphic(actionButton);
-                    }
-                };
+            public void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) setGraphic(null);
+                else setGraphic(actionButton);
             }
         });
         tableView.getColumns().add(actionableCol);
