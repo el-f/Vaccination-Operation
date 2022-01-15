@@ -394,6 +394,47 @@ public class EntitiesManager {
     }
 
     /**
+     * A helper function to add supplies to a clinic.
+     *
+     * @param em     entity manager we use to query the DB.
+     * @param clinic the {@link Clinic} instance marking the clinic we add the supplies to.
+     * @param amount amount of doses in each supply added.
+     */
+    private static void addSuppliesToClinic(EntityManager em, Clinic clinic, int amount) {
+        List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
+        Date expiryDate = Supply.DEFAULT_EXPIRATION();
+        vaccineTypes.forEach(vaccineID -> {
+            Supply supply = Supply.SupplyBuilder
+                    .aSupply()
+                    .withVaccineId(vaccineID)
+                    .withClinicId(clinic.getClinicId())
+                    .withExpiryDate(expiryDate)
+                    .build();
+
+            em.persist(supply);
+        });
+
+        List<Integer> newSuppliesIDs = em.createQuery(
+                        "select s.supplyId " +
+                                "from Supply s " +
+                                "where s.dosesBySupplyId is empty " +
+                                "and s.clinicId = :cid " +
+                                "and s.expiryDate = :exp"
+                )
+                .setParameter("cid", clinic.getClinicId())
+                .setParameter("exp", expiryDate)
+                .getResultList();
+
+        newSuppliesIDs.forEach(supplyID -> {
+            for (int i = 0; i < amount; i++) {
+                Dose dose = new Dose();
+                dose.setSupplyId(supplyID);
+                em.persist(dose);
+            }
+        });
+    }
+
+    /**
      * Add a supply of each vaccine type to the clinic, the supply size is marked by {@code amount}.
      *
      * @param clinicID a clinic ID marking the clinic we add the supplies to.
@@ -605,47 +646,6 @@ public class EntitiesManager {
             em.close(); // Close EntityManager
         }
         if (exp != null) throw new DatabaseQueryException(exp);
-    }
-
-    /**
-     * A helper function to add supplies to a clinic.
-     *
-     * @param em     entity manager we use to query the DB.
-     * @param clinic the {@link Clinic} instance marking the clinic we add the supplies to.
-     * @param amount amount of doses in each supply added.
-     */
-    private static void addSuppliesToClinic(EntityManager em, Clinic clinic, int amount) {
-        List<Integer> vaccineTypes = em.createQuery("select v.vaccineId from Vaccine v").getResultList();
-        Date expiryDate = Supply.DEFAULT_EXPIRATION();
-        vaccineTypes.forEach(vaccineID -> {
-            Supply supply = Supply.SupplyBuilder
-                    .aSupply()
-                    .withVaccineId(vaccineID)
-                    .withClinicId(clinic.getClinicId())
-                    .withExpiryDate(expiryDate)
-                    .build();
-
-            em.persist(supply);
-        });
-
-        List<Integer> newSuppliesIDs = em.createQuery(
-                        "select s.supplyId " +
-                                "from Supply s " +
-                                "where s.dosesBySupplyId is empty " +
-                                "and s.clinicId = :cid " +
-                                "and s.expiryDate = :exp"
-                )
-                .setParameter("cid", clinic.getClinicId())
-                .setParameter("exp", expiryDate)
-                .getResultList();
-
-        newSuppliesIDs.forEach(supplyID -> {
-            for (int i = 0; i < amount; i++) {
-                Dose dose = new Dose();
-                dose.setSupplyId(supplyID);
-                em.persist(dose);
-            }
-        });
     }
 
     /**
