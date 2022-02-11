@@ -1,4 +1,4 @@
-open module Vaccination.Operation {
+open module vac_op {
     requires javafx.controls;
     requires java.sql;
     requires java.persistence;
